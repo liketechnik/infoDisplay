@@ -171,4 +171,9 @@
             </case>
         </command_message>
     </command_package>
+    <command_message command="about_command">
+        <part position="1">Dieser Bot wurde von [liketechnik](https://github.com/liketechni) programmiert.
+            Der Quellcode dieses Bots ist auf [GitHub](https://github.com/liketechnik/infoDisplay) zu finden. Wenn du
+            Bugs bemerkst, melde diese bitte [GitHub](https://github.com/liketechnik/infoDisplay/issues/new).</part>
+    </command_message>
 </language>

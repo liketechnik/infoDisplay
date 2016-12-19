@@ -81,6 +81,7 @@ public class DisplayBot extends TelegramLongPollingCommandBot {
         register(new AskCommand());
         register(new AnswerCommand());
         register(new PinPictureCommand());
+        register(new AboutCommand());
         register(new CancelCommand(this));
 
         HelpCommand helpCommand = new HelpCommand(this);

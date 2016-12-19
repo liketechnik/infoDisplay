@@ -483,4 +483,12 @@ public class Message {
             return writeAnswerMessage.toString();
         }
     }
+
+    public static String getAboutCommandMessage(User user) {
+        final String aboutCommandQuarry = "command_message[@command='about_command']/part[@position=1]";
+
+        XMLConfiguration config = getXmlConfiguration(user.getId());
+
+        return config.getString(aboutCommandQuarry).replaceAll("/n>", "\n");
+    }
 }
