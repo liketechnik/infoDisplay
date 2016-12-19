@@ -33,6 +33,7 @@ package org.telegram.bot.commands;
 
 import org.telegram.bot.commands.SendOnErrorOccurred;
 import org.telegram.bot.database.DatabaseManager;
+import org.telegram.bot.messages.Message;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Chat;
 import org.telegram.telegrambots.api.objects.User;
@@ -65,6 +66,7 @@ public class  AboutCommand extends BotCommand {
 
             StringBuilder messageBuilder = new StringBuilder();
 
+            messageBuilder.append(Message.getAboutCommandMessage(user));
 
             answer.setChatId(chat.getId().toString());
             answer.setText(messageBuilder.toString());
