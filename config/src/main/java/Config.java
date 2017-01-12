@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016  liketechnik <flowa2000@gmail.com>
+ * Copyright (C) 2017  Florian Warzecha <flowa2000@gmail.com>
  *
  * This file is part of infoDisplay.
  *
@@ -29,11 +29,25 @@
  * program possible.
  */
 
-rootProject.name = 'infoDisplay'
-//include 'liketechnik'
-//include 'org'
-include 'bot'
-include 'display'
-include 'displayFile'
-include 'config'
+//packageStatement*
 
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
+
+/**
+ * @author Florian Warzecha
+ * @version 1.0.1
+ * @date 22 of October of 2016
+ */
+public final class Config {
+
+
+
+
+
+
+
+
+
+
+}
