@@ -70,8 +70,8 @@ public class Message {
     public static final String LOGTAG = "MESSAGE";
 
     public static final Path location = FileSystems.getDefault().getPath(
-            Message.class.getResource(Message.class.getSimpleName() + ".class").toString());
-    public static final Path dtd = FileSystems.getDefault().getPath(location.getParent() + "/language.xsd");
+            Message.class.getClassLoader().getResource("language.xsd").toString()).getParent();
+    public static final Path dtd = FileSystems.getDefault().getPath(location + "/language.xsd");
 
     private static XMLConfiguration getXmlConfiguration(int userID) {
         String language = null;
@@ -80,7 +80,7 @@ public class Message {
         XMLConfiguration config = null;
 
         XMLBuilderParameters params = new Parameters().xml();
-        params.setBasePath(location.toString());
+        params.setBasePath(location.getParent().toString());
         params.setSchemaValidation(true);
         params.setExpressionEngine(new XPathExpressionEngine());
 
