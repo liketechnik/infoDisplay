@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016  liketechnik <flowa2000@gmail.com>
+ * Copyright (C) 2017  Florian Warzecha <flowa2000@gmail.com>
  *
  * This file is part of infoDisplay.
  *
@@ -29,11 +29,16 @@
  * program possible.
  */
 
-rootProject.name = 'infoDisplay'
-//include 'liketechnik'
-//include 'org'
-include 'bot'
-include 'display'
-include 'displayFile'
-include 'config'
+package Config;
 
+/**
+ * @author liketechnik
+ * @version 1.0
+ * @date 11 of Januar 2017
+ */
+public final class Languages {
+    public static final String ENGLISH = "en";
+    public static final String GERMAN = "ger";
+
+    public static final String NONE = "none";
+}
