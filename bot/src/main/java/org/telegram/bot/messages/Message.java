@@ -70,10 +70,12 @@ public class Message {
     public static final String LOGTAG = "MESSAGE";
 
     public static final Path location = FileSystems.getDefault().getPath(
-            Message.class.getResource(Message.class.getSimpleName() + ".class").toString());
-    public static final Path dtd = FileSystems.getDefault().getPath(location.getParent() + "/language.xsd");
+            Message.class.getClassLoader().getResource("language.xsd").toString()).getParent();
 
     private static XMLConfiguration getXmlConfiguration(int userID) {
+
+        BotLogger.info(LOGTAG, location.toString());
+
         String language = null;
 
         FileBasedConfigurationBuilder<XMLConfiguration> builder;
@@ -94,7 +96,7 @@ public class Message {
         }
 
         builder = new FileBasedConfigurationBuilder<XMLConfiguration>(XMLConfiguration.class)
-                .configure(params.setFileName(location.getParent().toString() + "/" + language + ".xml"));
+                .configure(params.setFileName(location.toString() + "/" + language + ".xml"));
 
         try {
             config = builder.getConfiguration();
@@ -104,6 +106,14 @@ public class Message {
         }
 
         return  config;
+    }
+
+    public static String getFinalizedMessage(StringBuilder message) {
+        if (!message.toString().contains("/help")) {
+            message.append("\n\n");
+            message.append("/help");
+        }
+        return message.toString();
     }
 
     public static String getStartMessage(User user, boolean userKnown) {
@@ -131,7 +141,7 @@ public class Message {
                      .replaceAll("/n>", "\n"));
         }
 
-        return startMessage.toString();
+        return getFinalizedMessage(startMessage);
     }
 
     public static String getStopMessage(User user) {
@@ -147,7 +157,7 @@ public class Message {
         stopMessage.append(getFilteredUsername(user));
         stopMessage.append(config.getString(stopMessageQuarry + "part[@position=2]").replaceAll("/n>", "\n"));
 
-        return stopMessage.toString();
+        return getFinalizedMessage(stopMessage);
     }
 
     public static String getSendOnErrorOccurredMessage(User user, boolean terminating) {
@@ -207,7 +217,7 @@ public class Message {
 
         registerMessage.append("\n").append("/help");
 
-        return registerMessage.toString();
+        return getFinalizedMessage(registerMessage);
     }
 
     public static String getIdMessage(User user, Long chatID) {
@@ -225,9 +235,7 @@ public class Message {
         idMessage.append(" ");
         idMessage.append(chatID);
 
-        idMessage.append("\n").append("/help");
-
-        return idMessage.toString();
+        return getFinalizedMessage(idMessage);
     }
 
     public static String getHelpMessage(User user) {
@@ -252,7 +260,7 @@ public class Message {
         administratorMessage.append(config.getString(administratorMessageQuarry + "part[@position=1]")
                 .replaceAll("/n>", "\n"));
 
-        return administratorMessage.toString();
+        return getFinalizedMessage(administratorMessage);
     }
 
     public static class pinPictureCommand {
@@ -273,7 +281,7 @@ public class Message {
                         "permission']/part[@position=1]").replaceAll("/n>", "\n"));
             }
 
-            return pinPictureMessage.toString();
+            return getFinalizedMessage(pinPictureMessage);
         }
 
         public static String getSendDescriptionMessage(User user) {
@@ -287,7 +295,7 @@ public class Message {
             sendDescriptionMessage.append(config.getString(sendDescriptionMessageQuarry + "part[@position=1]")
                     .replaceAll("/n>", "\n"));
 
-            return sendDescriptionMessage.toString();
+            return getFinalizedMessage(sendDescriptionMessage);
         }
 
         public static String getSendDurationMessage(User user, boolean validDuration) {
@@ -307,7 +315,7 @@ public class Message {
                         "duration']/part[@position=1]").replaceAll("/n>", "\n"));
             }
 
-            return sendDurationMessage.toString();
+            return getFinalizedMessage(sendDurationMessage);
         }
 
         public static String getSendPictureMessage(User user, boolean hasPicture) {
@@ -326,7 +334,7 @@ public class Message {
                         "part[@position=1]").replaceAll("/n>", "\n"));
             }
 
-            return sendPictureMessage.toString();
+            return getFinalizedMessage(sendPictureMessage);
         }
 
         public static String getSendTitleMessage(User user, boolean newName) {
@@ -345,7 +353,7 @@ public class Message {
                         "used']/part[@position=1]").replaceAll("/n>", "\n"));
             }
 
-            return sendTitleMessage.toString();
+            return getFinalizedMessage(sendTitleMessage);
         }
     }
 
@@ -375,7 +383,7 @@ public class Message {
             writeQuestionMessage.append(config.getString(writeQuestionQuarry + "part[@position=2]")
                     .replaceAll("/n>", "\n"));
 
-            return writeQuestionMessage.toString();
+            return getFinalizedMessage(writeQuestionMessage);
         }
 
         public static String getWriteQuestionMessage(User user) {
@@ -406,7 +414,7 @@ public class Message {
             answerMessage.append(config.getString(answerQuarry + "part[@position=2]").replaceAll("/n>",
                     "\n"));
 
-            return  answerMessage.toString();
+            return  getFinalizedMessage(answerMessage);
         }
 
         public static String getChooseNumberMessage(User user) {
@@ -420,7 +428,7 @@ public class Message {
             chooseNumberMessage.append(config.getString(chooseNumberQuarry + "part[@position=1]")
                     .replaceAll("/n>", "\n"));
 
-            return chooseNumberMessage.toString();
+            return getFinalizedMessage(chooseNumberMessage);
         }
 
         public static String getChooseNumberMessage(User user, int selectedQuestion) {
@@ -439,7 +447,7 @@ public class Message {
             chooseNumberMessage.append(config.getString(chooseNumberQuarry + "part[@position=2]")
                     .replaceAll("/n>", "\n"));
 
-            return chooseNumberMessage.toString();
+            return getFinalizedMessage(chooseNumberMessage);
         }
 
         public static String getWriteAnswerMessage(User user, int selectedQuestion, String message) {
@@ -466,7 +474,7 @@ public class Message {
 
             writeAnswerMessage.append(message);
 
-            return writeAnswerMessage.toString();
+            return getFinalizedMessage(writeAnswerMessage);
         }
 
         public static String getWriteAnswerMessage(User user) {
@@ -480,7 +488,7 @@ public class Message {
             writeAnswerMessage.append(config.getString(writeAnswerQuarry + "part[@position=1]")
                     .replaceAll("/n>", "\n"));
 
-            return writeAnswerMessage.toString();
+            return getFinalizedMessage(writeAnswerMessage);
         }
     }
 
