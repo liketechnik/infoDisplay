@@ -37,8 +37,8 @@ package Config;
  * @date 11 of Januar 2017
  */
 public final class Languages {
-    public static final String ENGLISH = "en";
-    public static final String GERMAN = "ger";
+    public static final String ENGLISH = "english";
+    public static final String GERMAN = "german";
 
     public static final String NONE = "none";
 }
