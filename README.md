@@ -46,7 +46,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 infoDisplay uses TelegramBots Java API <https://github.com/rubenlagus/TelegramBots> by Ruben Bermudez.
-TelegramBots API is licensed under GNU General Public License version 3 <https://www.gnu.org/licenses/gpl-3.0.de.html>.
+TelegramBots API is licensed under MIT License <https://opensource.org/licenses/mit-license.php>.
 
 infoDisplay uses parts of the Apache Commons project <https://commons.apache.org/>.
 Apache commons is licensed under the Apache License Version 2.0 <http://www.apache.org/licenses/>.
