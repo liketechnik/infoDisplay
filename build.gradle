@@ -60,38 +60,7 @@ allprojects {
 //    scope = 'runtime'
 //}
 
-    distributions {
-        infoDisplay {
-            baseName = 'display'
-            contents {
-//                from jar
-//                into('libs') {
-//                    from {
-//                        project(':config').getBuildDir().toString() + '/libs/config-' + project.getVersion().toString() + '.jar'
-//                    }
-//                }
-            }
-        }
-        bot {
-            baseName = 'bot'
-            contents {
-//                from { project(':config').getBuildDir().toString() + '/libs/config-' + project.getVersion().toString() + '.jar' }
-//                from jar
-            }
-        }
-        config {
-            baseName = 'config'
-            contents {
-//                from jar
-            }
-        }
-        displayFile {
-            baseName = 'displayFile'
-            contents {
-//                from jar
-            }
-        }
-    }
+
 
     repositories {
         mavenCentral()
@@ -127,9 +96,73 @@ allprojects {
         }
     }
 
-    task mytest {
+//    task copyReadme {
+//        outputs.file new File(file(project(':bot').buildDir.parent).parent + "/README.md")
+//        doLast {
+//            copy {
+//                from "README.md"
+//                into file(project(':bot').buildDir.parent).parent
+//            }
+//        }
+//    }
+
+    task createDocs {
+        def docs = file("$buildDir/docs")
+        outputs.dir docs
         doLast {
-            println gradle.getRootProject()
+            docs.mkdirs()
+            new File(docs, "readme.txt").write("Read me!")
+        }
+    }
+
+    distributions {
+        infoDisplay {
+            baseName = 'display'
+            contents {
+//                from jar
+//                into('libs') {
+//                    from {
+//                        project(':config').getBuildDir().toString() + '/libs/config-' + project.getVersion().toString() + '.jar'
+//                    }
+//                }
+//                into('README') {
+//                    from file('README.md')
+//                }
+//                from 'README.md' {
+//                    into ('')
+//                }
+            }
+        }
+        bot {
+            baseName = 'bot'
+            contents {
+//                from { project(':config').getBuildDir().toString() + '/libs/config-' + project.getVersion().toString() + '.jar' }
+//                from jar
+//                into('README') {
+//                    from file('README.md')
+//                }
+//                from(jar) {
+//                    into "README"
+//                }
+//                from (copyReadme) {
+//                    into ""
+//                }
+                from(createDocs) {
+                    into "docs"
+                }
+            }
+        }
+        config {
+            baseName = 'config'
+            contents {
+//                from jar
+            }
+        }
+        displayFile {
+            baseName = 'displayFile'
+            contents {
+//                from jar
+            }
         }
     }
 }
@@ -141,6 +174,14 @@ project(':display') {
         compile 'com.github.caprica:vlcj:vlcj-3.10.+'
         compile 'ch.qos.logback:logback-classic:1.1.7'
     }
+    applicationDistribution.from("${rootProject.projectDir}/") {
+        include "README.md"
+        into ""
+    }
+    applicationDistribution.from("${rootProject.projectDir}/") {
+        include "LICENSE-**"
+        into "LICENSES"
+    }
 }
 
 project(':bot') {
@@ -148,10 +189,13 @@ project(':bot') {
     dependencies {
         compile project(':config')
     }
-}
-
-task buildtest {
-    doLast{
-        println project(':config').getBuildDir().toString() + '/libs/config-' + project.getVersion().toString() + '.jar'
+    applicationDistribution.from("${rootProject.projectDir}/") {
+        include "README.md"
+        into ""
+    }
+    applicationDistribution.from("${rootProject.projectDir}/") {
+        include "LICENSE-**"
+        into "LICENSES"
     }
 }
+
