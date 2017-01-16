@@ -85,94 +85,95 @@
     <command_message command="help_command">
         <part position="1">*Help*/n>/n>
             _Description_/n>
-            Mit diesem Bot kannst Du Bilder an das virtuelle Brett hochladen, bearbeiten und wieder löschen. Als
-            Administrator kannst du auch veraltete Bilder *anderer* löschen und deren Eigenschaften bearbeiten./n>/n>
+            With this bot you are able to pictures to the digital blackboard, edit them and delete them. If you are
+            one of the admins of the bot you can delete obsolescent pictures of *other* users or change their
+            properties./n>/n>
             _How to use me:_/n>
         </part>
     </command_message>
     <command_message command="administrator_command">
-        <part position="1">Ersteller / Administrator dieses Bots ist @liketechnik2000.</part>
+        <part position="1">This bot is made / administrated by @liketechnik2000.</part>
     </command_message>
     <command_message command="about_command">
-        <part position="1">Dieser Bot wurde von [liketechnik](https://github.com/liketechni) programmiert.
-            Der Quellcode dieses Bots ist auf [GitHub](https://github.com/liketechnik/infoDisplay) zu finden. Wenn du
-            Bugs bemerkst, melde diese bitte [GitHub](https://github.com/liketechnik/infoDisplay/issues/new).</part>
+        <part position="1">This bot was made by [liketechnik](https://github.com/liketechni).
+            You can find the source code on [GitHub](https://github.com/liketechnik/infoDisplay). If you realise any
+            bugs, you can report them on [GitHub](https://github.com/liketechnik/infoDisplay/issues/new) too.</part>
     </command_message>
     <command_package command="pinPictureCommand">
         <command_message command="pin_picture_command">
             <case case="has_no_permission">
-                <part position="1">Du bist nicht berechtigt Bilder hochzuladen./n>
-                    Benutze /register um als berechtigte Person eingetragen zu werden./n></part>
+                <part position="1">You are not allowed to upload pictures./n>
+                    Use /register to gain the permission for doing this./n></part>
             </case>
             <case case="has_permission">
-                <part position="1">Bitte sende mir einen Namen für dein Bild.</part>
+                <part position="1">Please send me a name for your picture.</part>
             </case>
         </command_message>
         <command_message command="send_description_command">
-            <part position="1">Sende mir nun die Anzeigedauer für dein Bild.</part>
+            <part position="1">How long do you want the pciture to be displayed (seconds)?</part>
         </command_message>
         <command_message command="send_duration_command">
             <case case="invalid_duration">
-                <part position="1">Bitte gib eine gültige Anzeigedauer an.</part>
+                <part position="1">Please send me a valid duration.</part>
             </case>
             <case case="valid_duration">
-                <part position="1">Sende mir nun bitte das Bild.</part>
+                <part position="1">Please send the picture now.</part>
             </case>
         </command_message>
         <command_message command="send_picture_command">
             <case case="no_picture">
-                <part position="1">Sende mir bitte ein Bild.</part>
+                <part position="1">Please send a *picture*.</part>
             </case>
             <case case="picture">
-                <part position="1">Du hast ein neues Bild an das Brett hochgeladen.</part>
+                <part position="1">You have succesfully uploaded a new picture.</part>
             </case>
         </command_message>
         <command_message command="send_title_command">
             <case case="already_used">
-                <part position="1">Dieser Name wurde schon für ein Bild gewählt. Bitte nimm einen anderen.</part>
+                <part position="1">This name is already in use! Please choose a different one.</part>
             </case>
             <case case="new_name">
-                <part position="1">Bitte sende mir nun eine (kurze) Beschreibung / Überschrift für dein Bild.</part>
+                <part position="1">Please send a (short) description / title for your picture.</part>
             </case>
         </command_message>
     </command_package>
     <command_package command="askCommand">
         <command_message command="ask_command">
-            <part position="1">Sende mir bitte deine Frage, ich leite sie an den Administrator weiter.</part>
+            <part position="1">Ask the question, I will transmit it to the administrator.</part>
         </command_message>
         <command_message command="write_question_command">
             <case case="question">
-                <part position="1">/n>Von Benutzer:</part>
+                <part position="1">/n>Asked by user:</part>
                 <part position="2">.</part>
             </case>
             <case case="response">
-                <part position="1">Deine Frage wurde weitergeleitet.</part>
+                <part position="1">Your question was succesfully transmitted.</part>
             </case>
         </command_message>
     </command_package>
     <command_package command="answerCommand">
         <command_message command="answer_command">
-            <part position="1">Folgende Nachrichten sind zu beantworten:/n></part>
-            <part position="2">/n>Welche Frage möchtest du beantworten (Nummer)?</part>
+            <part position="1">The following messages are waiting for response:/n></part>
+            <part position="2">/n>Which question do you want to answer (number)?</part>
         </command_message>
         <command_message command="choose_number_command">
             <case case="invalid">
-                <part position="1">Diese Frage ist nicht verfügbar. Bitte schaue Dir die Liste erneut an und wähle eine
-                    gültige Frage.</part>
+                <part position="1">This question is not available! Please take another look at the list and choose a
+                    valid question.</part>
             </case>
             <case case="valid">
-                <part position="1">Du hast die Frage Nummer</part>
-                <part position="2">ausgewählt./n>
-                    Sende mir nun die Antwort, ich werde sie an den Fragesteller weiterleiten.</part>
+                <part position="1">You chose question number </part>
+                <part position="2"> /n>
+                    Send me a reply to that question now, I will transmit it to the questioner.</part>
             </case>
         </command_message>
         <command_message command="write_answer_command">
             <case case="explanation">
-                <part position="1">Deine Frage war:/n></part>
-                <part position="2">Die Antwort ist:/n></part>
+                <part position="1">Your question was:/n></part>
+                <part position="2">The answer is:/n></part>
             </case>
             <case case="answer">
-                <part position="1">Deine Antwort wurde erfolgreich gesendet.</part>
+                <part position="1">Your answer was succesfully transmitted.</part>
             </case>
         </command_message>
     </command_package>
