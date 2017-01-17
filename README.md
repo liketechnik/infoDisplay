@@ -28,7 +28,7 @@ Please contact me if you want to contribute to this project.
 
 ## License ##
 
- Copyright (C) 2016  Florian Warzecha <flowa2000@gmail.com>
+ Copyright (C) 2016-2017  Florian Warzecha <flowa2000@gmail.com>
  
 This file is part of infoDisplay.
 
