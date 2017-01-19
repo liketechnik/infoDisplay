@@ -12,19 +12,43 @@ without the need to set up a server on ones own.
 
 ### Prerequisites ###
 
-Create a bot inside Telegram with @BotFather. Remember the bot's name and token.
+Create a bot inside Telegram with @BotFather. Remember the bot's name and token. 
+Then create the file bot.conf in ```<your_home_directory>/.infoDisplay```. Edit the file 
+and add the following lines:
+```botUsername = <bot's name>```
+```botToken = <bot's token>```
 
-### Build and Execution ###
+### Build ###
 
-Download the source code and edit Config.java (fill in the missing Strings with your corresponding text). Then execute the gradle tasks createBotJarArchive
-and createDisplayJarArchive. The output .jar-Archives represent the 
-two parts of the program: The bot for receiving the media, and the display
-which display the information. You can find the output in the org.build/libs
-directory.
+Execute gradle task ":zipDist" (for zip archive) or ":tarDist" (for tar archive) for the 
+projects bot and display. Copy the archives from ```build/distributions/<name>-<version>.zip``` to
+anywhere you want them. Then follow the instructions under execution.
+
+### Execution ###
+#### Bot ####
+Download or build the zip / tar archive for the bot, extract it and run the bot executable for your OS.
+#### Display ####
+Download or build the zip / tar archive for the display, extract it and run the bot executable for your OS.
+
+### Administration ###
+#### In Telegram ####
+If you do not know your Telegram userID yet, go to Telegram and send the command /id to the
+ bot. Remember your userID, go to directory `<your_home_directory>/.infoDisplay/` and open the file
+ ```bot.conf```. Add the lines:
+  ```botAdminUserId = <your_user_id>```
+  ```botAdminChatId = <your_chat_id_with_bot>```
+  to it, restart the bot. Now you can administrate the bot via 
+  Telegram. 
+#### Allow new users to use the bot ####
+If any new user of the bot wants to upload new media to the board, he/she needs to be registered. If
+  a user wants to register him, he can do that via a command that sends a message with his/her userId to the
+  administrator (see above). To complete the registration the administrator needs to edit the file 
+  ```<your_home_directory/.infoDisplay/bot_database/users/<user_id>``` and set ```userRegistered``` to ```true```.
 
 ## Contribute ##
 
-Please contact me if you want to contribute to this project.
+Fork the project and / or create pull requests. The project is build and run with gradle
+tasks.
 
 ## License ##
 
