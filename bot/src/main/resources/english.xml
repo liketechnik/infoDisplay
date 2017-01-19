@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!--
+  ~ Copyright (C) 2016-2017  Florian Warzecha <flowa2000@gmail.com>
+  ~
+  ~ This file is part of infoDisplay.
+  ~
+  ~ infoDisplay is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ infoDisplay is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  ~
+  ~ infoDisplay uses TelegramBots Java API <https://github.com/rubenlagus/TelegramBots> by Ruben Bermudez.
+  ~ TelegramBots API is licensed under GNU General Public License version 3 <https://www.gnu.org/licenses/gpl-3.0.de.html>.
+  ~
+  ~ infoDisplay uses parts of the Apache Commons project <https://commons.apache.org/>.
+  ~ Apache commons is licensed under the Apache License Version 2.0 <http://www.apache.org/licenses/>.
+  ~
+  ~ infoDisplay uses vlcj library <http://capricasoftware.co.uk/#/projects/vlcj>.
+  ~ vlcj is licensed under GNU General Public License version 3 <https://www.gnu.org/licenses/gpl-3.0.de.html>.
+  ~
+  ~ Thanks to all the people who contributed to the projects that make this
+  ~ program possible.
+  -->
+
+<!-- Please use '/n>' to produce a newline character in output-->
+
+<language xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="language.xsd">
+    <name>en</name>
+    <command_message command="start_command">
+        <case case="userUnknown">
+            <part position="1">Hello</part>
+            <part position="2">,/n>as you know this bot, you probably already know how to use it, although you can use
+                the '/help' command. If you do not know it yet, it probably will not be useful for you. If you have a
+                question concerning this bot, feel free to ask it via '/ask'.</part>
+        </case>
+        <case case="userKnown">
+            <part position="1">Hello</part>
+            <part position="2">,/n>nice to see you again. I hope you still know all the commands, if not
+                the '/help' command will always be you guide.</part>
+        </case>
+    </command_message>
+    <command_message command="stop_command">
+        <part position="1">Bye</part>
+        <part position="2">./n>It was nice to work with you.</part>
+    </command_message>
+    <command_message command="send_on_error_occurred_command">
+        <case case="terminating">
+            <part position="1">The bot was terminated because of an internal error. Please advise the administrator of
+                this event.</part>
+        </case>
+        <case case="not_terminating">
+            <part position="1">An internal error occurred while processing your request. Please contact the
+                administrator.</part>
+        </case>
+    </command_message>
+    <command_message command="register_command">
+        <case case="alreadyRegistered">
+            <part position="1">You are already registered. Your telegram userID is: </part>
+        </case>
+        <case case="registrationRequestSent">
+            <part position="1">You have already sent a registration request. Your telegram userID is:</part>
+        </case>
+        <case case="newRegistrationRequest">
+            <part position="1">The administrator will be advised that you want to be registered. That why he will get in
+                contact with you soon. Your telegram userID is: </part>
+        </case>
+        <case case="toAdmin">
+            <part position="1">The user </part>
+            <part position="2">wants to get registered. His userID is: </part>
+        </case>
+    </command_message>
+    <command_message command="id_command">
+        <part position="1">Your telegram userID is:</part>
+        <part position="2">The chatID is:</part>
+    </command_message>
+    <command_message command="help_command">
+        <part position="1">*Help*/n>/n>
+            _Description_/n>
+            With this bot you are able to pictures to the digital blackboard, edit them and delete them. If you are
+            one of the admins of the bot you can delete obsolescent pictures of *other* users or change their
+            properties./n>/n>
+            _How to use me:_/n>
+        </part>
+    </command_message>
+    <command_message command="administrator_command">
+        <part position="1">This bot is made / administrated by @liketechnik2000.</part>
+    </command_message>
+    <command_message command="about_command">
+        <part position="1">This bot was made by [liketechnik](https://github.com/liketechni).
+            You can find the source code on [GitHub](https://github.com/liketechnik/infoDisplay). If you realise any
+            bugs, you can report them on [GitHub](https://github.com/liketechnik/infoDisplay/issues/new) too.</part>
+    </command_message>
+    <command_package command="pinPictureCommand">
+        <command_message command="pin_picture_command">
+            <case case="has_no_permission">
+                <part position="1">You are not allowed to upload pictures./n>
+                    Use /register to gain the permission for doing this./n></part>
+            </case>
+            <case case="has_permission">
+                <part position="1">Please send me a name for your picture.</part>
+            </case>
+        </command_message>
+        <command_message command="send_description_command">
+            <part position="1">How long do you want the pciture to be displayed (seconds)?</part>
+        </command_message>
+        <command_message command="send_duration_command">
+            <case case="invalid_duration">
+                <part position="1">Please send me a valid duration.</part>
+            </case>
+            <case case="valid_duration">
+                <part position="1">Please send the picture now.</part>
+            </case>
+        </command_message>
+        <command_message command="send_picture_command">
+            <case case="no_picture">
+                <part position="1">Please send a *picture*.</part>
+            </case>
+            <case case="picture">
+                <part position="1">You have succesfully uploaded a new picture.</part>
+            </case>
+        </command_message>
+        <command_message command="send_title_command">
+            <case case="already_used">
+                <part position="1">This name is already in use! Please choose a different one.</part>
+            </case>
+            <case case="new_name">
+                <part position="1">Please send a (short) description / title for your picture.</part>
+            </case>
+        </command_message>
+    </command_package>
+    <command_package command="askCommand">
+        <command_message command="ask_command">
+            <part position="1">Ask the question, I will transmit it to the administrator.</part>
+        </command_message>
+        <command_message command="write_question_command">
+            <case case="question">
+                <part position="1">/n>Asked by user:</part>
+                <part position="2">.</part>
+            </case>
+            <case case="response">
+                <part position="1">Your question was succesfully transmitted.</part>
+            </case>
+        </command_message>
+    </command_package>
+    <command_package command="answerCommand">
+        <command_message command="answer_command">
+            <part position="1">The following messages are waiting for response:/n></part>
+            <part position="2">/n>Which question do you want to answer (number)?</part>
+        </command_message>
+        <command_message command="choose_number_command">
+            <case case="invalid">
+                <part position="1">This question is not available! Please take another look at the list and choose a
+                    valid question.</part>
+            </case>
+            <case case="valid">
+                <part position="1">You chose question number </part>
+                <part position="2"> /n>
+                    Send me a reply to that question now, I will transmit it to the questioner.</part>
+            </case>
+        </command_message>
+        <command_message command="write_answer_command">
+            <case case="explanation">
+                <part position="1">Your question was:/n></part>
+                <part position="2">The answer is:/n></part>
+            </case>
+            <case case="answer">
+                <part position="1">Your answer was succesfully transmitted.</part>
+            </case>
+        </command_message>
+    </command_package>
+</language>

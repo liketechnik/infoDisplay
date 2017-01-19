@@ -29,11 +29,27 @@
  * program possible.
  */
 
-rootProject.name = 'infoDisplay'
-//include 'liketechnik'
-//include 'org'
-include 'bot'
-include 'display'
-include 'displayFile'
-include 'config'
+package Config;
 
+/**
+ * @author liketechnik
+ * @version 1.0
+ * @date 11 of Januar 2017
+ */
+public final class Bot {
+
+    public static final String DISPLAY_FILE_TYPE_IMAGE = "image";
+    public static final String HAS_PHOTO = "hasPhoto";
+    public static final String HAS_NO_PHOTO = "hasNoPhoto";
+
+    public final static String ASK_COMMAND_WRITE_QUESTION = "askCommand";
+    public final static String NO_COMMAND = "none";
+    public final static String ANSWER_COMMAND_CHOOSE_NUMBER = "answerCommandChooseNumber";
+    public final static String ANSWER_COMMAND_WRITE_ANSWER = "answerCommandWriteAnswer";
+    public final static String PIN_PICTURE_COMMAND_SEND_DESCRIPTION =
+            "pinPictureCommandSendDescription";
+    public static final String PIN_PICTURE_COMMAND_SEND_TITLE =
+            "pinPictureCommandSendTitle";
+    public final static String PIN_PICTURE_COMMAND_SEND_PICTURE = "pinPictureCommandSendPicture";
+    public static final String PIN_PICTURE_COMMAND_SEND_DURATION = "pinPictureCommandSendDuration";
+}

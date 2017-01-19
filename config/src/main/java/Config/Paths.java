@@ -29,11 +29,26 @@
  * program possible.
  */
 
-rootProject.name = 'infoDisplay'
-//include 'liketechnik'
-//include 'org'
-include 'bot'
-include 'display'
-include 'displayFile'
-include 'config'
+package Config;
 
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
+
+/**
+ * @author liketechnik
+ * @version 1.0
+ * @date 11 of Januar 2017
+ */
+public final class Paths {
+    public static final String USER_HOME = System.getProperty("user.home");
+    public static final Path APP_HOME = FileSystems.getDefault().getPath(USER_HOME + "/.infoDisplay");
+
+    public static final Path DISPLAY_FILES_CONFIG_FILE = FileSystems.getDefault().getPath(APP_HOME + "/displayFiles.conf");
+    public static final Path DISPLAY_FILES = FileSystems.getDefault().getPath(APP_HOME + "/displayFiles");
+
+    public static final Path BOT_DATABASE = FileSystems.getDefault().getPath(APP_HOME + "/bot_database");
+    public static final Path USER_DATABASE = FileSystems.getDefault().getPath(BOT_DATABASE + "/users");
+    public static final Path QUESTION_DATABASE = FileSystems.getDefault().getPath(BOT_DATABASE + "/questions");
+
+    public static final Path BOT_CONFIG_FILE = FileSystems.getDefault().getPath(APP_HOME + "/bot.conf");
+}

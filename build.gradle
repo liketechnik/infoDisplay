@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016  liketechnik <flowa2000@gmail.com>
+ * Copyright (C) 2016-2017  Florian Warzecha <flowa2000@gmail.com>
  *
  * This file is part of infoDisplay.
  *
@@ -29,79 +29,181 @@
  * program possible.
  */
 
-group 'liketechnik'
-
-version '1.0.1'
-
-apply plugin: 'java'
-apply plugin: 'idea'
-
-sourceCompatibility = 1.8
-
-repositories {
-    mavenCentral()
-    maven { url "https://jitpack.io" }
-}
-
-dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.11'
-
-    compile 'com.github.caprica:vlcj:vlcj-3+'
-
-    compile group: 'ch.qos.logback', name: 'logback-classic', version: '1+'
-    compile 'org.apache.commons:commons-configuration2:2+'
-    compile 'commons-beanutils:commons-beanutils:1.9.3'
-
-    compile group: 'org.telegram', name: 'telegrambots', version: '2+'
-}
-
-jar {
-    manifest {
-        attributes("Main-Class": 'liketechnik.InfoDisplay.Display')
-    }
-}
-
-
-
-task createDisplayJarArchive(type: Jar, dependsOn: [':build', ':updateDisplayFileClass', 'updateConfigClass']) {
-    from 'build/classes/main/'
-    manifest {
-        attributes("Main-Class": 'liketechnik.InfoDisplay.Display')
-    }
-    exclude '**telegram**'
-    classifier 'Display'
-    into ''
-    from configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
-}
-
-task createBotJarArchive(type: Jar, dependsOn: [':build', ':updateDisplayFileClass', 'updateConfigClass']) {
-    from 'build/classes/main/'
-    manifest {
-        attributes("Main-Class": 'org.telegram.bot.Main')
-    }
-    exclude '**liketechnik**'
-    classifier 'Bot'
-    into ''
-    from configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
-}
-
-//task updateDisplayFileClass(type: Copy) {
-    //from 'src/main/java/'
-    //include 'DisplayFile**'
-    //def myProps = new Properties()
-    //file("gradle.properties").withInputStream {
-    //    myProps.load(it);
-    //}
-    //filter(ReplaceTokens, tokens: myProps)
-    //into 'src/main/java/liketechnik/InfoDisplay'
-    //println ReplaceTokens.properties
-    //into 'src/main/java/'
+//buildscript {
+//    repositories {
+//        maven {
+//            url "https://plugins.gradle.org/m2/"
+//        }
+//    }
 //}
-ant.importBuild 'build.xml'
 
-compileJava.mustRunAfter(updateDisplayFileClass)
-compileJava.mustRunAfter(updateConfigClass)
+    plugins {
+        id "com.srcclr.gradle" version "2.2.0"
+    }
 
-task getHomeDir << {
-    println gradle.gradleHomeDir
+allprojects {
+    group 'liketechnik'
+
+    version '1.2'
+
+    apply plugin: 'distribution'
+    apply plugin: 'java'
+    apply plugin: 'idea'
+    apply plugin: 'application'
+//    apply plugin: "com.srcclr.gradle"
+
+    sourceCompatibility = 1.8
+
+    srcclr {
+        apiToken = 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NjkyNCwiZXhwIjoxNTExODkxMDUzLCJhdXRob3JpdGllcyI6IkFHRU5UIiwianRpIjoiMDg0MGRkZjQtZTJhNS00YTRiLWIxOGQtZmFjZGQ5NDMyZWI4IiwiY2xpZW50X2lkIjoiIiwic2NvcGUiOltdfQ.P_pcL-kkDsQ3Qj3hDhIz4wZC98-KHA4kQNYtcIxERjmM0ah48tH9FjUq3GycC0d-pGhLNy5S5Y_EJjgGe4IkbMq_0Ic8S28u1TpYODl-mFW55mbWO4C762QBwsIWIFOSmkazUsQPTHipdwTeqGDpi_Z33nl2bQAO9kQpvra3ee8'
+    }
+
+
+
+    repositories {
+        mavenCentral()
+        maven { url "https://jitpack.io" }
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+
+    dependencies {
+        testCompile group: 'junit', name: 'junit', version: '4.11'
+
+        compile 'org.telegram:telegrambots:2.4.4.4'
+
+        compile 'org.apache.commons:commons-configuration2:2.1'
+        // runtime dependencies of commons-configuration
+        compile 'org.apache.commons:commons-lang3:3.5'
+        compile 'commons-logging:commons-logging:1..1.1'
+        compile 'commons-beanutils:commons-beanutils:1.9.3'
+        compile 'commons-codec:commons-codec:1.10'
+        compile 'commons-jxpath:commons-jxpath:1.3'
+        // compile dependencies
+        compile 'org.apache.commons:commons-jexl:2.1.1'
+        compile 'org.apache.commons:commons-vfs2-project:2.1'
+        compile 'xml-resolver:xml-resolver:1.2'
+    }
+
+ //   ant.importBuild 'build.xml'
+
+   // compileJava.mustRunAfter(updateDisplayFileClass)
+    //compileJava.mustRunAfter(updateConfigClass)
+
+    task getHomeDir {
+        doLast {
+            println gradle.gradleHomeDir
+        }
+    }
+
+//    task copyReadme {
+//        outputs.file new File(file(project(':bot').buildDir.parent).parent + "/README.md")
+//        doLast {
+//            copy {
+//                from "README.md"
+//                into file(project(':bot').buildDir.parent).parent
+//            }
+//        }
+//    }
+
+    task createDocs {
+        def docs = file("$buildDir/docs")
+        outputs.dir docs
+        doLast {
+            docs.mkdirs()
+            new File(docs, "readme.txt").write("Read me!")
+        }
+    }
+
+    distributions {
+        infoDisplay {
+            baseName = 'display'
+            contents {
+//                from jar
+//                into('libs') {
+//                    from {
+//                        project(':config').getBuildDir().toString() + '/libs/config-' + project.getVersion().toString() + '.jar'
+//                    }
+//                }
+//                into('README') {
+//                    from file('README.md')
+//                }
+//                from 'README.md' {
+//                    into ('')
+//                }
+            }
+        }
+        bot {
+            baseName = 'bot'
+            contents {
+//                from { project(':config').getBuildDir().toString() + '/libs/config-' + project.getVersion().toString() + '.jar' }
+//                from jar
+//                into('README') {
+//                    from file('README.md')
+//                }
+//                from(jar) {
+//                    into "README"
+//                }
+//                from (copyReadme) {
+//                    into ""
+//                }
+                from(createDocs) {
+                    into "docs"
+                }
+            }
+        }
+        config {
+            baseName = 'config'
+            contents {
+//                from jar
+            }
+        }
+        displayFile {
+            baseName = 'displayFile'
+            contents {
+//                from jar
+            }
+        }
+    }
 }
+
+project(':display') {
+    mainClassName = "liketechnik.InfoDisplay.Display"
+    dependencies {
+        compile project(':config')
+        compile project(':displayFile')
+        compile 'com.github.caprica:vlcj:vlcj-3.10.+'
+        compile 'ch.qos.logback:logback-classic:1.1.8'
+    }
+    applicationDistribution.from("${rootProject.projectDir}/") {
+        include "README.md"
+        into ""
+    }
+    applicationDistribution.from("${rootProject.projectDir}/") {
+        include "LICENSE-**"
+        into "LICENSES"
+    }
+}
+
+project(':bot') {
+    mainClassName = "org.telegram.bot.Main"
+    dependencies {
+        compile project(':config')
+    }
+    applicationDistribution.from("${rootProject.projectDir}/") {
+        include "README.md"
+        into ""
+    }
+    applicationDistribution.from("${rootProject.projectDir}/") {
+        include "LICENSE-**"
+        into "LICENSES"
+    }
+}
+
+project(':displayFile') {
+    dependencies {
+        compile project(':config')
+    }
+}
+

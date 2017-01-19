@@ -29,11 +29,46 @@
  * program possible.
  */
 
-rootProject.name = 'infoDisplay'
-//include 'liketechnik'
-//include 'org'
-include 'bot'
-include 'display'
-include 'displayFile'
-include 'config'
+package org.telegram.bot;
 
+import org.telegram.telegrambots.logging.BotLogger;
+
+public class ResetRecentlyError extends Thread {
+
+    public static final String LOGTAG = "RESETRECENTLYERROR";
+
+    private static volatile ResetRecentlyError instance;
+
+    private static boolean recentlyError = false;
+    private static boolean appIsTerminating = false;
+
+    @Override
+    public void run() {
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            BotLogger.error(LOGTAG, e);
+        }
+        if (!appIsTerminating) {
+            recentlyError = false;
+        }
+    }
+
+    public static boolean getRecentlyError() {
+        return recentlyError;
+    }
+
+    public static void setRecentlyError(boolean recentlyError) {
+        if (!appIsTerminating) {
+            ResetRecentlyError.recentlyError = recentlyError;
+        }
+    }
+
+    public static boolean getAppIsTerminating() {
+        return appIsTerminating;
+    }
+
+    public static void setAppIsTerminating(boolean appIsTerminating) {
+        ResetRecentlyError.appIsTerminating = appIsTerminating;
+    }
+}

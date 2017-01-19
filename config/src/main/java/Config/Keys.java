@@ -29,11 +29,37 @@
  * program possible.
  */
 
-rootProject.name = 'infoDisplay'
-//include 'liketechnik'
-//include 'org'
-include 'bot'
-include 'display'
-include 'displayFile'
-include 'config'
+package Config;
 
+/**
+ * @author liketechnik
+ * @version 1.0
+ * @date 11 of Januar 2017
+ */
+public final class Keys {
+    public static final String DISPLAY_FILES_KEY = "displayFiles";
+    public static final String DISPLAY_FILE_DURATION_KEY = "displayDuration";
+    public static final String DISPLAY_FILE_TYPE_KEY = "type";
+    public static final String DISPLAY_FILE_DESCRIPTION = "description";
+
+    public static final String USER_ACTIVE = "userActive";
+    public static final String USER_REGISTERED = "userRegistered";
+    public static final String USER_WANTS_REGISTRATION = "userWantsregistration";
+    public static final String USER_COMMAND_STATE = "userState";
+    public static final String USER_LANGUAGE = "userLanguage";
+
+    public final static String QUESTION = "question";
+
+    public static final String CHAT_ID = "chatID";
+
+    public static final String SELECTED_QUESTION = "selectedQuestion";
+    public static final String CURRENT_PICTURE_TITLE = "currentPictureTitle";
+    public static final String CURRENT_PICTURE_DESCRIPTION = "currentPictureDescription";
+    public static final String CURRENT_PICTURE_DURATION = "currentPictureDuration";
+
+    public static final String BOT_USERNAME_KEY = "botUsername";
+    public static final String BOT_TOKEN_KEY = "botToken";
+
+    public static final String BOT_ADMIN_USER_ID_KEY = "botAdminUserId";
+    public static final String BOT_ADMIN_CHAT_ID_KEY = "botAdminChatId";
+}

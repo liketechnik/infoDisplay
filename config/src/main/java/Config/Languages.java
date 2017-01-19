@@ -29,11 +29,16 @@
  * program possible.
  */
 
-rootProject.name = 'infoDisplay'
-//include 'liketechnik'
-//include 'org'
-include 'bot'
-include 'display'
-include 'displayFile'
-include 'config'
+package Config;
 
+/**
+ * @author liketechnik
+ * @version 1.0
+ * @date 11 of Januar 2017
+ */
+public final class Languages {
+    public static final String ENGLISH = "english";
+    public static final String GERMAN = "german";
+
+    public static final String NONE = "none";
+}
