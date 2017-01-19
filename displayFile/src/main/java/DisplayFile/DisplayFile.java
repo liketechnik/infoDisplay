@@ -29,7 +29,8 @@
  * program possible.
  */
 
-package org.telegram.bot;
+package DisplayFile;//packageStatement*
+
 /**
  * @author Florian Warzecha
  * @version 1.0.1
@@ -45,7 +46,7 @@ public class DisplayFile {
     private String fileName;
 
     public DisplayFile(int displayDuration, String type, String fileName) throws IllegalArgumentException {
-        if (type.equals(Config.Bot.DISPLAY_FILE_TYPE_IMAGE)) {
+        if (!type.equals(Config.Bot.DISPLAY_FILE_TYPE_IMAGE)) {
             throw new IllegalArgumentException("No known type: " + type);
         }
 

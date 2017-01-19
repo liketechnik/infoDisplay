@@ -172,6 +172,7 @@ project(':display') {
     mainClassName = "liketechnik.InfoDisplay.Display"
     dependencies {
         compile project(':config')
+        compile project(':displayFile')
         compile 'com.github.caprica:vlcj:vlcj-3.10.+'
         compile 'ch.qos.logback:logback-classic:1.1.8'
     }
@@ -197,6 +198,12 @@ project(':bot') {
     applicationDistribution.from("${rootProject.projectDir}/") {
         include "LICENSE-**"
         into "LICENSES"
+    }
+}
+
+project(':displayFile') {
+    dependencies {
+        compile project(':config')
     }
 }
 
