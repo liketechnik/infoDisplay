@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017  Florian Warzecha <flowa2000@gmail.com>
+ * Copyright (C) 2016-2017  Florian Warzecha <flowa2000@gmail.com>
  *
  * This file is part of infoDisplay.
  *
@@ -37,8 +37,8 @@ package Config;
  * @date 11 of Januar 2017
  */
 public final class Languages {
-    public static final String ENGLISH = "en";
-    public static final String GERMAN = "ger";
+    public static final String ENGLISH = "english";
+    public static final String GERMAN = "german";
 
     public static final String NONE = "none";
 }

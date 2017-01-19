@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016  liketechnik <flowa2000@gmail.com>
+ * Copyright (C) 2016-2017  Florian Warzecha <flowa2000@gmail.com>
  *
  * This file is part of infoDisplay.
  *
@@ -52,6 +52,7 @@ import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
+import DisplayFile.DisplayFile;
 
 /**
  * @author Florian Warzecha
@@ -155,7 +156,7 @@ public class Display {
         new showFiles().start(mediaPlayerComponent, loadDisplayFiles());
     }
 
-    static liketechnik.InfoDisplay.DisplayFile[] loadDisplayFiles() {
+    static DisplayFile[] loadDisplayFiles() {
         Configuration displayFileConfig = null;
         Configuration config = null;
         String[] displayFilesToLoad;
@@ -227,7 +228,7 @@ public class Display {
             }
 
             // create a new displayFile and add it to the array containing all display files
-            displayFiles[processedFiles] = new liketechnik.InfoDisplay.DisplayFile(
+            displayFiles[processedFiles] = new DisplayFile(
                     displayFileConfig.getInt(Config.Keys.DISPLAY_FILE_DURATION_KEY),
                         displayFileConfig.getString(Config.Keys.DISPLAY_FILE_TYPE_KEY),
                     Config.Paths.DISPLAY_FILES.toString() + "/" + displayFile);
