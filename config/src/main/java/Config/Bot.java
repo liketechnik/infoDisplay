@@ -39,6 +39,7 @@ package Config;
 public final class Bot {
 
     public static final String DISPLAY_FILE_TYPE_IMAGE = "image";
+    public static final String DISPLAY_FILE_TYPE_VIDEO = "video";
     public static final String HAS_PHOTO = "hasPhoto";
     public static final String HAS_NO_PHOTO = "hasNoPhoto";
 
