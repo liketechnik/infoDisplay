@@ -37,23 +37,13 @@ import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
 import org.apache.commons.configuration2.builder.fluent.Parameters;
 import org.apache.commons.configuration2.builder.fluent.XMLBuilderParameters;
 import org.apache.commons.configuration2.ex.ConfigurationException;
-import org.apache.commons.configuration2.resolver.CatalogResolver;
-import org.apache.commons.configuration2.resolver.DefaultEntityResolver;
 import org.apache.commons.configuration2.tree.xpath.XPathExpressionEngine;
 import org.telegram.bot.database.DatabaseManager;
 import org.telegram.telegrambots.api.objects.User;
 import org.telegram.telegrambots.logging.BotLogger;
-import org.xml.sax.EntityResolver;
-import org.xml.sax.SAXException;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
-import java.util.Iterator;
-import java.util.List;
-import java.util.function.Consumer;
-import java.util.regex.Pattern;
 
 import static org.telegram.bot.Main.getFilteredUsername;
 import static org.telegram.bot.Main.getSpecialFilteredUsername;
@@ -339,6 +329,80 @@ public class Message {
 
         public static String getSendTitleMessage(User user, boolean newName) {
             final String sendTitleMessageQuarry = pinPictureQuarry + "command_message[@command='send_title_" +
+                    "command']/";
+
+            XMLConfiguration config = getXmlConfiguration(user.getId());
+
+            StringBuilder sendTitleMessage = new StringBuilder();
+
+            if (newName) {
+                sendTitleMessage.append(config.getString(sendTitleMessageQuarry + "case[@case='new_name']/" +
+                        "part[@position=1]").replaceAll("/n>", "\n"));
+            } else {
+                sendTitleMessage.append(config.getString(sendTitleMessageQuarry + "case[@case='already_" +
+                        "used']/part[@position=1]").replaceAll("/n>", "\n"));
+            }
+
+            return getFinalizedMessage(sendTitleMessage);
+        }
+    }
+
+    public static class pinVideoCommand {
+        static final String pinVideoQuarry = "command_package[@command='pinVideoCommand']/";
+
+        public static String getPinVideoMessage(User user, boolean hasPermission) {
+            final String pinPictureMessageQuarry = pinVideoQuarry + "command_message[@command='pin_video_command']/";
+
+            XMLConfiguration config = getXmlConfiguration(user.getId());
+
+            StringBuilder pinPictureMessage = new StringBuilder();
+
+            if (hasPermission) {
+                pinPictureMessage.append(config.getString(pinPictureMessageQuarry + "case[@case='has_permission']/" +
+                        "part[@position=1]").replaceAll("/n>", "\n"));
+            } else {
+                pinPictureMessage.append(config.getString(pinPictureMessageQuarry + "case[@case='has_no_" +
+                        "permission']/part[@position=1]").replaceAll("/n>", "\n"));
+            }
+
+            return getFinalizedMessage(pinPictureMessage);
+        }
+
+        public static String getSendDescriptionMessage(User user) {
+            final String sendDescriptionMessageQuarry = pinVideoQuarry + "command_message[@command='send_description_" +
+                    "command']/";
+
+            XMLConfiguration config = getXmlConfiguration(user.getId());
+
+            StringBuilder sendDescriptionMessage = new StringBuilder();
+
+            sendDescriptionMessage.append(config.getString(sendDescriptionMessageQuarry + "part[@position=1]")
+                    .replaceAll("/n>", "\n"));
+
+            return getFinalizedMessage(sendDescriptionMessage);
+        }
+
+        public static String getSendVideoMessage(User user, boolean hasPicture) {
+            final String sendVideoMessageQuarry = pinVideoQuarry + "command_message[@command='send_picture_" +
+                    "command']/";
+
+            XMLConfiguration config = getXmlConfiguration(user.getId());
+
+            StringBuilder sendPictureMessage = new StringBuilder();
+
+            if (hasPicture) {
+                sendPictureMessage.append(config.getString(sendVideoMessageQuarry + "case[@case='picture']/" +
+                        "part[@position=1]").replaceAll("/n>", "\n"));
+            } else {
+                sendPictureMessage.append(config.getString(sendVideoMessageQuarry + "case[@case='no_picture']/" +
+                        "part[@position=1]").replaceAll("/n>", "\n"));
+            }
+
+            return getFinalizedMessage(sendPictureMessage);
+        }
+
+        public static String getSendTitleMessage(User user, boolean newName) {
+            final String sendTitleMessageQuarry = pinVideoQuarry + "command_message[@command='send_title_" +
                     "command']/";
 
             XMLConfiguration config = getXmlConfiguration(user.getId());

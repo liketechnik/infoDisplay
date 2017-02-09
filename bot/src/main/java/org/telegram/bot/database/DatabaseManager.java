@@ -32,6 +32,8 @@
 package org.telegram.bot.database;
 
 
+import Config.Bot;
+import Config.Paths;
 import org.apache.commons.configuration2.Configuration;
 import org.apache.commons.configuration2.FileBasedConfiguration;
 import org.apache.commons.configuration2.PropertiesConfiguration;
@@ -881,6 +883,66 @@ public class DatabaseManager {
     }
 
     /**
+     * Saves currentVideoTitle in the configuration file of a user.
+     * @param userID User for who the value is saved.
+     * @param title The title that is to be saved.
+     * @see #getCurrentVideoTitle(Integer userID) Read the currentPictureTitle.
+     */
+    public void setCurrentVideoTitle(Integer userID, String title) throws Exception {
+        if (Files.exists(this.getDatabaseDisplayFilePath(title))) {
+            throw new FileAlreadyExistsException("There already is one file with this name.");
+        }
+
+        setCurrentConfiguration(userID);
+        try {
+            currentConfiguration.setProperty(Config.Keys.CURRENT_VIDEO_TITLE, title);
+        } catch (NullPointerException e) {
+            currentConfiguration.addProperty(Config.Keys.CURRENT_VIDEO_TITLE, title);
+        }
+
+        currentBuilder.save();
+    }
+
+    /**
+     * Reads currentVideoTitle from the configuration file of a user.
+     * @param userID User of who the value is read.
+     * @return The currentPictureTitle for the specified user.
+     * @see #setCurrentVideoTitle(Integer userID, String title) Save the currentVideo title.
+     */
+    public String getCurrentVideoTitle(Integer userID) throws Exception {
+        setCurrentConfiguration(userID);
+        return  currentConfiguration.getString(Config.Keys.CURRENT_VIDEO_TITLE);
+    }
+
+    /**
+     * Saves currentVideoDescription in the configuration file of a user.
+     * @param userId User for who the value is saved.
+     * @param description The description to be changed.
+     * @see #getCurrentVideoDescription(Integer userId) Read the currentVideoDescription.
+     */
+    public void setCurrentVideoDescription(Integer userId, String description) throws Exception {
+        setCurrentConfiguration(userId);
+        try {
+            currentConfiguration.setProperty(Config.Keys.CURRENT_VIDEO_DESCRIPTION, description);
+        } catch (NullPointerException e) {
+            currentConfiguration.addProperty(Config.Keys.CURRENT_VIDEO_DESCRIPTION, description);
+        }
+
+        currentBuilder.save();
+    }
+
+    /**
+     * Reads currentVideoDescription from the configuration file of a user.
+     * @param userId User of who the value is read.
+     * @return The currentVideoDescription for the specified user.
+     * @see #setCurrentVideoDescription(Integer userId, String description) Save the currentVideoDescription.
+     */
+    public String getCurrentVideoDescription(Integer userId) throws Exception {
+        setCurrentConfiguration(userId);
+        return currentConfiguration.getString(Config.Keys.CURRENT_VIDEO_DESCRIPTION);
+    }
+
+    /**
      * Download the file to display and add it together with its properties to the configuration files.
      * @param absSender
      * @param userId
@@ -907,6 +969,24 @@ public class DatabaseManager {
             this.setDisplayFileDescription(pictureTitle, this.getCurrentPictureDescription(userId));
             this.setDisplayFileDuration(pictureTitle, this.getCurrentPictureDuration(userId));
             this.addDisplayFile(pictureTitle);
+        } else if (type.equals(Config.Bot.DISPLAY_FILE_TYPE_VIDEO)) {
+            String videoTitle = this.getCurrentVideoTitle(userId);
+
+            GetFile getFileRequest = new GetFile();
+            getFileRequest.setFileId(fileId);
+
+            File file = absSender.getFile(getFileRequest);
+            URL fileUrl = new URL(
+                    "https://api.telegram.org/file/bot" + DatabaseManager.getInstance().getBotToken() + "/" +
+                            file.getFilePath());
+            Path image = FileSystems.getDefault().getPath(Paths.DISPLAY_FILES + "/" + videoTitle);
+
+            FileUtils.copyURLToFile(fileUrl, image.toFile());
+
+            this.createConfigurationFile(this.getDatabaseDisplayFilePath(videoTitle));
+            this.setDisplayFileType(videoTitle, Bot.DISPLAY_FILE_TYPE_VIDEO);
+            this.setDisplayFileDescription(videoTitle, this.getCurrentVideoDescription(userId));
+            this.addDisplayFile(videoTitle);
         } else {
             throw new IllegalArgumentException("No known type.");
         }

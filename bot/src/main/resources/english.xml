@@ -177,4 +177,34 @@
             </case>
         </command_message>
     </command_package>
+    <command_package command="pinVideoCommand">
+        <command_message command="pin_video_command">
+            <case case="has_no_permission">
+                <part position="1">You are not allowed to upload pictures./n>
+                    Use /register to gain the permission for doing this./n></part>
+            </case>
+            <case case="has_permission">
+                <part position="1">Please send me a name for your picture.</part>
+            </case>
+        </command_message>
+        <command_message command="send_description_command">
+            <part position="1">Please send the video now.</part>
+        </command_message>
+        <command_message command="send_video_command">
+            <case case="no_picture">
+                <part position="1">Please send a *picture*.</part>
+            </case>
+            <case case="picture">
+                <part position="1">You have succesfully uploaded a new picture.</part>
+            </case>
+        </command_message>
+        <command_message command="send_title_command">
+            <case case="already_used">
+                <part position="1">This name is already in use! Please choose a different one.</part>
+            </case>
+            <case case="new_name">
+                <part position="1">Please send a (short) description / title for your picture.</part>
+            </case>
+        </command_message>
+    </command_package>
 </language>
