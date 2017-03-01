@@ -35,6 +35,7 @@ import org.apache.commons.configuration2.ex.ConfigurationException;
 
 import org.telegram.bot.commands.SendOnErrorOccurred;
 import org.telegram.bot.database.DatabaseManager;
+import org.telegram.bot.messages.ContentMessage;
 import org.telegram.bot.messages.Message;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Chat;
@@ -45,6 +46,7 @@ import org.telegram.telegrambots.exceptions.TelegramApiException;
 import org.telegram.telegrambots.logging.BotLogger;
 
 import javax.xml.crypto.Data;
+import java.util.HashMap;
 
 
 /**
@@ -76,7 +78,6 @@ public class AnswerCommand extends BotCommand {
     @Override
     public void execute(AbsSender absSender, User user, Chat chat, String[] arguments) {
 
-        String message;
         StringBuilder questionsBuilder = new StringBuilder();
         SendMessage answer = new SendMessage();
 
@@ -95,10 +96,16 @@ public class AnswerCommand extends BotCommand {
                 questions++;
             }
 
-            message = Message.answerCommand.getAnswerMessage(user, questionsBuilder.toString());
+            HashMap<String, String> additionalContent = new HashMap<>();
+            additionalContent.put("questions", questionsBuilder.toString());
+
+            ContentMessage contentMessage = new ContentMessage(this.getCommandIdentifier() + "_command");
+            contentMessage.setMessageName(this.getClass().getPackage().getName().replaceAll("org.telegram.bot.commands.",
+                    ""), this.getCommandIdentifier() + "_command");
+            contentMessage.setAdditionalContent(additionalContent);
 
             answer.setChatId(chat.getId().toString());
-            answer.setText(message);
+            answer.setText(contentMessage.getContent(user.getId(), false));
 
             databaseManager.setUserCommandState(user.getId(), Config.Bot.ANSWER_COMMAND_CHOOSE_NUMBER);
         } catch (Exception e) {

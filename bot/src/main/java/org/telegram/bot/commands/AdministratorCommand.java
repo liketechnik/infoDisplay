@@ -78,10 +78,10 @@ public class AdministratorCommand extends BotCommand {
         try {
             DatabaseManager.getInstance().setUserState(user.getId(), true);
 
-            StringBuilder messageBuilder = new StringBuilder();
-            messageBuilder.append(Message.getAdministratorMessage(user));
             answer.setChatId(chat.getId().toString());
-            answer.setText(messageBuilder.toString());
+            answer.setText(new Message(this.getCommandIdentifier() + "_command")
+                    .getContent(user.getId(), true));
+
         // catch every error that could occur, log it and inform the user about the occurrence of an error.
         } catch (Exception e) {
             BotLogger.error(LOGTAG, e);

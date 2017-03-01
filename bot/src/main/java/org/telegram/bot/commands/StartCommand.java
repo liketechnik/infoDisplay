@@ -31,11 +31,8 @@
 
 package org.telegram.bot.commands;
 
-import org.apache.commons.configuration2.ex.ConfigurationException;
-
-import org.telegram.bot.DisplayBot.*;
 import org.telegram.bot.database.DatabaseManager;
-import org.telegram.bot.messages.Message;
+import org.telegram.bot.messages.SituationalContentMessage;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Chat;
 import org.telegram.telegrambots.api.objects.User;
@@ -44,8 +41,7 @@ import org.telegram.telegrambots.bots.commands.BotCommand;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 import org.telegram.telegrambots.logging.BotLogger;
 
-import java.io.IOException;
-import java.util.NoSuchElementException;
+import java.util.HashMap;
 
 import static org.telegram.bot.Main.getFilteredUsername;
 
@@ -77,7 +73,6 @@ public class StartCommand extends BotCommand {
     @Override
     public void execute(AbsSender absSender, User user, Chat chat, String[] strings) {
 
-        String message;
         SendMessage answer = new SendMessage();
 
         try {
@@ -91,8 +86,12 @@ public class StartCommand extends BotCommand {
                 userKnown = false;
             }
 
+            SituationalContentMessage situationalContentMessage = new SituationalContentMessage(
+                    this.getCommandIdentifier() + "_command");
+
             if (userKnown) {
-                message = Message.getStartMessage(user, true);
+                situationalContentMessage.setMessageName(
+                        this.getCommandIdentifier() + "_command", "userKnown");
             } else {
                 databaseManager.setUserState(user.getId(), true);
                 databaseManager.setUserLanguage(user.getId(), Config.Languages.NONE);
@@ -103,14 +102,20 @@ public class StartCommand extends BotCommand {
                     databaseManager.setUserRegistrationState(user.getId(), false);
                 }
 
-                message = Message.getStartMessage(user, false);
+                situationalContentMessage.setMessageName(
+                        this.getCommandIdentifier() + "_command", "userUnknown");
             }
 
             databaseManager.setUserWantsRegistrationState(user.getId(), false);
             databaseManager.setUserCommandState(user.getId(), Config.Bot.NO_COMMAND);
 
+            HashMap<String, String> additionalContent = new HashMap<String, String>();
+            additionalContent.put("userName", getFilteredUsername(user));
+
+            situationalContentMessage.setAdditionalContent(additionalContent);
+
             answer.setChatId(chat.getId().toString());
-            answer.setText(message);
+            answer.setText(situationalContentMessage.getContent(user.getId(), false));
 
         } catch (Exception e) {
             BotLogger.error(LOGTAG, e);

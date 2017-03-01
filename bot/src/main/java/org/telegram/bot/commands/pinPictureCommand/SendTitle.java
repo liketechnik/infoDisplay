@@ -35,6 +35,7 @@ package org.telegram.bot.commands.pinPictureCommand;
 import org.telegram.bot.commands.SendOnErrorOccurred;
 import org.telegram.bot.database.DatabaseManager;
 import org.telegram.bot.messages.Message;
+import org.telegram.bot.messages.SituationalMessage;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Chat;
 import org.telegram.telegrambots.api.objects.User;
@@ -82,25 +83,26 @@ public class SendTitle extends BotCommand {
 
             DatabaseManager databaseManager = DatabaseManager.getInstance();
 
-            StringBuilder messageBuilder = new StringBuilder();
-
             String message = arguments[0];
-
             String displayFileName;
             displayFileName = message + ".jpg";
 
-            messageBuilder.append(Message.pinPictureCommand.getSendTitleMessage(user, true));
+            SituationalMessage situationalMessage = new SituationalMessage(this.getCommandIdentifier() + "_command");
+            situationalMessage.setMessageName(this.getClass().getPackage().getName()
+                    .replaceAll("org.telegram.bot.commands.", ""), this.getCommandIdentifier() + "_command",
+                    "new_name");
 
             try {
                 databaseManager.setCurrentPictureTitle(user.getId(), displayFileName);
                 databaseManager.setUserCommandState(user.getId(), Config.Bot.PIN_PICTURE_COMMAND_SEND_DESCRIPTION);
             } catch (FileAlreadyExistsException e) {
-                messageBuilder = new StringBuilder();
-                messageBuilder.append(Message.pinPictureCommand.getSendTitleMessage(user, false));
+                situationalMessage.setMessageName(this.getClass().getPackage().getName()
+                                .replaceAll("org.telegram.bot.commands.", ""),
+                        this.getCommandIdentifier() + "_command","already_used");
             }
 
             answer.setChatId(chat.getId().toString());
-            answer.setText(messageBuilder.toString());
+            answer.setText(situationalMessage.getContent(user.getId(), false));
         } catch (Exception e) {
             BotLogger.error(LOGTAG, e);
 

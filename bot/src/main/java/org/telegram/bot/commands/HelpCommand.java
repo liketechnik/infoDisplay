@@ -31,11 +31,14 @@
 
 package org.telegram.bot.commands;
 
+import Config.Bot;
 import org.apache.commons.collections.KeyValue;
 import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.apache.commons.lang3.ArrayUtils;
 
 import org.telegram.bot.database.DatabaseManager;
+import org.telegram.bot.messages.CommandDescription;
+import org.telegram.bot.messages.ContentMessage;
 import org.telegram.bot.messages.Message;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Chat;
@@ -48,6 +51,9 @@ import org.telegram.telegrambots.logging.BotLogger;
 
 import java.awt.event.KeyEvent;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 /**
@@ -88,9 +94,7 @@ public class HelpCommand extends BotCommand {
         try {
             DatabaseManager.getInstance().setUserState(user.getId(), true);
 
-            StringBuilder messageBuilder = new StringBuilder();
-
-            messageBuilder.append(Message.getHelpMessage(user));
+            StringBuilder additionalContentBuilder = new StringBuilder();
 
             for (BotCommand botCommand : commandRegistry.getRegisteredCommands()) {
                 if (!botCommand.getCommandIdentifier().equals("help") &&
@@ -99,20 +103,45 @@ public class HelpCommand extends BotCommand {
                         !botCommand.getCommandIdentifier().equals("ids") &&
                         !botCommand.getCommandIdentifier().equals("answer")) {
 
-                    messageBuilder.append("/").append(botCommand.getCommandIdentifier().replace("_", "\\_"));
-                    messageBuilder.append(":\n    ").append(botCommand.getDescription()).append("\n");
+                    additionalContentBuilder.append("/").append(botCommand.getCommandIdentifier().replace("_",
+                            Matcher.quoteReplacement("\\_")));
+                    additionalContentBuilder.append(":\n    ");
+
+                    CommandDescription commandDescription =
+                            new CommandDescription(botCommand.getCommandIdentifier() + "_command");
+
+                    // check if the command is inside a package or not
+                    if (botCommand.getClass().getPackage() != StartCommand.class.getPackage()) {
+                        //                        additionalContentBuilder.append(commandDescription.getContent(user.getId(), false));
+                        // find out the package name and with its identifier parse it from xml file via CommandDescription class
+                        commandDescription.setMessageName(
+                                botCommand.getClass().getPackage().getName().replaceAll(
+                                        "org.telegram.bot.commands.", ""), botCommand.getCommandIdentifier() +
+                                            "_command");
+                    }
+
+                    additionalContentBuilder.append(commandDescription.getContent(user.getId(), false));
+                    additionalContentBuilder.append("\n");
                 }
             }
 
             if (user.getId().equals(DatabaseManager.getInstance().getAdminUserId())) {
-                messageBuilder.append("/").append(commandRegistry.getRegisteredCommand("answer")
+                additionalContentBuilder.append("/").append(commandRegistry.getRegisteredCommand("answer")
                         .getCommandIdentifier()).append(":\n    ").append(commandRegistry.getRegisteredCommand("answer")
                         .getDescription()).append("\n");
             }
 
+            HashMap<String, String> additionalContent = new HashMap<>();
+            additionalContent.put("commandDescriptions", additionalContentBuilder.toString());
+
+            ContentMessage contentMessage = new ContentMessage(this.getCommandIdentifier() + "_command");
+            contentMessage.setAdditionalContent(additionalContent);
+
+//            BotLogger.info(LOGTAG, contentMessage.getContent(user.getId(), false));
+
             answer.setChatId(chat.getId().toString());
             answer.enableMarkdown(true);
-            answer.setText(messageBuilder.toString());
+            answer.setText(contentMessage.getContent(user.getId(), false));
 
         } catch (Exception e) {
             BotLogger.error(LOGTAG, e);

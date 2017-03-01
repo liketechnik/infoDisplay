@@ -80,14 +80,14 @@ public class AskCommand extends BotCommand {
             DatabaseManager databaseManager = DatabaseManager.getInstance();
 
             databaseManager.setUserState(user.getId(), true);
-
-            StringBuilder messageBuilder = new StringBuilder();
-            messageBuilder.append(Message.askCommand.getAskMessage(user));
-
             databaseManager.setUserCommandState(user.getId(), Config.Bot.ASK_COMMAND_WRITE_QUESTION);
 
+            Message message = new Message(this.getCommandIdentifier() + "_command");
+            message.setMessageName(this.getClass().getPackage().getName().replaceAll("org.telegram.bot.commands.", ""),
+                    this.getCommandIdentifier() + "_command");
+
             answer.setChatId(chat.getId().toString());
-            answer.setText(messageBuilder.toString());
+            answer.setText(message.getContent(user.getId(), false));
         } catch (Exception e) {
             BotLogger.error(LOGTAG, e);
 
