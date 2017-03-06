@@ -45,6 +45,7 @@ public final class Bot {
     public static final String HAS_NO_PHOTO = "hasNoPhoto";
 
     public static final String HAS_VIDEO = "hasVideo";
+    public static final String HAS_NO_VIDEO = "hasNoVideo";
 
     public final static String ASK_COMMAND_WRITE_QUESTION = "askCommand";
 

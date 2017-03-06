@@ -31,6 +31,7 @@
 
 package org.telegram.bot;
 
+import Config.Bot;
 import org.apache.commons.io.FileUtils;
 import org.telegram.bot.commands.*;
 import org.telegram.bot.commands.answerCommand.AnswerCommand;
@@ -39,6 +40,9 @@ import org.telegram.bot.commands.answerCommand.WriteAnswer;
 import org.telegram.bot.commands.askCommand.AskCommand;
 import org.telegram.bot.commands.askCommand.WriteQuestion;
 import org.telegram.bot.commands.pinPictureCommand.*;
+import org.telegram.bot.commands.pinPictureCommand.SendDescription;
+import org.telegram.bot.commands.pinPictureCommand.SendTitle;
+import org.telegram.bot.commands.pinVideoCommand.*;
 import org.telegram.bot.database.DatabaseManager;
 import org.telegram.telegrambots.api.methods.GetFile;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
@@ -51,6 +55,7 @@ import org.telegram.telegrambots.bots.commands.ICommandRegistry;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 import org.telegram.telegrambots.logging.BotLogger;
 
+import javax.security.auth.login.Configuration;
 import java.net.URL;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
@@ -80,6 +85,7 @@ public class DisplayBot extends TelegramLongPollingCommandBot {
         register(new AskCommand());
         register(new AnswerCommand());
         register(new PinPictureCommand());
+        register(new PinVideoCommand());
         register(new AboutCommand());
         register(new CancelCommand(this));
 
@@ -166,49 +172,114 @@ public class DisplayBot extends TelegramLongPollingCommandBot {
                         new SendDuration().execute(this, update.getMessage().getFrom(), update.getMessage().getChat(),
                                 new String[]{update.getMessage().getText()});
 
+                    } else if (databaseManager.getUserCommandState(update.getMessage().getFrom().getId())
+                            .equals(Bot.PIN_PICTURE_COMMAND_SEND_PICTURE)) {
+
+                        new SendPicture().execute(this, update.getMessage().getFrom(), update.getMessage().getChat(),
+                                new String[]{Bot.HAS_NO_PHOTO});
+
+                    } else if (databaseManager.getUserCommandState(update.getMessage().getFrom().getId())
+                            .equals(Bot.PIN_VIDEO_COMMAND_SEND_VIDEO)) {
+
+                        new SendVideo().execute(this, update.getMessage().getFrom(), update.getMessage().getChat(),
+                                new String[]{Bot.HAS_NO_VIDEO});
+
+                    } else if (databaseManager.getUserCommandState(update.getMessage().getFrom().getId())
+                            .equals(Bot.PIN_VIDEO_COMMAND_SEND_DESCRIPTION)) {
+
+                        new org.telegram.bot.commands.pinVideoCommand.SendDescription().execute(this,
+                                update.getMessage().getFrom(), update.getMessage().getChat(),
+                                new String[]{update.getMessage().getText()});
+
+                    } else if (databaseManager.getUserCommandState(update.getMessage().getFrom().getId())
+                            .equals(Bot.PIN_VIDEO_COMMAND_SEND_TITLE)) {
+
+                        new org.telegram.bot.commands.pinVideoCommand.SendTitle().execute(this,
+                                update.getMessage().getFrom(), update.getMessage().getChat(),
+                                new String[]{update.getMessage().getText()});
+
                     }
-                } else if (databaseManager.getUserCommandState(update.getMessage().getFrom().getId())
-                        .equals(Config.Bot.PIN_PICTURE_COMMAND_SEND_PICTURE)) {
+                } else if (update.getMessage().hasPhoto() || hasPhoto(update.getMessage())) {
+                    if (databaseManager.getUserCommandState(update.getMessage().getFrom().getId())
+                            .equals(Bot.PIN_PICTURE_COMMAND_SEND_PICTURE)) {
 
-                    if (update.getMessage().getPhoto() != null) {
+                        String fileId = null;
 
-                        List<PhotoSize> photos = update.getMessage().getPhoto();
+                        if (update.getMessage().hasPhoto()) {
 
-                        int width = 0;
-                        int height = 0;
+                            List<PhotoSize> photos = update.getMessage().getPhoto();
 
-                        int biggestPhoto = 0;
+                            int width = 0;
+                            int height = 0;
+
+                            int biggestPhoto = 0;
 
 
-                        for (int x = 0; x < photos.size(); x++) {
-                            if (width < photos.get(x).getWidth() || height < photos.get(x).getHeight()) {
-                                biggestPhoto = x;
+                            for (int x = 0; x < photos.size(); x++) {
+                                if (width < photos.get(x).getWidth() || height < photos.get(x).getHeight()) {
+                                    biggestPhoto = x;
+                                }
                             }
+
+                            fileId = photos.get(biggestPhoto).getFileId();
+                        } else if (hasPhoto(update.getMessage())) {
+                            fileId = update.getMessage().getDocument().getFileId();
                         }
 
                         new SendPicture().execute(this, update.getMessage().getFrom(), update.getMessage().getChat(),
-                                new String[]{Config.Bot.HAS_PHOTO, photos.get(biggestPhoto).getFileId()});
-                    } else if (update.getMessage().getDocument() != null &&
-                            (update.getMessage().getDocument().getMimeType().equals("image/jpeg") ||
-                                    update.getMessage().equals("image/png"))) {
+                                new String[]{Config.Bot.HAS_PHOTO, fileId});
+                    }
 
-                        if (update.getMessage().getDocument() != null &&
-                                (update.getMessage().getDocument().getMimeType().equals("image/jpeg") ||
-                                        update.getMessage().equals("image/png"))) {
+                } else if (hasVideo(update.getMessage())) {
+                    if (databaseManager.getUserCommandState(update.getMessage().getFrom().getId())
+                            .equals(Bot.PIN_VIDEO_COMMAND_SEND_VIDEO)) {
 
-                            new SendPicture().execute(this, update.getMessage().getFrom(), update.getMessage().getChat(),
-                                    new String[]{Config.Bot.HAS_PHOTO,
-                                            update.getMessage().getDocument().getFileId().toString()});
-                        } else {
-                            new SendPicture().execute(this, update.getMessage().getFrom(), update.getMessage().getChat(),
-                                    new String[]{Config.Bot.HAS_NO_PHOTO});
-                        }
-
-                    } else {
-                        new SendPicture().execute(this, update.getMessage().getFrom(), update.getMessage().getChat(),
-                                new String[]{Config.Bot.HAS_NO_PHOTO});
+                        new SendVideo().execute(this, update.getMessage().getFrom(), update.getMessage().getChat(),
+                                new String[]{Bot.HAS_VIDEO, update.getMessage().getDocument().getFileId()});
                     }
                 }
+//                else if (databaseManager.getUserCommandState(update.getMessage().getFrom().getId())
+//                        .equals(Config.Bot.PIN_PICTURE_COMMAND_SEND_PICTURE)) {
+//
+//                    if (update.getMessage().getPhoto() != null) {
+//
+//                        List<PhotoSize> photos = update.getMessage().getPhoto();
+//
+//                        int width = 0;
+//                        int height = 0;
+//
+//                        int biggestPhoto = 0;
+//
+//
+//                        for (int x = 0; x < photos.size(); x++) {
+//                            if (width < photos.get(x).getWidth() || height < photos.get(x).getHeight()) {
+//                                biggestPhoto = x;
+//                            }
+//                        }
+//
+//                        new SendPicture().execute(this, update.getMessage().getFrom(), update.getMessage().getChat(),
+//                                new String[]{Config.Bot.HAS_PHOTO, photos.get(biggestPhoto).getFileId()});
+//                    } else if (update.getMessage().getDocument() != null &&
+//                            (update.getMessage().getDocument().getMimeType().equals("image/jpeg") ||
+//                                    update.getMessage().equals("image/png"))) {
+//
+//                        if (update.getMessage().getDocument() != null &&
+//                                (update.getMessage().getDocument().getMimeType().equals("image/jpeg") ||
+//                                        update.getMessage().equals("image/png"))) {
+//
+//                            new SendPicture().execute(this, update.getMessage().getFrom(), update.getMessage().getChat(),
+//                                    new String[]{Config.Bot.HAS_PHOTO,
+//                                            update.getMessage().getDocument().getFileId().toString()});
+//                        } else {
+//                            new SendPicture().execute(this, update.getMessage().getFrom(), update.getMessage().getChat(),
+//                                    new String[]{Config.Bot.HAS_NO_PHOTO});
+//                        }
+//
+//                    } else {
+//                        new SendPicture().execute(this, update.getMessage().getFrom(), update.getMessage().getChat(),
+//                                new String[]{Config.Bot.HAS_NO_PHOTO});
+//                    }
+//                }
             }
         } catch (Exception e) {
             BotLogger.error("PROCESSNONCOMMANDUPDATE", e);
@@ -244,5 +315,29 @@ public class DisplayBot extends TelegramLongPollingCommandBot {
             BotLogger.error(this.LOGTAG, "Error getting bot's token.", e);
         }
         return null;
+    }
+
+    private boolean hasPhoto(Message message) {
+        if (message.hasDocument()) {
+            if (message.getDocument().getMimeType().contains("image")) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    private boolean hasVideo(Message message) {
+        if (message.hasDocument()) {
+            if (message.getDocument().getMimeType().contains("video")) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
     }
 }
