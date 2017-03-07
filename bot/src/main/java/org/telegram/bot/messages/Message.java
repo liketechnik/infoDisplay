@@ -383,7 +383,7 @@ public class Message {
         }
 
         public static String getSendVideoMessage(User user, boolean hasPicture) {
-            final String sendVideoMessageQuarry = pinVideoQuarry + "command_message[@command='send_picture_" +
+            final String sendVideoMessageQuarry = pinVideoQuarry + "command_message[@command='send_video_" +
                     "command']/";
 
             XMLConfiguration config = getXmlConfiguration(user.getId());

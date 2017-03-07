@@ -34,9 +34,9 @@
 
     <xs:element name="name"  type="xs:language"/>
 
-    <xs:attribute name="command" type="xs:ID"/>
+    <xs:attribute name="command" type="xs:token"/>
     <xs:attribute name="position" type="xs:nonNegativeInteger"/>
-    <xs:attribute name="case" type="xs:ID"/>
+    <xs:attribute name="case" type="xs:token"/>
 
 
     <xs:element name="part">

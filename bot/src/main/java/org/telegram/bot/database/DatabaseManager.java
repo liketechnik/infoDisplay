@@ -428,7 +428,10 @@ public class DatabaseManager {
                 && !state.equals(Config.Bot.PIN_PICTURE_COMMAND_SEND_DESCRIPTION)
                 && !state.equals(Config.Bot.PIN_PICTURE_COMMAND_SEND_TITLE)
                 && !state.equals(Config.Bot.PIN_PICTURE_COMMAND_SEND_PICTURE)
-                && !state.equals(Config.Bot.PIN_PICTURE_COMMAND_SEND_DURATION)) {
+                && !state.equals(Config.Bot.PIN_PICTURE_COMMAND_SEND_DURATION)
+                && !state.equals(Bot.PIN_VIDEO_COMMAND_SEND_VIDEO)
+                && !state.equals(Bot.PIN_VIDEO_COMMAND_SEND_DESCRIPTION)
+                && !state.equals(Bot.PIN_VIDEO_COMMAND_SEND_TITLE)) {
             throw new IllegalArgumentException("No known state: " + state);
         }
 
@@ -724,7 +727,8 @@ public class DatabaseManager {
      * @see #setDisplayFileDescription(String displayFileName, String description) Set the description of a displayFile.
      */
     public void setDisplayFileType(String displayFileName, String type) throws Exception {
-        if (!type.equals(Config.Bot.DISPLAY_FILE_TYPE_IMAGE)) {
+        if (!type.equals(Config.Bot.DISPLAY_FILE_TYPE_IMAGE)
+                && !type.equals(Bot.DISPLAY_FILE_TYPE_VIDEO)) {
             throw new IllegalArgumentException("No known type: " + type);
         }
 
