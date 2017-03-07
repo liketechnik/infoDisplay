@@ -35,6 +35,7 @@ import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.telegram.bot.commands.SendOnErrorOccurred;
 import org.telegram.bot.database.DatabaseManager;
 import org.telegram.bot.messages.Message;
+import org.telegram.bot.messages.SituationalMessage;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Chat;
 import org.telegram.telegrambots.api.objects.User;
@@ -78,27 +79,21 @@ public class PinPictureCommand extends BotCommand {
         try {
             DatabaseManager databaseManager = DatabaseManager.getInstance();
 
-            StringBuilder messageBuilder = new StringBuilder();
+            SituationalMessage situationalMessage = new SituationalMessage(this.getCommandIdentifier() + "_command");
 
             if (!databaseManager.getUserRegistrationState(user.getId())) {
-                messageBuilder.append(Message.pinPictureCommand.getPinPictureMessage(user, false));
+                situationalMessage.setMessageName(this.getClass().getPackage().getName()
+                                .replaceAll("org.telegram.bot.commands.", ""), this.getCommandIdentifier() + "_command",
+                        "has_no_permission");
+            } else {
+                databaseManager.setUserCommandState(user.getId(), Config.Bot.PIN_PICTURE_COMMAND_SEND_TITLE);
 
-                answerMessage.setText(messageBuilder.toString());
-
-                try {
-                    absSender.sendMessage(answerMessage);
-                } catch (Exception e) {
-                    BotLogger.error(LOGTAG, e);
-                }
-
-                return;
+                situationalMessage.setMessageName(this.getClass().getPackage().getName()
+                                .replaceAll("org.telegram.bot.commands.", ""), this.getCommandIdentifier() + "_command",
+                        "has_permission");
             }
 
-            databaseManager.setUserCommandState(user.getId(), Config.Bot.PIN_PICTURE_COMMAND_SEND_TITLE);
-
-            messageBuilder.append(Message.pinPictureCommand.getPinPictureMessage(user, true));
-
-            answerMessage.setText(messageBuilder.toString());
+            answerMessage.setText(situationalMessage.getContent(user.getId(), false));
             answerMessage.setChatId(user.getId().toString());
         } catch (Exception e) {
             BotLogger.error(LOGTAG, e);

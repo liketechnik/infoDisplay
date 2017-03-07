@@ -35,6 +35,8 @@ package org.telegram.bot.commands.answerCommand;
 import org.telegram.bot.commands.SendOnErrorOccurred;
 import org.telegram.bot.database.DatabaseManager;
 import org.telegram.bot.messages.Message;
+import org.telegram.bot.messages.SituationalContentMessage;
+import org.telegram.bot.messages.SituationalMessage;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Chat;
 import org.telegram.telegrambots.api.objects.User;
@@ -42,6 +44,8 @@ import org.telegram.telegrambots.bots.AbsSender;
 import org.telegram.telegrambots.bots.commands.BotCommand;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 import org.telegram.telegrambots.logging.BotLogger;
+
+import java.util.HashMap;
 
 /**
  * @author Florian Warzecha
@@ -76,31 +80,35 @@ public class WriteAnswer extends BotCommand {
         SendMessage answer = new SendMessage();
         SendMessage confirmation = new SendMessage();
 
-        String message = arguments[0];
-
         try {
 
             DatabaseManager databaseManager = DatabaseManager.getInstance();
 
-            StringBuilder messageBuilder = new StringBuilder();
-
             int selectedQuestion = databaseManager.getSelectedQuestion(user.getId());
 
-            messageBuilder.append(Message.answerCommand.getWriteAnswerMessage(user, selectedQuestion,message));
+            HashMap<String, String> additionalContent = new HashMap<>();
+            additionalContent.put("question", databaseManager.getQuestion(selectedQuestion - 1));
+            additionalContent.put("answer", arguments[0]);
 
-            StringBuilder confirmationBuilder = new StringBuilder();
-            confirmationBuilder.append(Message.answerCommand.getWriteAnswerMessage(user));
+            SituationalContentMessage explanationMessage = new SituationalContentMessage(this.getCommandIdentifier() +
+                "_command");
+            explanationMessage.setMessageName(this.getClass().getPackage().getName().replaceAll("org.telegram.bot.commands.", ""),
+                    this.getCommandIdentifier() + "_command", "explanation");
+            explanationMessage.setAdditionalContent(additionalContent);
+
+            SituationalMessage confirmationMessage = new SituationalMessage(this.getCommandIdentifier() + "_command");
+            confirmationMessage.setMessageName(this.getClass().getPackage().getName().replaceAll("org.telegram.bot.commands.", ""),
+                    this.getCommandIdentifier() + "_command", "answer");
+
 
             answer.setChatId(databaseManager.getQuestionChatID(selectedQuestion - 1).toString());
-            answer.setText(messageBuilder.toString());
+            answer.setText(explanationMessage.getContent(user.getId(), false));
 
             confirmation.setChatId(databaseManager.getAdminChatId().toString());
-            confirmation.setText(confirmationBuilder.toString());
+            confirmation.setText(confirmationMessage.getContent(user.getId(), true));
 
             databaseManager.deleteQuestion(selectedQuestion - 1);
             databaseManager.setSelectedQuestion(user.getId(), -1);
-
-
         } catch (Exception e) {
             BotLogger.error(LOGTAG, e);
 

@@ -35,6 +35,7 @@ package org.telegram.bot.commands.pinPictureCommand;
 import org.telegram.bot.commands.SendOnErrorOccurred;
 import org.telegram.bot.database.DatabaseManager;
 import org.telegram.bot.messages.Message;
+import org.telegram.bot.messages.SituationalMessage;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Chat;
 import org.telegram.telegrambots.api.objects.User;
@@ -78,40 +79,32 @@ public class SendDuration extends BotCommand {
         try {
 
             DatabaseManager databaseManager = DatabaseManager.getInstance();
-
-            StringBuilder messageBuilder = new StringBuilder();
-            String message = arguments[0];
-
             String displayFileName = databaseManager.getCurrentPictureTitle(user.getId());
 
-            int duration = 15;
+            SituationalMessage situationalMessage = new SituationalMessage(this.getCommandIdentifier() + "_command");
 
-            answer.setChatId(user.getId().toString());
-
+            String message = arguments[0];
+            int duration;
             try {
                 duration = Integer.parseInt(message);
                 if (duration < 1) {
                     throw new NumberFormatException("Duration is too low.");
                 }
+
+                situationalMessage.setMessageName(this.getClass().getPackage().getName()
+                                .replaceAll("org.telegram.bot.commands.", ""), this.getCommandIdentifier() + "_command",
+                        "valid_duration");
+
+                databaseManager.setCurrentPictureDuration(user.getId(), duration);
+                databaseManager.setUserCommandState(user.getId(), Config.Bot.PIN_PICTURE_COMMAND_SEND_PICTURE);
             } catch (NumberFormatException e) {
-                messageBuilder.append(Message.pinPictureCommand.getSendDurationMessage(user, false));
-                answer.setText(messageBuilder.toString());
-
-                try {
-                    absSender.sendMessage(answer);
-                } catch (TelegramApiException e1) {
-                    BotLogger.error(LOGTAG, e1);
-                }
-
-                return;
+                situationalMessage.setMessageName(this.getClass().getPackage().getName()
+                                .replaceAll("org.telegram.bot.commands.", ""), this.getCommandIdentifier() + "_command",
+                        "invalid_duration");
             }
 
-            messageBuilder.append(Message.pinPictureCommand.getSendDurationMessage(user, true));
-
-            databaseManager.setCurrentPictureDuration(user.getId(), duration);
-            databaseManager.setUserCommandState(user.getId(), Config.Bot.PIN_PICTURE_COMMAND_SEND_PICTURE);
-
-            answer.setText(messageBuilder.toString());
+            answer.setChatId(user.getId().toString());
+            answer.setText(situationalMessage.getContent(user.getId(), false));
         } catch (Exception e) {
             BotLogger.error(LOGTAG, e);
 

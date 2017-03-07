@@ -35,6 +35,8 @@ import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.apache.commons.io.output.StringBuilderWriter;
 import org.telegram.bot.database.DatabaseManager;
 import org.telegram.bot.messages.Message;
+import org.telegram.bot.messages.SituationalContentMessage;
+import org.telegram.bot.messages.SituationalMessage;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Chat;
 import org.telegram.telegrambots.api.objects.User;
@@ -44,6 +46,7 @@ import org.telegram.telegrambots.exceptions.TelegramApiException;
 import org.telegram.telegrambots.logging.BotLogger;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 import static org.telegram.bot.Main.getSpecialFilteredUsername;
 
@@ -83,28 +86,43 @@ public class RegisterCommand extends BotCommand {
             DatabaseManager databaseManager = DatabaseManager.getInstance();
             databaseManager.setUserState(user.getId(), true);
 
-            String message;
+
+            SituationalContentMessage situationalContentMessage =
+                    new SituationalContentMessage(this.getCommandIdentifier() + "_command");
+
+            HashMap<String, String> additionalContent = new HashMap<>();
+            additionalContent.put("userId", user.getId().toString());
+            additionalContent.put("userName", getSpecialFilteredUsername(user));
+
+            situationalContentMessage.setAdditionalContent(additionalContent);
 
             if (databaseManager.getUserRegistrationState(user.getId())) {
-                message = Message.getRegisterMessage(user, Config.registerCommandIfClauses.alreadyRegisterd);
+                situationalContentMessage.setMessageName(
+                        this.getCommandIdentifier() + "_command", "alreadyRegistered");
             } else {
                 if (databaseManager.getUserWantsRegistrationState(user.getId())) {
-                    message = Message.getRegisterMessage(user, Config.registerCommandIfClauses.registrationRequestSent);
+                    situationalContentMessage.setMessageName(
+                            this.getCommandIdentifier() + "_command", "registrationRequestSent");
                 } else {
                     databaseManager.setUserWantsRegistrationState(user.getId(), true);
 
-                    message = Message.getRegisterMessage(user, Config.registerCommandIfClauses.sendRegistrationRequest);
+                    situationalContentMessage.setMessageName(
+                            this.getCommandIdentifier() + "_command", "toAdmin");
 
                     SendMessage request = new SendMessage();
                     request.setChatId(databaseManager.getAdminChatId().toString());
-                    request.setText(Message.getRegisterMessage(user, Config.registerCommandIfClauses.toAdmin));
+                    request.setText(situationalContentMessage.getContent(user.getId(), true));
 
                     absSender.sendMessage(request);
+
+                    situationalContentMessage.setMessageName(
+                            this.getCommandIdentifier() + "_command", "sendRegistrationRequest");
                 }
             }
 
             answer.setChatId(chat.getId().toString());
-            answer.setText(message);
+            answer.setText(situationalContentMessage.getContent(user.getId(), true));
+
         } catch (Exception e) {
             BotLogger.error(LOGTAG, e);
 

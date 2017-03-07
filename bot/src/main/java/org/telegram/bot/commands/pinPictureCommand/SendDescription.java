@@ -80,18 +80,16 @@ public class SendDescription extends BotCommand {
 
             DatabaseManager databaseManager = DatabaseManager.getInstance();
 
-            StringBuilder messageBuilder = new StringBuilder();
-
-            String message = arguments[0];
-
-            databaseManager.setCurrentPictureDescription(user.getId(), message);
-
-            messageBuilder.append(Message.pinPictureCommand.getSendDescriptionMessage(user));
-
+            String description = arguments[0];
+            databaseManager.setCurrentPictureDescription(user.getId(), description);
             databaseManager.setUserCommandState(user.getId(), Config.Bot.PIN_PICTURE_COMMAND_SEND_DURATION);
 
+            Message message = new Message(this.getCommandIdentifier() + "_command");
+            message.setMessageName(this.getClass().getPackage().getName().replaceAll("org.telegram.bot.commands.", ""),
+                    this.getCommandIdentifier() + "_command");
+
             answer.setChatId(chat.getId().toString());
-            answer.setText(messageBuilder.toString());
+            answer.setText(message.getContent(user.getId(), false));
         } catch (Exception e) {
             BotLogger.error(LOGTAG, e);
 

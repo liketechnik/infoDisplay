@@ -32,6 +32,7 @@
 package org.telegram.bot.messages;
 
 
+import Config.Bot;
 import org.apache.commons.configuration2.XMLConfiguration;
 import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
 import org.apache.commons.configuration2.builder.fluent.Parameters;
@@ -59,12 +60,106 @@ public class Message {
 
     public static final String LOGTAG = "MESSAGE";
 
-    public static final Path location = FileSystems.getDefault().getPath(
+    private static final Path resources = FileSystems.getDefault().getPath(
             Message.class.getClassLoader().getResource("language.xsd").toString()).getParent();
 
-    private static XMLConfiguration getXmlConfiguration(int userID) {
+    String message;
+    String messageName;
+    String xmlQuarry;
 
-        BotLogger.info(LOGTAG, location.toString());
+    /**
+     * Initialize new Message object.
+     * @param command Command the message gets requested for.
+     */
+    public Message(String command) {
+        this.messageName = command;
+        this.xmlQuarry = "command_message[@command='" + command + "']/command_content";
+    }
+
+    /**
+     * Handles the xmlQuarry and sets the name of the message.
+     * @param command Command the message gets requested for.
+     */
+    public void setMessageName(String command) {
+        this.messageName = command;
+        this.xmlQuarry = "command_message[@command='" + command + "']/command_content";
+    }
+
+    /**
+     * Handle the xmlQuarry and sets the name of the message.
+     * @param commandPackage The collection of commands the command belongs to.
+     * @param command Command in the commandPackage the message gets requested for.
+     */
+    public void setMessageName(String commandPackage, String command) {
+        this.messageName = command;
+        this.xmlQuarry = "command_package[@command='" + commandPackage +
+                "']/command_message[@command='" + command + "']/command_content";
+    }
+
+    /**
+     * Get the message for the specified command.
+     * @param userId Get the language from a users config file.
+     * @param addHelp If a link to the help command should be provided at the end
+     *                of a message.
+     * @return The text of the message.
+     */
+    public String getContent(int userId, boolean addHelp) {
+//        BotLogger.info(LOGTAG, this.xmlQuarry);
+
+        if (this.xmlQuarry == null) {
+            BotLogger.error(LOGTAG, "Can't load message text without setting " +
+                    "message name");
+            return null;
+        }
+
+//        BotLogger.info(LOGTAG, this.xmlQuarry);
+
+        if (this.message == null) {
+            XMLConfiguration config = this.getXmlConfiguration(userId);
+            this.message = config.getString(this.xmlQuarry).replaceAll("/n>", "\n");
+        }
+
+        if (addHelp) {
+            return this.message + "\n\n/help";
+        } else {
+            return this.message;
+        }
+    }
+
+
+    /**
+     * Get the command name the message belongs to.
+     * @return Command name the message belongs to.
+     */
+    public String getMessageName() {
+        if (this.messageName != null) {
+            return this.messageName;
+        } else {
+            BotLogger.warn(LOGTAG, "Not set message name requested!");
+            return "No name set.";
+
+        }
+    }
+
+    /**
+     * Get the xmlQuarry for the current command.
+     * @return The xmlQuarry for the current command.
+     */
+    public String getXmlQuarry() {
+        if (this.xmlQuarry != null) {
+            return this.xmlQuarry;
+        } else {
+            BotLogger.warn(LOGTAG, "Not set xmlConfiguration requested!");
+            return  "No xmlQuarry set.";
+        }
+    }
+
+    /**
+     * Load a message file in a user specific language.
+     * @param userID The user who's language is used.
+     * @return XMLConfiguration in the users language.
+     */
+    static XMLConfiguration getXmlConfiguration(int userID) {
 
         String language = null;
 
@@ -72,7 +167,7 @@ public class Message {
         XMLConfiguration config = null;
 
         XMLBuilderParameters params = new Parameters().xml();
-        params.setBasePath(location.toString());
+        params.setBasePath(resources.toString());
         params.setSchemaValidation(true);
         params.setExpressionEngine(new XPathExpressionEngine());
 
@@ -85,8 +180,12 @@ public class Message {
             System.exit(10);
         }
 
+//        BotLogger.info(LOGTAG, resources.toString());
+//        BotLogger.info(LOGTAG, language);
+//        BotLogger.info(LOGTAG, resources.toString() + "/" + language + ".xml");
+
         builder = new FileBasedConfigurationBuilder<XMLConfiguration>(XMLConfiguration.class)
-                .configure(params.setFileName(location.toString() + "/" + language + ".xml"));
+                .configure(params.setFileName(resources.toString() + "/" + language + ".xml"));
 
         try {
             config = builder.getConfiguration();
@@ -95,472 +194,8 @@ public class Message {
             System.exit(2);
         }
 
-        return  config;
-    }
+//        BotLogger.info(LOGTAG, config.toString());
 
-    public static String getFinalizedMessage(StringBuilder message) {
-        if (!message.toString().contains("/help")) {
-            message.append("\n\n");
-            message.append("/help");
-        }
-        return message.toString();
-    }
-
-    public static String getStartMessage(User user, boolean userKnown) {
-
-        final String startMessageQuarry = "command_message[@command='start_command']/";
-
-        StringBuilder startMessage = new StringBuilder();
-
-        XMLConfiguration config = getXmlConfiguration(user.getId());
-
-
-        if (userKnown) {
-             startMessage.append(config.getString(startMessageQuarry + "case[@case='userKnown']/part[@position=1]")
-                     .replaceAll("/n>", "\n"));
-             startMessage.append(" ");
-             startMessage.append(getFilteredUsername(user));
-             startMessage.append(config.getString(startMessageQuarry + "case[@case='userKnown']/part[@position=2]")
-                     .replaceAll("/n>", "\n"));
-        } else {
-             startMessage.append(config.getString(startMessageQuarry + "case[@case='userUnknown']/part[@position=1]")
-                     .replaceAll("/n>", "\n"));
-             startMessage.append(" ");
-             startMessage.append(getFilteredUsername(user));
-             startMessage.append(config.getString(startMessageQuarry + "case[@case='userUnknown']/part[@position=2]")
-                     .replaceAll("/n>", "\n"));
-        }
-
-        return getFinalizedMessage(startMessage);
-    }
-
-    public static String getStopMessage(User user) {
-
-        final String stopMessageQuarry = "command_message[@command='stop_command']/";
-
-        StringBuilder stopMessage = new StringBuilder();
-
-        XMLConfiguration config = getXmlConfiguration(user.getId());
-
-        stopMessage.append(config.getString(stopMessageQuarry + "part[@position=1]").replaceAll("/n>", "\n"));
-        stopMessage.append(" ");
-        stopMessage.append(getFilteredUsername(user));
-        stopMessage.append(config.getString(stopMessageQuarry + "part[@position=2]").replaceAll("/n>", "\n"));
-
-        return getFinalizedMessage(stopMessage);
-    }
-
-    public static String getSendOnErrorOccurredMessage(User user, boolean terminating) {
-
-        final String onErrorOccurredMessageQuarry = "command_message[@command='send_on_error_occurred_command']/";
-
-        String onErrorOccurredMessage;
-
-        XMLConfiguration config = getXmlConfiguration(user.getId());
-
-        if (terminating) {
-            onErrorOccurredMessage = config.getString(onErrorOccurredMessageQuarry + "case[@case='terminating']/" +
-                    "part[@position=1]");
-        } else {
-            onErrorOccurredMessage = config.getString(onErrorOccurredMessageQuarry + "case[@case=" +
-                    "'not_terminating']/part[@position=1]");
-        }
-
-        return onErrorOccurredMessage;
-    }
-
-    public static String getRegisterMessage(User user, String ifClause) {
-        final String registerMessageQuarry = "command_message[@=command='register_command']/";
-
-        StringBuilder registerMessage = new StringBuilder();
-
-        XMLConfiguration config = getXmlConfiguration(user.getId());
-
-        if (ifClause.equals(Config.registerCommandIfClauses.alreadyRegisterd)) {
-            registerMessage.append(config.getString(registerMessageQuarry + "case[@case='" +
-                    Config.registerCommandIfClauses.alreadyRegisterd + "']/part[@position=1]").replaceAll("/n>", "\n"));
-            registerMessage.append(" ");
-            registerMessage.append(user.getId());
-        } else if (ifClause.equals(Config.registerCommandIfClauses.registrationRequestSent)) {
-            registerMessage.append(config.getString(registerMessageQuarry + "case[@case='" +
-                    Config.registerCommandIfClauses.registrationRequestSent + "']/part[@position=1]")
-                    .replaceAll("/n>", "\n"));
-            registerMessage.append(" ");
-            registerMessage.append(user.getId());
-        } else if (ifClause.equals(Config.registerCommandIfClauses.sendRegistrationRequest)) {
-            registerMessage.append(config.getString(registerMessageQuarry + "case[@case='" +
-                    Config.registerCommandIfClauses.sendRegistrationRequest + "']/part[@position=1]")
-                    .replaceAll("/n>", "\n"));
-            registerMessage.append(" ");
-            registerMessage.append(user.getId());
-        } else if (ifClause.equals(Config.registerCommandIfClauses.toAdmin)) {
-            registerMessage.append(config.getString(registerMessageQuarry + "case[@case='" +
-                    Config.registerCommandIfClauses.toAdmin + "']/part[@position=1]").replaceAll("/n>", "\n"));
-            registerMessage.append(" ");
-            registerMessage.append(getSpecialFilteredUsername(user));
-            registerMessage.append(" ");
-            registerMessage.append(config.getString(registerMessageQuarry + "case[@case='" +
-                    Config.registerCommandIfClauses.toAdmin + "']/part[@position=2]").replaceAll("/n>", "\n"));
-            registerMessage.append(" ");
-            registerMessage.append(user.getId());
-        }
-
-        registerMessage.append("\n").append("/help");
-
-        return getFinalizedMessage(registerMessage);
-    }
-
-    public static String getIdMessage(User user, Long chatID) {
-        final String idMessageQuarry = "command_message[@command='id_command']/";
-
-        StringBuilder idMessage = new StringBuilder();
-
-        XMLConfiguration config = getXmlConfiguration(user.getId());
-
-        idMessage.append(config.getString(idMessageQuarry + "part[@position=1]").replaceAll("/n>", "\n"));
-        idMessage.append(" ");
-        idMessage.append(user.getId());
-        idMessage.append("\n");
-        idMessage.append(config.getString(idMessageQuarry + "part[@position=2]").replaceAll("/n>", "\n"));
-        idMessage.append(" ");
-        idMessage.append(chatID);
-
-        return getFinalizedMessage(idMessage);
-    }
-
-    public static String getHelpMessage(User user) {
-        final String helpMessageQuarry = "command_message[@command='help_command']/";
-
-        XMLConfiguration config = getXmlConfiguration(user.getId());
-
-        StringBuilder helpMessage = new StringBuilder();
-
-        helpMessage.append(config.getString(helpMessageQuarry + "part[@position=1]").replaceAll("/n>", "\n"));
-
-        return helpMessage.toString();
-    }
-
-    public static String getAdministratorMessage(User user) {
-        final String administratorMessageQuarry   = "command_message[@command='administrator_command']/";
-
-        XMLConfiguration config = getXmlConfiguration(user.getId());
-
-        StringBuilder administratorMessage = new StringBuilder();
-
-        administratorMessage.append(config.getString(administratorMessageQuarry + "part[@position=1]")
-                .replaceAll("/n>", "\n"));
-
-        return getFinalizedMessage(administratorMessage);
-    }
-
-    public static class pinPictureCommand {
-        static final String pinPictureQuarry = "command_package[@command='pinPictureCommand']/";
-
-        public static String getPinPictureMessage(User user, boolean hasPermission) {
-            final String pinPictureMessageQuarry = pinPictureQuarry + "command_message[@command='pin_picture_command']/";
-
-            XMLConfiguration config = getXmlConfiguration(user.getId());
-
-            StringBuilder pinPictureMessage = new StringBuilder();
-
-            if (hasPermission) {
-                pinPictureMessage.append(config.getString(pinPictureMessageQuarry + "case[@case='has_permission']/" +
-                        "part[@position=1]").replaceAll("/n>", "\n"));
-            } else {
-                pinPictureMessage.append(config.getString(pinPictureMessageQuarry + "case[@case='has_no_" +
-                        "permission']/part[@position=1]").replaceAll("/n>", "\n"));
-            }
-
-            return getFinalizedMessage(pinPictureMessage);
-        }
-
-        public static String getSendDescriptionMessage(User user) {
-            final String sendDescriptionMessageQuarry = pinPictureQuarry + "command_message[@command='send_description_" +
-                    "command']/";
-
-            XMLConfiguration config = getXmlConfiguration(user.getId());
-
-            StringBuilder sendDescriptionMessage = new StringBuilder();
-
-            sendDescriptionMessage.append(config.getString(sendDescriptionMessageQuarry + "part[@position=1]")
-                    .replaceAll("/n>", "\n"));
-
-            return getFinalizedMessage(sendDescriptionMessage);
-        }
-
-        public static String getSendDurationMessage(User user, boolean validDuration) {
-            final String sendDurationMessageQuarry = pinPictureQuarry + "command_message[@command='send_duration_" +
-                    "command']/";
-
-            XMLConfiguration config = getXmlConfiguration(user.getId());
-
-            StringBuilder sendDurationMessage = new StringBuilder();
-
-            if (validDuration) {
-                sendDurationMessage.append(config.getString(sendDurationMessageQuarry + "case[@case='valid_" +
-                        "duration']/" +
-                        "part[@position=1]").replaceAll("/n>", "\n"));
-            } else {
-                sendDurationMessage.append(config.getString(sendDurationMessageQuarry + "case[@case='invalid_" +
-                        "duration']/part[@position=1]").replaceAll("/n>", "\n"));
-            }
-
-            return getFinalizedMessage(sendDurationMessage);
-        }
-
-        public static String getSendPictureMessage(User user, boolean hasPicture) {
-            final String sendPictureMessageQuarry = pinPictureQuarry + "command_message[@command='send_picture_" +
-                    "command']/";
-
-            XMLConfiguration config = getXmlConfiguration(user.getId());
-
-            StringBuilder sendPictureMessage = new StringBuilder();
-
-            if (hasPicture) {
-                sendPictureMessage.append(config.getString(sendPictureMessageQuarry + "case[@case='picture']/" +
-                        "part[@position=1]").replaceAll("/n>", "\n"));
-            } else {
-                sendPictureMessage.append(config.getString(sendPictureMessageQuarry + "case[@case='no_picture']/" +
-                        "part[@position=1]").replaceAll("/n>", "\n"));
-            }
-
-            return getFinalizedMessage(sendPictureMessage);
-        }
-
-        public static String getSendTitleMessage(User user, boolean newName) {
-            final String sendTitleMessageQuarry = pinPictureQuarry + "command_message[@command='send_title_" +
-                    "command']/";
-
-            XMLConfiguration config = getXmlConfiguration(user.getId());
-
-            StringBuilder sendTitleMessage = new StringBuilder();
-
-            if (newName) {
-                sendTitleMessage.append(config.getString(sendTitleMessageQuarry + "case[@case='new_name']/" +
-                        "part[@position=1]").replaceAll("/n>", "\n"));
-            } else {
-                sendTitleMessage.append(config.getString(sendTitleMessageQuarry + "case[@case='already_" +
-                        "used']/part[@position=1]").replaceAll("/n>", "\n"));
-            }
-
-            return getFinalizedMessage(sendTitleMessage);
-        }
-    }
-
-    public static class pinVideoCommand {
-        static final String pinVideoQuarry = "command_package[@command='pinVideoCommand']/";
-
-        public static String getPinVideoMessage(User user, boolean hasPermission) {
-            final String pinPictureMessageQuarry = pinVideoQuarry + "command_message[@command='pin_video_command']/";
-
-            XMLConfiguration config = getXmlConfiguration(user.getId());
-
-            StringBuilder pinPictureMessage = new StringBuilder();
-
-            if (hasPermission) {
-                pinPictureMessage.append(config.getString(pinPictureMessageQuarry + "case[@case='has_permission']/" +
-                        "part[@position=1]").replaceAll("/n>", "\n"));
-            } else {
-                pinPictureMessage.append(config.getString(pinPictureMessageQuarry + "case[@case='has_no_" +
-                        "permission']/part[@position=1]").replaceAll("/n>", "\n"));
-            }
-
-            return getFinalizedMessage(pinPictureMessage);
-        }
-
-        public static String getSendDescriptionMessage(User user) {
-            final String sendDescriptionMessageQuarry = pinVideoQuarry + "command_message[@command='send_description_" +
-                    "command']/";
-
-            XMLConfiguration config = getXmlConfiguration(user.getId());
-
-            StringBuilder sendDescriptionMessage = new StringBuilder();
-
-            sendDescriptionMessage.append(config.getString(sendDescriptionMessageQuarry + "part[@position=1]")
-                    .replaceAll("/n>", "\n"));
-
-            return getFinalizedMessage(sendDescriptionMessage);
-        }
-
-        public static String getSendVideoMessage(User user, boolean hasPicture) {
-            final String sendVideoMessageQuarry = pinVideoQuarry + "command_message[@command='send_video_" +
-                    "command']/";
-
-            XMLConfiguration config = getXmlConfiguration(user.getId());
-
-            StringBuilder sendPictureMessage = new StringBuilder();
-
-            if (hasPicture) {
-                sendPictureMessage.append(config.getString(sendVideoMessageQuarry + "case[@case='picture']/" +
-                        "part[@position=1]").replaceAll("/n>", "\n"));
-            } else {
-                sendPictureMessage.append(config.getString(sendVideoMessageQuarry + "case[@case='no_picture']/" +
-                        "part[@position=1]").replaceAll("/n>", "\n"));
-            }
-
-            return getFinalizedMessage(sendPictureMessage);
-        }
-
-        public static String getSendTitleMessage(User user, boolean newName) {
-            final String sendTitleMessageQuarry = pinVideoQuarry + "command_message[@command='send_title_" +
-                    "command']/";
-
-            XMLConfiguration config = getXmlConfiguration(user.getId());
-
-            StringBuilder sendTitleMessage = new StringBuilder();
-
-            if (newName) {
-                sendTitleMessage.append(config.getString(sendTitleMessageQuarry + "case[@case='new_name']/" +
-                        "part[@position=1]").replaceAll("/n>", "\n"));
-            } else {
-                sendTitleMessage.append(config.getString(sendTitleMessageQuarry + "case[@case='already_" +
-                        "used']/part[@position=1]").replaceAll("/n>", "\n"));
-            }
-
-            return getFinalizedMessage(sendTitleMessage);
-        }
-    }
-
-    public static class askCommand {
-        static final String askCommandQuarry = "command_package[@command='askCommand']/";
-
-        public static String getAskMessage(User user) {
-            final String askMessageQuarry = askCommandQuarry + "command_message[@command='ask_command']/";
-
-            XMLConfiguration config = getXmlConfiguration(user.getId());
-
-            return config.getString(askMessageQuarry + "part[@position=1]").replaceAll("/n>", "\n");
-        }
-
-        public static String getWriteQuestionMessage(User user, String question) {
-            final String writeQuestionQuarry = askCommandQuarry + "command_message[@command='write_question_" +
-                    "command']/case[@case='question']/";
-
-            XMLConfiguration config = getXmlConfiguration(user.getId());
-
-            StringBuilder writeQuestionMessage = new StringBuilder();
-
-            writeQuestionMessage.append(question);
-            writeQuestionMessage.append(config.getString(writeQuestionQuarry + "part[@position=1]")
-                    .replaceAll("/n>", "\n"));
-            writeQuestionMessage.append(" ").append(getSpecialFilteredUsername(user));
-            writeQuestionMessage.append(config.getString(writeQuestionQuarry + "part[@position=2]")
-                    .replaceAll("/n>", "\n"));
-
-            return getFinalizedMessage(writeQuestionMessage);
-        }
-
-        public static String getWriteQuestionMessage(User user) {
-            final String writeQuestionQuarry = askCommandQuarry + "command_message[@command='write_question_" +
-                    "command']/case[@case='response']/";
-
-            XMLConfiguration config = getXmlConfiguration(user.getId());
-
-            return config.getString(writeQuestionQuarry + "part[@position=1]").replaceAll("/n>", "\n");
-        }
-    }
-
-    public static class answerCommand {
-        static final String answerCommandQuarry = "command_package[@command='answerCommand']/";
-
-        public static String getAnswerMessage(User user, String questions) {
-            final String answerQuarry = answerCommandQuarry + "command_message[@command='answer_command']/";
-
-            XMLConfiguration config = getXmlConfiguration(user.getId());
-
-            StringBuilder answerMessage = new StringBuilder();
-
-            answerMessage.append(config.getString(answerQuarry + "part[@position=1]").replaceAll("/n>",
-                    "\n"));
-
-            answerMessage.append(questions);
-
-            answerMessage.append(config.getString(answerQuarry + "part[@position=2]").replaceAll("/n>",
-                    "\n"));
-
-            return  getFinalizedMessage(answerMessage);
-        }
-
-        public static String getChooseNumberMessage(User user) {
-            final String chooseNumberQuarry = answerCommandQuarry + "command_message[@command='choose_number_" +
-                    "command']/case[@case='invalid']/";
-
-            XMLConfiguration config = getXmlConfiguration(user.getId());
-
-            StringBuilder chooseNumberMessage = new StringBuilder();
-
-            chooseNumberMessage.append(config.getString(chooseNumberQuarry + "part[@position=1]")
-                    .replaceAll("/n>", "\n"));
-
-            return getFinalizedMessage(chooseNumberMessage);
-        }
-
-        public static String getChooseNumberMessage(User user, int selectedQuestion) {
-            final String chooseNumberQuarry = answerCommandQuarry + "command_message[@command='choose_number_" +
-                    "command']/case[@case='valid']/";
-
-            XMLConfiguration config = getXmlConfiguration(user.getId());
-
-            StringBuilder chooseNumberMessage = new StringBuilder();
-
-            chooseNumberMessage.append(config.getString(chooseNumberQuarry + "part[@position=1]")
-                    .replaceAll("/n>", "\n"));
-
-            chooseNumberMessage.append(" ").append(selectedQuestion);
-
-            chooseNumberMessage.append(config.getString(chooseNumberQuarry + "part[@position=2]")
-                    .replaceAll("/n>", "\n"));
-
-            return getFinalizedMessage(chooseNumberMessage);
-        }
-
-        public static String getWriteAnswerMessage(User user, int selectedQuestion, String message) {
-            final String writeAnswerQuarry = answerCommandQuarry + "command_message[@command='write_answer_command']/" +
-                    "case[@case='explanation']/";
-
-            XMLConfiguration config = getXmlConfiguration(user.getId());
-
-            StringBuilder writeAnswerMessage = new StringBuilder();
-
-            writeAnswerMessage.append(config.getString(writeAnswerQuarry + "part[@position=1]")
-                    .replaceAll("/n>", "\n"));
-
-            try {
-                writeAnswerMessage.append(DatabaseManager.getInstance().getQuestion(selectedQuestion -1));
-            } catch (Exception e) {
-                BotLogger.error(LOGTAG, "Failed to get question.");
-            }
-
-            writeAnswerMessage.append("\n\n");
-
-            writeAnswerMessage.append(config.getString(writeAnswerQuarry + "part[@position=2]")
-                    .replaceAll("/n>", "\n"));
-
-            writeAnswerMessage.append(message);
-
-            return getFinalizedMessage(writeAnswerMessage);
-        }
-
-        public static String getWriteAnswerMessage(User user) {
-            final String writeAnswerQuarry = answerCommandQuarry + "command_message[@command='write_answer_command']/" +
-                    "case[@case='answer']/";
-
-            XMLConfiguration config = getXmlConfiguration(user.getId());
-
-            StringBuilder writeAnswerMessage = new StringBuilder();
-
-            writeAnswerMessage.append(config.getString(writeAnswerQuarry + "part[@position=1]")
-                    .replaceAll("/n>", "\n"));
-
-            return getFinalizedMessage(writeAnswerMessage);
-        }
-    }
-
-    public static String getAboutCommandMessage(User user) {
-        final String aboutCommandQuarry = "command_message[@command='about_command']/part[@position=1]";
-
-        XMLConfiguration config = getXmlConfiguration(user.getId());
-
-        return config.getString(aboutCommandQuarry).replaceAll("/n>", "\n");
+        return config;
     }
 }
