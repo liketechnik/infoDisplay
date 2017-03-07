@@ -31,6 +31,7 @@
 
 package org.telegram.bot.commands;
 
+import org.telegram.bot.messages.ContentMessage;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Chat;
 import org.telegram.telegrambots.api.objects.User;
@@ -39,7 +40,7 @@ import org.telegram.telegrambots.bots.commands.BotCommand;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 import org.telegram.telegrambots.logging.BotLogger;
 
-import static org.telegram.bot.messages.Message.getIdMessage;
+import java.util.HashMap;
 
 
 /**
@@ -73,10 +74,16 @@ public class IDCommand extends BotCommand {
         SendMessage answer = new SendMessage();
 
         try {
-            String message = getIdMessage(user, chat.getId());
+            HashMap<String, String> additionalContent  = new HashMap<>();
+            additionalContent.put("userId", user.getId().toString());
+            additionalContent.put("chatId", chat.getId().toString());
+
+            ContentMessage contentMessage = new ContentMessage(this.getCommandIdentifier() + "_command");
+            contentMessage.setAdditionalContent(additionalContent);
 
             answer.setChatId(chat.getId().toString());
-            answer.setText(message);
+            answer.setText(contentMessage.getContent(user.getId(), true));
+
         } catch (Exception e) {
             BotLogger.error(LOGTAG, e);
 

@@ -64,12 +64,9 @@ public class  AboutCommand extends BotCommand {
 
             DatabaseManager databaseManager = DatabaseManager.getInstance();
 
-            StringBuilder messageBuilder = new StringBuilder();
-
-            messageBuilder.append(Message.getAboutCommandMessage(user));
-
             answer.setChatId(chat.getId().toString());
-            answer.setText(messageBuilder.toString());
+            answer.setText(new Message(this.getCommandIdentifier() + "_command").getContent(user.getId(), true));
+
         } catch (Exception e) {
             BotLogger.error(LOGTAG, e);
 

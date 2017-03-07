@@ -35,6 +35,7 @@ package org.telegram.bot.commands.pinPictureCommand;
 import org.telegram.bot.commands.SendOnErrorOccurred;
 import org.telegram.bot.database.DatabaseManager;
 import org.telegram.bot.messages.Message;
+import org.telegram.bot.messages.SituationalMessage;
 import org.telegram.telegrambots.api.methods.GetFile;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Chat;
@@ -87,22 +88,29 @@ public class SendPicture extends BotCommand {
 
             DatabaseManager databaseManager = DatabaseManager.getInstance();
 
-            StringBuilder messageBuilder = new StringBuilder();
+            boolean addHelp;
+            SituationalMessage situationalMessage = new SituationalMessage(this.getCommandIdentifier() + "_command");
 
             if (arguments[0].equals(Config.Bot.HAS_PHOTO)) {
 
                 databaseManager.createNewDisplayFile(absSender, user.getId(), arguments[1],
                         Config.Bot.DISPLAY_FILE_TYPE_IMAGE);
 
-                messageBuilder.append(Message.pinPictureCommand.getSendPictureMessage(user, true));
-
                 databaseManager.setUserCommandState(user.getId(), Config.Bot.NO_COMMAND);
+
+                situationalMessage.setMessageName(this.getClass().getPackage().getName()
+                                .replaceAll("org.telegram.bot.commands.", ""), this.getCommandIdentifier() + "_command",
+                        "picture");
+                addHelp = true;
             } else {
-                messageBuilder.append(Message.pinPictureCommand.getSendPictureMessage(user, false));
+                situationalMessage.setMessageName(this.getClass().getPackage().getName()
+                                .replaceAll("org.telegram.bot.commands.", ""), this.getCommandIdentifier() + "_command",
+                        "no_picture");
+                addHelp = false;
             }
 
             answer.setChatId(chat.getId().toString());
-            answer.setText(messageBuilder.toString());
+            answer.setText(situationalMessage.getContent(user.getId(), addHelp));
         } catch (Exception e) {
             BotLogger.error(LOGTAG, e);
 

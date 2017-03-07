@@ -33,7 +33,9 @@ package org.telegram.bot.commands;
 
 import org.apache.commons.configuration2.ex.ConfigurationException;
 
+import org.telegram.bot.Main;
 import org.telegram.bot.database.DatabaseManager;
+import org.telegram.bot.messages.ContentMessage;
 import org.telegram.bot.messages.Message;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Chat;
@@ -44,8 +46,10 @@ import org.telegram.telegrambots.exceptions.TelegramApiException;
 import org.telegram.telegrambots.logging.BotLogger;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 import static org.telegram.bot.Main.getFilteredUsername;
+
 /**
  * @author Florian Warzecha
  * @version 1.0.1
@@ -78,7 +82,6 @@ public class StopCommand extends BotCommand {
 
         try {
             DatabaseManager databaseManager = DatabaseManager.getInstance();
-            String message;
 
 
             try {
@@ -93,10 +96,15 @@ public class StopCommand extends BotCommand {
                 BotLogger.error(LOGTAG, e);
             }
 
-            message = Message.getStopMessage(user);
+            HashMap<String, String> additionalContent  = new HashMap<String, String>();
+            additionalContent.put("userName", getFilteredUsername(user));
+
+            ContentMessage contentMessage = new ContentMessage(this.getCommandIdentifier() + "_command");
+            contentMessage.setAdditionalContent(additionalContent);
 
             answer.setChatId(chat.getId().toString());
-            answer.setText(message);
+            answer.setText(contentMessage.getContent(user.getId(), false));
+
         } catch (Exception e) {
             BotLogger.error(LOGTAG, e);
 
