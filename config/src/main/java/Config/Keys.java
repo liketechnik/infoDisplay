@@ -53,9 +53,13 @@ public final class Keys {
     public static final String CHAT_ID = "chatID";
 
     public static final String SELECTED_QUESTION = "selectedQuestion";
+
     public static final String CURRENT_PICTURE_TITLE = "currentPictureTitle";
     public static final String CURRENT_PICTURE_DESCRIPTION = "currentPictureDescription";
     public static final String CURRENT_PICTURE_DURATION = "currentPictureDuration";
+
+    public static final String CURRENT_VIDEO_TITLE = "currentVideoTitle";
+    public static final String CURRENT_VIDEO_DESCRIPTION = "currentVideoDescription";
 
     public static final String BOT_USERNAME_KEY = "botUsername";
     public static final String BOT_TOKEN_KEY = "botToken";

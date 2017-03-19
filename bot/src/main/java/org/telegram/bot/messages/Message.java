@@ -126,6 +126,7 @@ public class Message {
         }
     }
 
+
     /**
      * Get the command name the message belongs to.
      * @return Command name the message belongs to.
@@ -136,6 +137,7 @@ public class Message {
         } else {
             BotLogger.warn(LOGTAG, "Not set message name requested!");
             return "No name set.";
+
         }
     }
 

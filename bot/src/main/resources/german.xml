@@ -193,4 +193,38 @@
             </case>
         </command_message>
     </command_package>
+    <command_package command="pinVideoCommand">
+        <command_message command="pin_video_command">
+            <command_description>Lade ein neues Video an das virtuelle Brett hoch.</command_description>
+            <case case="has_no_permission">
+                <command_content>Du bist nicht berechtigt Videos hochzuladen./n>
+                    Benutze /register um als berechtigte Person eingetragen zu werden./n></command_content>
+            </case>
+            <case case="has_permission">
+                <command_content>Bitte sende mir einen Namen für dein Video.</command_content>
+            </case>
+        </command_message>
+        <command_message command="send_description_command">
+            <command_description>Speichert die Beschreibung eines neuen Videos.</command_description>
+            <command_content>Sende mir nun bitte das Video.</command_content>
+        </command_message>
+        <command_message command="send_video_comamand">
+            <command_description>Speichert das neue Video als displayFile.</command_description>
+            <case case="no_picture">
+                <command_content>Sende mir bitte ein Bild.</command_content>
+            </case>
+            <case case="picture">
+                <command_content>Du hast ein neues Video an das Brett hochgeladen.</command_content>
+            </case>
+        </command_message>
+        <command_message command="send_title_command">
+            <command_description>Speichert den Titel eines neuen Videos.</command_description>
+            <case case="already_used">
+                <command_content>Dieser Name wurde schon für ein Video gewählt. Bitte nimm einen anderen.</command_content>
+            </case>
+            <case case="new_name">
+                <command_content>Bitte sende mir nun eine (kurze) Beschreibung / Überschrift für dein Video.</command_content>
+            </case>
+        </command_message>
+    </command_package>
 </language>
