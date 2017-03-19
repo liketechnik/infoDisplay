@@ -1,4 +1,8 @@
 [![Stories in Ready](https://badge.waffle.io/liketechnik/infoDisplay.png?label=ready&title=Ready)](http://waffle.io/liketechnik/infoDisplay)
+[![Issue Count](https://codeclimate.com/github/liketechnik/infoDisplay/badges/issue_count.svg)](https://codeclimate.com/github/liketechnik/infoDisplay)
+[![Test Coverage](https://codeclimate.com/github/liketechnik/infoDisplay/badges/coverage.svg)](https://codeclimate.com/github/liketechnik/infoDisplay/coverage)
+[![Code Climate](https://codeclimate.com/github/liketechnik/infoDisplay/badges/gpa.svg)](https://codeclimate.com/github/liketechnik/infoDisplay)
+
 ## README ##
 
 This is a telegram bot based on Ruben Bermudez Telegram Bots API. 
