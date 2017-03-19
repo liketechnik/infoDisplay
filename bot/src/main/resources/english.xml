@@ -197,31 +197,35 @@
     </command_package>
     <command_package command="pinVideoCommand">
         <command_message command="pin_video_command">
+            <command_description>Upload a video to the virtual board.</command_description>
             <case case="has_no_permission">
-                <part position="1">You are not allowed to upload pictures./n>
-                    Use /register to gain the permission for doing this./n></part>
+                <command_content>You are not allowed to upload pictures./n>
+                    Use /register to gain the permission for doing this./n></command_content>
             </case>
             <case case="has_permission">
-                <part position="1">Please send me a name for your picture.</part>
+                <command_content>Please send me a name for your picture.</command_content>
             </case>
         </command_message>
         <command_message command="send_description_command">
-            <part position="1">Please send the video now.</part>
+            <command_description>Set the description of a new video file.</command_description>
+            <command_content>Please send the video now.</command_content>
         </command_message>
         <command_message command="send_video_command">
+            <command_description>Save a new video as displayFile.</command_description>
             <case case="no_picture">
-                <part position="1">Please send a *picture*.</part>
+                <command_content>Please send a *picture*.</command_content>
             </case>
             <case case="picture">
-                <part position="1">You have succesfully uploaded a new picture.</part>
+                <command_content>You have succesfully uploaded a new picture.</command_content>
             </case>
         </command_message>
         <command_message command="send_title_command">
+            <command_description>Save the title of a new video file.</command_description>
             <case case="already_used">
-                <part position="1">This name is already in use! Please choose a different one.</part>
+                <command_content>This name is already in use! Please choose a different one.</command_content>
             </case>
             <case case="new_name">
-                <part position="1">Please send a (short) description / title for your picture.</part>
+                <command_content>Please send a (short) description / title for your picture.</command_content>
             </case>
         </command_message>
     </command_package>

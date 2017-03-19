@@ -3,6 +3,7 @@ package org.telegram.bot.commands.pinVideoCommand;
 import org.telegram.bot.commands.SendOnErrorOccurred;
 import org.telegram.bot.database.DatabaseManager;
 import org.telegram.bot.messages.Message;
+import org.telegram.bot.messages.SituationalMessage;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Chat;
 import org.telegram.telegrambots.api.objects.User;
@@ -33,28 +34,22 @@ public class PinVideoCommand extends BotCommand {
 
             DatabaseManager databaseManager = DatabaseManager.getInstance();
 
-            StringBuilder messageBuilder = new StringBuilder();
+            SituationalMessage situationalMessage = new SituationalMessage(this.getCommandIdentifier() + " _command");
 
             if (!databaseManager.getUserRegistrationState(user.getId())) {
-                messageBuilder.append(Message.pinVideoCommand.getPinVideoMessage(user, false));
+                situationalMessage.setMessageName(this.getClass().getPackage().getName()
+                                .replaceAll("org.telegram.bot.commands.", ""), this.getCommandIdentifier() + "_command",
+                        "has_no_permission");
+            } else {
+                databaseManager.setUserCommandState(user.getId(), Config.Bot.PIN_VIDEO_COMMAND_SEND_TITLE);
 
-                answer.setText(messageBuilder.toString());
-
-                try {
-                    absSender.sendMessage(answer);
-                } catch (Exception e) {
-                    BotLogger.error(LOGTAG, e);
-                }
-
-                return;
+                situationalMessage.setMessageName(this.getClass().getPackage().getName()
+                                .replaceAll("org.telegram.bot.commands.", ""), this.getCommandIdentifier() + "_command",
+                        "has_permission");
             }
 
-            databaseManager.setUserCommandState(user.getId(), Config.Bot.PIN_VIDEO_COMMAND_SEND_TITLE);
-
-            messageBuilder.append(Message.pinVideoCommand.getPinVideoMessage(user, true));
-
             answer.setChatId(chat.getId().toString());
-            answer.setText(messageBuilder.toString());
+            answer.setText(situationalMessage.getContent(user.getId(), false));
         } catch (Exception e) {
             BotLogger.error(LOGTAG, e);
 
