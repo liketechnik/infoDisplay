@@ -46,7 +46,7 @@ allprojects {
 
     version '1.2.3'
 
-    apply plugin: 'distribution'
+    //apply plugin: 'distribution'
     apply plugin: 'java'
     apply plugin: 'idea'
     apply plugin: 'application'
@@ -116,56 +116,56 @@ allprojects {
         }
     }
 
-    distributions {
-        infoDisplay {
-            baseName = 'display'
-            contents {
-//                from jar
-//                into('libs') {
-//                    from {
-//                        project(':config').getBuildDir().toString() + '/libs/config-' + project.getVersion().toString() + '.jar'
-//                    }
+//    distributions {
+//        infoDisplay {
+//            baseName = 'display'
+//            contents {
+////                from jar
+////                into('libs') {
+////                    from {
+////                        project(':config').getBuildDir().toString() + '/libs/config-' + project.getVersion().toString() + '.jar'
+////                    }
+////                }
+////                into('README') {
+////                    from file('README.md')
+////                }
+////                from 'README.md' {
+////                    into ('')
+////                }
+//            }
+//        }
+//        bot {
+//            baseName = 'bot'
+//            contents {
+////                from { project(':config').getBuildDir().toString() + '/libs/config-' + project.getVersion().toString() + '.jar' }
+////                from jar
+////                into('README') {
+////                    from file('README.md')
+////                }
+////                from(jar) {
+////                    into "README"
+////                }
+////                from (copyReadme) {
+////                    into ""
+////                }
+//                from(createDocs) {
+//                    into "docs"
 //                }
-//                into('README') {
-//                    from file('README.md')
-//                }
-//                from 'README.md' {
-//                    into ('')
-//                }
-            }
-        }
-        bot {
-            baseName = 'bot'
-            contents {
-//                from { project(':config').getBuildDir().toString() + '/libs/config-' + project.getVersion().toString() + '.jar' }
-//                from jar
-//                into('README') {
-//                    from file('README.md')
-//                }
-//                from(jar) {
-//                    into "README"
-//                }
-//                from (copyReadme) {
-//                    into ""
-//                }
-                from(createDocs) {
-                    into "docs"
-                }
-            }
-        }
-        config {
-            baseName = 'config'
-            contents {
-//                from jar
-            }
-        }
-        displayFile {
-            baseName = 'displayFile'
-            contents {
-//                from jar
-            }
-        }
-    }
+//            }
+//        }
+//        config {
+//            baseName = 'config'
+//            contents {
+////                from jar
+//            }
+//        }
+//        displayFile {
+//            baseName = 'displayFile'
+//            contents {
+////                from jar
+//            }
+//        }
+//    }
 }
 
 project(':display') {
