@@ -450,7 +450,8 @@ public class DatabaseManager {
                 && !state.equals(Config.Bot.PIN_PICTURE_COMMAND_SEND_DURATION)
                 && !state.equals(Bot.PIN_VIDEO_COMMAND_SEND_VIDEO)
                 && !state.equals(Bot.PIN_VIDEO_COMMAND_SEND_DESCRIPTION)
-                && !state.equals(Bot.PIN_VIDEO_COMMAND_SEND_TITLE)) {
+                && !state.equals(Bot.PIN_VIDEO_COMMAND_SEND_TITLE)
+                && !state.equals(Bot.SET_LANGUAGE_COMMAND)) {
             throw new IllegalArgumentException("No known state: " + state);
         }
 

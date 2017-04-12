@@ -280,4 +280,24 @@
             </case>
         </command_message>
     </command_package>
+    <command_package command="setLanguageCommand">
+        <command_message command="set_language_command">
+            <command_description>Wähle die Sprache mit der der Bot kommuniziert aus.</command_description>
+            <command_content>Bitte wähle deine Sprache aus.</command_content>
+            <reply_keyboard>
+                <keyboard_button row="1" column="1" callback_data="set_language_german">Deutsch</keyboard_button>
+                <keyboard_button row="1" column="2" callback_data="set_language_english">Englisch</keyboard_button>
+                <keyboard_button row="2" column="1" callback_data="set_language_default">Standard</keyboard_button>
+            </reply_keyboard>
+        </command_message>
+        <command_message command="change_language_command">
+            <command_description>Ändert die Sprache entsprechend der Eingabe.</command_description>
+            <case case="language">
+                <command_content>Sprache erfolgreich auf Deutsch geändert.</command_content>
+            </case>
+            <case case="default">
+                <command_content>Sprache erfolgreich auf Deutsch (Standard) geändert.</command_content>
+            </case>
+        </command_message>
+    </command_package>
 </language>

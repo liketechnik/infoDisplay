@@ -159,7 +159,7 @@ public class Message {
      * @param userID The user who's language is used.
      * @return XMLConfiguration in the users language.
      */
-    static XMLConfiguration getXmlConfiguration(int userID) {
+    public static XMLConfiguration getXmlConfiguration(int userID) {
 
         String language = null;
 
