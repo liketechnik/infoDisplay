@@ -174,7 +174,7 @@ project(':display') {
         compile project(':config')
         compile project(':displayFile')
         compile 'com.github.caprica:vlcj:vlcj-3.10.+'
-        compile 'ch.qos.logback:logback-classic:1.1.8'
+        compile 'ch.qos.logback:logback-classic:1.1.11'
     }
     applicationDistribution.from("${rootProject.projectDir}/") {
         include "README.md"
