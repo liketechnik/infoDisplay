@@ -6,3 +6,4 @@
 infoDisplay.i[a-z][a-z]
 gradle/
 !.gitignore
+.idea/*
