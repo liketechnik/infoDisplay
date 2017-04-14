@@ -15,7 +15,7 @@ import java.util.List;
  * @version ${VERSION}
  * @date 24 of März 2017
  */
-public class InlineKeyboard extends Message {
+public class  InlineKeyboard extends Message {
 
     private List<List<InlineKeyboardButton>> keyboard;
 
@@ -70,7 +70,7 @@ public class InlineKeyboard extends Message {
 
                 while (config.containsKey(columnQuarry)) {
                     inlineRow.add(new InlineKeyboardButton().setText(config.getString(columnQuarry))
-                            .setCallbackData(config.getString(columnQuarry + "/callback_data")));
+                            .setCallbackData(config.getString(columnQuarry + "/@callback_data")));
 
                     column += 1;
                     columnQuarry = rowQuarry + "[@column='" + column + "']";
