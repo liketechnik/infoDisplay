@@ -66,7 +66,7 @@ public class ChangeLanguage extends BotCommand {
 
             databaseManager.setUserCommandState(user.getId(), Bot.NO_COMMAND);
 
-            answer.setChatId(arguments[2]);
+            answer.setChatId(chat.getId());
             answer.setMessageId(Integer.valueOf(arguments[1]));
             answer.setText(message.getContent(user.getId(), true));
         } catch (Exception e) {

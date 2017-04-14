@@ -284,14 +284,14 @@ public class DisplayBot extends TelegramLongPollingCommandBot {
 //                    }
 //                }
             } else if (update.hasCallbackQuery()) {
-                if (databaseManager.getUserCommandState(update.getMessage().getFrom().getId())
+                if (databaseManager.getUserCommandState(update.getCallbackQuery().getFrom().getId())
                         .equals(Bot.SET_LANGUAGE_COMMAND)) {
                     CallbackQuery callbackQuery = update.getCallbackQuery();
 
                     if (callbackQuery.getData().equals(CallbackData.SET_LANGUAGE_DEFAULT)
                             || callbackQuery.getData().equals(CallbackData.SET_LANGUAGE_GERMAN)
                             || callbackQuery.getData().equals(CallbackData.SET_LANGUAGE_ENGLISH)) {
-                        new ChangeLanguage().execute(this, callbackQuery.getFrom(), new Chat(), new String[]{callbackQuery.getData(), callbackQuery.getMessage().getMessageId().toString(), callbackQuery.getChatInstance()});
+                        new ChangeLanguage().execute(this, callbackQuery.getFrom(), callbackQuery.getMessage().getChat(), new String[]{callbackQuery.getData(), callbackQuery.getMessage().getMessageId().toString()});
                     }
                 }
             }
