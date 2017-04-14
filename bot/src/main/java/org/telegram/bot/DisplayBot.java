@@ -33,8 +33,6 @@ package org.telegram.bot;
 
 import Config.Bot;
 import Config.CallbackData;
-import javafx.scene.control.TextFormatter;
-import org.apache.commons.io.FileUtils;
 import org.telegram.bot.commands.*;
 import org.telegram.bot.commands.answerCommand.AnswerCommand;
 import org.telegram.bot.commands.answerCommand.ChooseNumber;
@@ -56,10 +54,6 @@ import org.telegram.telegrambots.bots.commands.ICommandRegistry;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 import org.telegram.telegrambots.logging.BotLogger;
 
-import javax.security.auth.login.Configuration;
-import java.net.URL;
-import java.nio.file.FileSystems;
-import java.nio.file.Path;
 import java.util.List;
 
 
