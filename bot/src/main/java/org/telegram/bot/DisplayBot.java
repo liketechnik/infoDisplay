@@ -32,7 +32,7 @@
 package org.telegram.bot;
 
 import Config.Bot;
-import org.apache.commons.io.FileUtils;
+import Config.CallbackData;
 import org.telegram.bot.commands.*;
 import org.telegram.bot.commands.answerCommand.AnswerCommand;
 import org.telegram.bot.commands.answerCommand.ChooseNumber;
@@ -43,22 +43,17 @@ import org.telegram.bot.commands.pinPictureCommand.*;
 import org.telegram.bot.commands.pinPictureCommand.SendDescription;
 import org.telegram.bot.commands.pinPictureCommand.SendTitle;
 import org.telegram.bot.commands.pinVideoCommand.*;
+import org.telegram.bot.commands.setLanguageCommand.ChangeLanguage;
+import org.telegram.bot.commands.setLanguageCommand.SetLanguageCommand;
 import org.telegram.bot.database.DatabaseManager;
 import org.telegram.telegrambots.api.methods.GetFile;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
-import org.telegram.telegrambots.api.objects.File;
-import org.telegram.telegrambots.api.objects.Message;
-import org.telegram.telegrambots.api.objects.PhotoSize;
-import org.telegram.telegrambots.api.objects.Update;
+import org.telegram.telegrambots.api.objects.*;
 import org.telegram.telegrambots.bots.TelegramLongPollingCommandBot;
 import org.telegram.telegrambots.bots.commands.ICommandRegistry;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 import org.telegram.telegrambots.logging.BotLogger;
 
-import javax.security.auth.login.Configuration;
-import java.net.URL;
-import java.nio.file.FileSystems;
-import java.nio.file.Path;
 import java.util.List;
 
 
@@ -87,6 +82,7 @@ public class DisplayBot extends TelegramLongPollingCommandBot {
         register(new PinPictureCommand());
         register(new PinVideoCommand());
         register(new AboutCommand());
+        register(new SetLanguageCommand());
         register(new CancelCommand(this));
 
         HelpCommand helpCommand = new HelpCommand(this);
@@ -128,6 +124,7 @@ public class DisplayBot extends TelegramLongPollingCommandBot {
      */
     @Override
     public void processNonCommandUpdate(Update update) {
+
 
         DatabaseManager databaseManager = DatabaseManager.getInstance();
         try {
@@ -280,6 +277,17 @@ public class DisplayBot extends TelegramLongPollingCommandBot {
 //                                new String[]{Config.Bot.HAS_NO_PHOTO});
 //                    }
 //                }
+            } else if (update.hasCallbackQuery()) {
+                if (databaseManager.getUserCommandState(update.getCallbackQuery().getFrom().getId())
+                        .equals(Bot.SET_LANGUAGE_COMMAND)) {
+                    CallbackQuery callbackQuery = update.getCallbackQuery();
+
+                    if (callbackQuery.getData().equals(CallbackData.SET_LANGUAGE_DEFAULT)
+                            || callbackQuery.getData().equals(CallbackData.SET_LANGUAGE_GERMAN)
+                            || callbackQuery.getData().equals(CallbackData.SET_LANGUAGE_ENGLISH)) {
+                        new ChangeLanguage().execute(this, callbackQuery.getFrom(), callbackQuery.getMessage().getChat(), new String[]{callbackQuery.getData(), callbackQuery.getMessage().getMessageId().toString()});
+                    }
+                }
             }
         } catch (Exception e) {
             BotLogger.error("PROCESSNONCOMMANDUPDATE", e);

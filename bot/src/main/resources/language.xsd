@@ -41,8 +41,25 @@
     <xs:attribute name="case" type="xs:token"/>
 
 
+    <xs:element name="keyboard_button">
+        <xs:complexType mixed="true">
+            <xs:attribute name="row" type="xs:nonNegativeInteger"></xs:attribute>
+            <xs:attribute name="column" type="xs:nonNegativeInteger"></xs:attribute>
+            <xs:attribute name="callback_data" type="xs:token"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="reply_keyboard">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="keyboard_button" minOccurs="1" maxOccurs="unbounded"></xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
     <xs:element name="command_description" type="xs:token"/>
-    <xs:element name="command_content" type="xs:token"/>
+    <xs:element name="command_content" type="xs:token">
+    </xs:element>
 
     <!--<xs:element name="part">-->
         <!--<xs:complexType mixed="true">-->
@@ -63,6 +80,7 @@
             <!--</xs:simpleContent>-->
             <xs:sequence>
                 <xs:element ref="command_content" minOccurs="1" maxOccurs="1"/>
+                <xs:element ref="reply_keyboard" minOccurs="0" maxOccurs="1"/>
             </xs:sequence>
             <xs:attribute ref="case"/>
         </xs:complexType>
@@ -74,6 +92,7 @@
                 <xs:element ref="command_description" minOccurs="1" maxOccurs="1"></xs:element>
                 <xs:element ref="case" minOccurs="0" maxOccurs="unbounded"/>
                 <xs:element ref="command_content" minOccurs="0" maxOccurs="1"/>
+                <xs:element ref="reply_keyboard" minOccurs="0" maxOccurs="1"/>
             </xs:sequence>
             <xs:attribute ref="command" use="required"/>
         </xs:complexType>

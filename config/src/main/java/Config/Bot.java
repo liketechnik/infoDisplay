@@ -62,4 +62,5 @@ public final class Bot {
     public static final String PIN_VIDEO_COMMAND_SEND_TITLE = "pinVideoCommandSendTitle";
     public static final String PIN_VIDEO_COMMAND_SEND_DESCRIPTION = "pinVideoCommandSendDescription";
     public static final String PIN_VIDEO_COMMAND_SEND_VIDEO = "pinVideoCommandSendVideo";
+    public static final String SET_LANGUAGE_COMMAND = "setLanguageCommand";
 }

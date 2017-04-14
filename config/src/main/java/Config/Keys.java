@@ -48,6 +48,8 @@ public final class Keys {
     public static final String USER_COMMAND_STATE = "userState";
     public static final String USER_LANGUAGE = "userLanguage";
 
+    public static final String DEFAULT_LANGUAGE = "defaultLanguage";
+
     public final static String QUESTION = "question";
 
     public static final String CHAT_ID = "chatID";

@@ -21,6 +21,9 @@ Then create the file bot.conf in ```<your_home_directory>/.infoDisplay```. Edit 
 and add the following lines:
 ```botUsername = <bot's name>```
 ```botToken = <bot's token>```
+```defaultLanguage = <language you prefer for users of the bot (you can choose between any of the supported languages)* >```
+
+\* Currently supported languages are 'english' or 'german'.
 
 ### Build ###
 

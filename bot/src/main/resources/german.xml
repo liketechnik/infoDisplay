@@ -41,44 +41,62 @@
     <command_message command="start_command">
         <command_description>Der Bot fängt an dir zu antworten.</command_description>
         <case case="userUnknown">
+            <command_content>
             Hallo /userName> ,/n>da Du diesen Bot schon kennst, weißt du wahrscheinlich auch schon wie er zu benutzen
                 ist, auch wenn du den '/help' Befehl benutzen kannst. Wenn du diesen Bot noch nicht kennst, wird er
                 wahrscheinlich er dir wahrscheinlich nichts nutzen. Wenn du eine Frage zu diesem Bot hast, benutze
                 einfach den '/ask' Befehl.
+            </command_content>
         </case>
         <case case="userKnown">
+            <command_content>
             Hallo /userName> ,/n>schön dich wieder zu sehen. Ich hoffe dir sind noch alle Befehle bekannt, wenn nicht
                 steht dir der '/help' Befehl mit Rat und Tat zur Seite.
+            </command_content>
         </case>
     </command_message>
     <command_message command="stop_command">
         <command_description>Der Bot hört auf dir zu antworten.</command_description>
+        <command_content>
         Tschüss /userName>./n>War 'ne schöne Zeit mit dir.
+        </command_content>
     </command_message>
     <command_message command="send_on_error_occurred_command">
         <command_description>Informiert den Benutzer über Fehler.</command_description>
         <case case="terminating">
+            <command_content>
             Der Bot ist aufgrund eines Fehlers beendet worden. Bitte informiere den Administrator.
+            </command_content>
         </case>
         <case case="not_terminating">
+            <command_content>
             Es ist ein interner Fehler aufgetreten. Benachrichtige bitte den Administrator.
+            </command_content>
         </case>
     </command_message>
     <command_message command="register_command">
         <command_description>Registriere dich als Benutzer dieses Bots um seinen vollen Funktionsumfang nutzen zu können.</command_description>
         <case case="alreadyRegistered">
+            <command_content>
             Du bist bereits registriert. Deine Telegram userID ist: /userId>
+            </command_content>
         </case>
         <case case="registrationRequestSent">
+            <command_content>
             Du hast bereits eine Anfrage zur Registrierung gesendet.
                 Deine Telegram userID ist: /userId>
+            </command_content>
         </case>
         <case case="sendRegistrationRequest">
+            <command_content>
             Ich werde den Administratot über deine Anfrage zur Registrierung informieren. Er wird
                 dich deshalb in Kürze kontaktieren. Deine Telegram userID ist: /userId>
+            </command_content>
         </case>
         <case case="toAdmin">
+            <command_content>
             Der Benutzer /userName> möchte registriert werden. Seine userID ist: /userId>
+            </command_content>
         </case>
     </command_message>
     <command_message command="id_command">
@@ -88,108 +106,143 @@
     <command_message command="help_command">
         <command_description>Sendet eine Beschreibung des Bots, dem folgt ein Überblick über die vorhandenen
             Funktionen.</command_description>
+        <command_content>
             *Hilfe*/n>/n>
             _Beschreibung_/n>
             Mit diesem Bot kannst Du Bilder an das virtuelle Brett hochladen, bearbeiten und wieder löschen. Als
             Administrator kannst du auch veraltete Bilder *anderer* löschen und deren Eigenschaften bearbeiten./n>/n>
             _How to use me:_/n>/commandDescriptions>
+        </command_content>
     </command_message>
     <command_message command="administrator_command">
         <command_description>Sendet den Benutzernamen des Administrators dieses Bots.</command_description>
-        Ersteller / Administrator dieses Bots ist @liketechnik2000.
+        <command_content>Ersteller / Administrator dieses Bots ist @liketechnik2000.</command_content>
     </command_message>
     <command_message command="about_command">
         <command_description>Sendet informationen über den Bot.</command_description>
-        Dieser Bot wurde von [liketechnik](https://github.com/liketechni) programmiert.
+        <command_content>Dieser Bot wurde von [liketechnik](https://github.com/liketechni) programmiert.
             Der Quellcode dieses Bots ist auf [GitHub](https://github.com/liketechnik/infoDisplay) zu finden. Wenn du
-            Bugs bemerkst, melde diese bitte [GitHub](https://github.com/liketechnik/infoDisplay/issues/new).
+            Bugs bemerkst, melde diese bitte [GitHub](https://github.com/liketechnik/infoDisplay/issues/new).</command_content>
     </command_message>
     <command_package command="pinPictureCommand">
         <command_message command="pin_picture_command">
             <command_description>Lade ein Bild auf das virtuelle Bord.</command_description>
             <case case="has_no_permission">
+                <command_content>
                 Du bist nicht berechtigt Bilder hochzuladen./n>
                     Benutze /register um als berechtigte Person eingetragen zu werden./n>
+                </command_content>
             </case>
             <case case="has_permission">
+                <command_content>
                 Bitte sende mir einen Namen für dein Bild.
+                </command_content>
             </case>
         </command_message>
         <command_message command="send_description_command">
             <command_description>Verarbeitet die gesendete Beschreibung nachdem ein Benutzer /pin_picture (und SendTitle)
              ausführte.</command_description>
+            <command_content>
             Sende mir nun die Anzeigedauer für dein Bild.
+            </command_content>
         </command_message>
         <command_message command="send_duration_command">
             <command_description>Verarbeitet die gesendete Anzeigedauer nachdem ein Nutzer den Befehl /pin_picture (and
                 SendTitle + SendDescription) ausführte.</command_description>
             <case case="invalid_duration">
+                <command_content>
                 Bitte gib eine gültige Anzeigedauer an.
+                </command_content>
             </case>
             <case case="valid_duration">
+                <command_content>
                 Sende mir nun bitte das Bild.
+                </command_content>
             </case>
         </command_message>
         <command_message command="send_picture_comamand">
             <command_description>Speichert das Bild eines Nutzers nachdem er /pinc_picture (und SendTitle,
                 SendDescription und SendDescription) ausführte.</command_description>
             <case case="no_picture">
+                <command_content>
                 Sende mir bitte ein Bild.
+                </command_content>
             </case>
             <case case="picture">
-                Du hast ein neues Bild an das Brett hochgeladen.
+                <command_content>
+                Du hast ein neues Bild an das Brett hochgeladen.</command_content>
             </case>
         </command_message>
         <command_message command="send_title_command">
             <command_description>Wertet die Antwort aus, nachdem ein Nutzer /pin_picture verwendete.</command_description>
             <case case="already_used">
+                <command_content>
                 Dieser Name wurde schon für ein Bild gewählt. Bitte nimm einen anderen.
+                </command_content>
             </case>
             <case case="new_name">
+                <command_content>
                 Bitte sende mir nun eine (kurze) Beschreibung / Überschrift für dein Bild.
+                </command_content>
             </case>
         </command_message>
     </command_package>
     <command_package command="askCommand">
         <command_message command="ask_command">
             <command_description>Stelle dem Administrator dieses Bots eine Frage.</command_description>
+            <command_content>
             Sende mir bitte deine Frage, ich leite sie an den Administrator weiter.
+            </command_content>
         </command_message>
         <command_message command="write_question_command">
             <command_description>Empfange die Frage eines Nutzers nachdem er /ask verwendete.</command_description>
             <case case="question">
+                <command_content>
                 /question>/n>Von Benutzer: /userName>.
+                </command_content>
             </case>
             <case case="response">
+                <command_content>
                 Deine Frage wurde weitergeleitet.
+                </command_content>
             </case>
         </command_message>
     </command_package>
     <command_package command="answerCommand">
         <command_message command="answer_command">
             <command_description>Beantworte fragen der Nutzer.</command_description>
+            <command_content>
             Folgende Nachrichten sind zu beantworten:/n>/questions>/n>
                 Welche Frage möchtest du beantworten (Nummer)?
+            </command_content>
         </command_message>
         <command_message command="choose_number_command">
             <command_description>Verarbeitet die Antwort eines Benutzers der /answer sendete.</command_description>
             <case case="invalid">
+                <command_content>
                 Diese Frage ist nicht verfügbar. Bitte schaue Dir die Liste erneut an und wähle eine
                     gültige Frage.
+                </command_content>
             </case>
             <case case="valid">
+                <command_content>
                 Du hast die Frage Nummer /selectedQuestion> ausgewählt./n>
                     Sende mir nun die Antwort, ich werde sie an den Fragesteller weiterleiten.
+                </command_content>
             </case>
         </command_message>
         <command_message command="write_answer_command">
             <command_description>Verarbeitet die Antwort nachdem ein Benutzer /answer (und ChooseNumber) verwendete.</command_description>
             <case case="explanation">
+                <command_content>
                 Deine Frage war:/n>/question>/n>
                 Die Antwort ist:/n>/answer>
+                </command_content>
             </case>
             <case case="answer">
+                <command_content>
                 Deine Antwort wurde erfolgreich gesendet.
+                </command_content>
             </case>
         </command_message>
     </command_package>
@@ -224,6 +277,26 @@
             </case>
             <case case="new_name">
                 <command_content>Bitte sende mir nun eine (kurze) Beschreibung / Überschrift für dein Video.</command_content>
+            </case>
+        </command_message>
+    </command_package>
+    <command_package command="setLanguageCommand">
+        <command_message command="set_language_command">
+            <command_description>Wähle die Sprache mit der der Bot kommuniziert aus.</command_description>
+            <command_content>Bitte wähle deine Sprache aus.</command_content>
+            <reply_keyboard>
+                <keyboard_button row="1" column="1" callback_data="set_language_german">Deutsch</keyboard_button>
+                <keyboard_button row="1" column="2" callback_data="set_language_english">Englisch</keyboard_button>
+                <keyboard_button row="2" column="1" callback_data="set_language_default">Standard</keyboard_button>
+            </reply_keyboard>
+        </command_message>
+        <command_message command="change_language_command">
+            <command_description>Ändert die Sprache entsprechend der Eingabe.</command_description>
+            <case case="language">
+                <command_content>Sprache erfolgreich auf Deutsch geändert.</command_content>
+            </case>
+            <case case="default">
+                <command_content>Sprache erfolgreich auf Deutsch (Standard) geändert.</command_content>
             </case>
         </command_message>
     </command_package>
