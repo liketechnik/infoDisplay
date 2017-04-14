@@ -74,7 +74,11 @@ public class SendOnErrorOccurred extends BotCommand {
 
         SendMessage answer = new SendMessage();
 
-        answer.setChatId(chat.getId().toString());
+        if (chat == null) {
+            answer.setChatId(LOGTAG[1]);
+        } else {
+            answer.setChatId(chat.getId().toString());
+        }
 
         SituationalMessage situationalMessage = new SituationalMessage(
                 this.getCommandIdentifier() + "_command");
