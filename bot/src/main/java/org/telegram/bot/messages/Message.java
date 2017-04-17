@@ -38,6 +38,8 @@ import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
 import org.apache.commons.configuration2.builder.fluent.Parameters;
 import org.apache.commons.configuration2.builder.fluent.XMLBuilderParameters;
 import org.apache.commons.configuration2.ex.ConfigurationException;
+import org.apache.commons.configuration2.io.ClasspathLocationStrategy;
+import org.apache.commons.configuration2.io.FileLocationStrategy;
 import org.apache.commons.configuration2.tree.xpath.XPathExpressionEngine;
 import org.telegram.bot.database.DatabaseManager;
 import org.telegram.telegrambots.api.objects.User;
@@ -180,12 +182,15 @@ public class Message {
             System.exit(10);
         }
 
+        params.setFileName(resources.toString() + "/" + language + ".xml");
+        params.setFile(FileSystems.getDefault().getPath(resources.toString() + "/" + language + ".xml").toFile());
 //        BotLogger.info(LOGTAG, resources.toString());
 //        BotLogger.info(LOGTAG, language);
 //        BotLogger.info(LOGTAG, resources.toString() + "/" + language + ".xml");
 
+
         builder = new FileBasedConfigurationBuilder<XMLConfiguration>(XMLConfiguration.class)
-                .configure(params.setFileName(resources.toString() + "/" + language + ".xml"));
+                .configure(params);
 
         try {
             config = builder.getConfiguration();
