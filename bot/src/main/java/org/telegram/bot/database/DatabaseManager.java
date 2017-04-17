@@ -139,7 +139,7 @@ public class DatabaseManager {
      * @param userActive State that is to be set.
      * @see #getUserState(Integer userID) Look up if user is active or inactive.
      */
-    public void setUserState(Integer userID, boolean userActive)
+    public synchronized void setUserState(Integer userID, boolean userActive)
             throws Exception
     {
         try {
@@ -167,9 +167,9 @@ public class DatabaseManager {
      * @return User state.
      * @see #setUserState(Integer userID, boolean userState) Set if user is active or not.
      */
-    public boolean getUserState(Integer userID) throws Exception {
-        setCurrentConfiguration(userID);
-        return currentConfiguration.getBoolean(Config.Keys.USER_ACTIVE);
+    public synchronized boolean getUserState(Integer userID) throws Exception {
+            setCurrentConfiguration(userID);
+            return currentConfiguration.getBoolean(Config.Keys.USER_ACTIVE);
     }
 
     /**
@@ -192,7 +192,7 @@ public class DatabaseManager {
      * @param language The language that the user wants to receive his messages in.
      * @see #getUserLanguage(Integer userId) Get the language prefernce of a user.
      */
-    public void setUserLanguage(Integer userId, String language) throws Exception {
+    public synchronized void setUserLanguage(Integer userId, String language) throws Exception {
         if (!language.equals(Config.Languages.ENGLISH) &&
                 !language.equals(Config.Languages.GERMAN) &&
                 !language.equals(Config.Languages.NONE)) {
@@ -216,7 +216,7 @@ public class DatabaseManager {
      * @return The language the messages send to the user should have.
      * @see #setUserLanguage(Integer userId, String language) Set the language preference for a user.
      */
-    public String getUserLanguage(Integer userId) throws Exception {
+    public synchronized String getUserLanguage(Integer userId) throws Exception {
         setCurrentConfiguration(userId);
         if (currentConfiguration.getString(Config.Keys.USER_LANGUAGE).equals(Config.Languages.NONE)) {
             throw new IllegalArgumentException("No language preference set for this user.");
@@ -300,7 +300,7 @@ public class DatabaseManager {
      * @param file Path of the file to be created.
      * @throws IOException Creation of {@code file} failed.
      */
-    public void createConfigurationFile(Path file) throws IOException {
+    public synchronized void createConfigurationFile(Path file) throws IOException {
         Files.createFile(file);
     }
 
@@ -349,7 +349,7 @@ public class DatabaseManager {
      * @param registered Registration state to be set.
      * @see #getUserRegistrationState(Integer userID) Look up the registration state.
      */
-    public void setUserRegistrationState(Integer userID, boolean registered)
+    public synchronized void setUserRegistrationState(Integer userID, boolean registered)
             throws Exception {
 
         setCurrentConfiguration(userID);
@@ -369,7 +369,7 @@ public class DatabaseManager {
      * @return Registration state of the user.
      * @see #setUserRegistrationState(Integer userID, boolean registered) Save the registration state.
      */
-    public boolean getUserRegistrationState(Integer userID) throws Exception {
+    public synchronized boolean getUserRegistrationState(Integer userID) throws Exception {
         setCurrentConfiguration(userID);
         return currentConfiguration.getBoolean(Config.Keys.USER_REGISTERED);
     }
@@ -381,7 +381,7 @@ public class DatabaseManager {
      * @param wantsRegistration Wants registration state to be set.
      * @see #getUserWantsRegistrationState(Integer userID)  Look up the wantsRegistration state.
      */
-    public void setUserWantsRegistrationState(Integer userID, boolean wantsRegistration)
+    public synchronized void setUserWantsRegistrationState(Integer userID, boolean wantsRegistration)
             throws Exception {
 
         setCurrentConfiguration(userID);
@@ -401,7 +401,7 @@ public class DatabaseManager {
      * @return WantsRegistration state of the user.
      * @see #setUserWantsRegistrationState(Integer userID, boolean wantsRegistration) Save the wantsRegistration state.
      */
-    public boolean getUserWantsRegistrationState(Integer userID) throws Exception {
+    public synchronized boolean getUserWantsRegistrationState(Integer userID) throws Exception {
         setCurrentConfiguration(userID);
         return currentConfiguration.getBoolean(Config.Keys.USER_WANTS_REGISTRATION);
     }
@@ -420,7 +420,7 @@ public class DatabaseManager {
      * @see org.telegram.bot.Config.Bot#PIN_PICTURE_COMMAND_SEND_DURATION
      * @see #getUserCommandState(Integer userID) Look up the command state.
      */
-    public void setUserCommandState(Integer userID, String state) throws Exception {
+    public synchronized void setUserCommandState(Integer userID, String state) throws Exception {
         if(!state.equals(Config.Bot.ASK_COMMAND_WRITE_QUESTION)
                 && !state.equals(Config.Bot.NO_COMMAND)
                 && !state.equals(Config.Bot.ANSWER_COMMAND_CHOOSE_NUMBER)
@@ -452,7 +452,7 @@ public class DatabaseManager {
      * @return The step of a command loop the user is.
      * @see #setUserCommandState(Integer userID, String state) Save the command state of a user.
      */
-    public String getUserCommandState(Integer userID) throws Exception {
+    public synchronized String getUserCommandState(Integer userID) throws Exception {
         setCurrentConfiguration(userID);
 
         return  currentConfiguration.getString(Config.Keys.USER_COMMAND_STATE);
@@ -470,7 +470,7 @@ public class DatabaseManager {
      * @see #deleteQuestion(int questionID) Delete a question.
      * @see #deleteQuestions() Deletes all questions.
      */
-    public String getQuestion(int questionID) throws Exception {
+    public synchronized String getQuestion(int questionID) throws Exception {
         setCurrentConfiguration(questionID);
         return currentConfiguration.getString(Config.Keys.QUESTION);
     }
@@ -487,7 +487,7 @@ public class DatabaseManager {
      * @see #deleteQuestion(int questionID) Delete a question.
      * @see #deleteQuestions() Deletes all questions.
      */
-    public Long getQuestionChatID(int questionID) throws Exception {
+    public synchronized Long getQuestionChatID(int questionID) throws Exception {
         setCurrentConfiguration(questionID);
         return  currentConfiguration.getLong(Config.Keys.CHAT_ID, this.getAdminChatId());
     }
@@ -509,14 +509,17 @@ public class DatabaseManager {
         int filesScanned = 0;
         Path currentFile;
 
-        while (gotAllFiles == false) {
-            currentFile = getDatabaseQuestionPath(filesScanned);
+        synchronized (this) {
+            while (gotAllFiles == false) {
+                currentFile = getDatabaseQuestionPath(filesScanned);
 
-            if(Files.notExists(currentFile)) {
-                gotAllFiles = true;
-            } else {
-                questions.add(getQuestion(filesScanned));
-                filesScanned++;
+
+                if (Files.notExists(currentFile)) {
+                    gotAllFiles = true;
+                } else {
+                    questions.add(getQuestion(filesScanned));
+                    filesScanned++;
+                }
             }
         }
 
@@ -541,14 +544,16 @@ public class DatabaseManager {
         int filesScanned = 0;
         Path currentFile;
 
-        while (gotAllFiles == false) {
-            currentFile = getDatabaseQuestionPath(filesScanned);
+        synchronized (this) {
+            while (gotAllFiles == false) {
+                currentFile = getDatabaseQuestionPath(filesScanned);
 
-            if(Files.notExists(currentFile)) {
-                gotAllFiles = true;
-            } else {
-                chatIDs.add(getQuestionChatID(filesScanned));
-                filesScanned++;
+                if (Files.notExists(currentFile)) {
+                    gotAllFiles = true;
+                } else {
+                   chatIDs.add(getQuestionChatID(filesScanned));
+                   filesScanned++;
+                }
             }
         }
 
@@ -571,13 +576,16 @@ public class DatabaseManager {
         int filesScanned = 0;
         Path currentFile;
 
-        while (gotAllFiles == false) {
-            currentFile = getDatabaseQuestionPath(filesScanned);
+        synchronized (this) {
+            while (gotAllFiles == false) {
+                currentFile = getDatabaseQuestionPath(filesScanned);
 
-            if(Files.notExists(currentFile)) {
-                gotAllFiles = true;
-            } else {
-                filesScanned++;
+
+                if (Files.notExists(currentFile)) {
+                    gotAllFiles = true;
+                } else {
+                    filesScanned++;
+                }
             }
         }
 
@@ -597,15 +605,14 @@ public class DatabaseManager {
      * @see #deleteQuestion(int questionID) Delete a question.
      * @see #deleteQuestions() Deletes all questions.
      */
-    public void createQuestion(String question, Long chatID) throws Exception {
+    public synchronized void createQuestion(String question, Long chatID) throws Exception {
         Path questionFile = getDatabaseQuestionPath(getNumberOfQuestions());
 
         createConfigurationFile(questionFile);
-        setCurrentConfiguration(questionFile);
 
+        setCurrentConfiguration(questionFile);
         currentConfiguration.addProperty(Config.Keys.QUESTION, question);
         currentConfiguration.addProperty(Config.Keys.CHAT_ID, chatID);
-
         currentBuilder.save();
     }
 
@@ -627,20 +634,22 @@ public class DatabaseManager {
         List<Long> questionChatIDs = new ArrayList<Long>();
         List<String> questions = new ArrayList<String>();
 
-        for (Long questionChatID : questionChatIDsArray) {
-            questionChatIDs.add(questionChatID);
-        }
-        for (String question : questionsArray) {
-            questions.add(question);
-        }
+        synchronized (this) {
+            for (Long questionChatID : questionChatIDsArray) {
+                questionChatIDs.add(questionChatID);
+            }
+            for (String question : questionsArray) {
+                questions.add(question);
+            }
 
-        deleteQuestions();
+            deleteQuestions();
 
-        questionChatIDs.remove(questionID);
-        questions.remove(questionID);
+            questionChatIDs.remove(questionID);
+            questions.remove(questionID);
 
-        for (int x = 0; x < questions.size(); x++) {
-            createQuestion(questions.get(x), questionChatIDs.get(x));
+            for (int x = 0; x < questions.size(); x++) {
+                createQuestion(questions.get(x), questionChatIDs.get(x));
+            }
         }
     }
 
@@ -662,17 +671,19 @@ public class DatabaseManager {
 
         Path currentFile;
 
-        while (processedAllFiles == false) {
-            currentFile = getDatabaseQuestionPath(filesDeleted);
+        synchronized (this) {
+            while (processedAllFiles == false) {
+                currentFile = getDatabaseQuestionPath(filesDeleted);
 
-            if (Files.notExists(currentFile)) {
-                processedAllFiles = true;
-            } else {
-                Files.deleteIfExists(currentFile);
-                filesDeleted++;
+                if (Files.notExists(currentFile)) {
+                    processedAllFiles = true;
+                } else {
+                    //TODO use the boolean value returned by deleteIfExists
+                    Files.deleteIfExists(currentFile);
+                    filesDeleted++;
+                }
             }
         }
-
     }
 
     /**
@@ -683,7 +694,7 @@ public class DatabaseManager {
      * @see #setDisplayFileDuration(String displayFileName, int duration) Save the duration for a displayFile.
      * @see #setDisplayFileType(String displayFileName, String type) Save the type of a displayFile.
      */
-    public void setDisplayFileDescription(String displayFileName, String description)
+    public synchronized void setDisplayFileDescription(String displayFileName, String description)
             throws Exception {
 
         setCurrentConfiguration(displayFileName);
@@ -704,7 +715,7 @@ public class DatabaseManager {
      * @see #setDisplayFileDescription(String displayFileName, String description) Set the description of a displayFile.
      * @see #setDisplayFileType(String displayFileName, String type) Save the type of a displayFile.
      */
-    public void setDisplayFileDuration(String displayFileName, int duration) throws Exception {
+    public synchronized void setDisplayFileDuration(String displayFileName, int duration) throws Exception {
 
         setCurrentConfiguration(displayFileName);
         try {
@@ -726,21 +737,22 @@ public class DatabaseManager {
      * @see #setDisplayFileDuration(String displayFileName, int duration) Save the duration for a displayFile.
      * @see #setDisplayFileDescription(String displayFileName, String description) Set the description of a displayFile.
      */
-    public void setDisplayFileType(String displayFileName, String type) throws Exception {
+    public synchronized void setDisplayFileType(String displayFileName, String type) throws Exception {
         if (!type.equals(Config.Bot.DISPLAY_FILE_TYPE_IMAGE)
                 && !type.equals(Bot.DISPLAY_FILE_TYPE_VIDEO)) {
             throw new IllegalArgumentException("No known type: " + type);
         }
 
+        synchronized (this) {
+            setCurrentConfiguration(displayFileName);
+            try {
+                currentConfiguration.setProperty(Config.Keys.DISPLAY_FILE_TYPE_KEY, type);
+            } catch (NullPointerException e) {
+                currentConfiguration.addProperty(Config.Keys.DISPLAY_FILE_TYPE_KEY, type);
+            }
 
-        setCurrentConfiguration(displayFileName);
-        try {
-            currentConfiguration.setProperty(Config.Keys.DISPLAY_FILE_TYPE_KEY, type);
-        } catch (NullPointerException e) {
-            currentConfiguration.addProperty(Config.Keys.DISPLAY_FILE_TYPE_KEY, type);
+            currentBuilder.save();
         }
-
-        currentBuilder.save();
     }
 
     /**
@@ -755,17 +767,19 @@ public class DatabaseManager {
         List<String> displayFiles = getDisplayFiles();
         displayFiles.add(displayFileName);
 
-        setCurrentConfiguration(Config.Paths.DISPLAY_FILES_CONFIG_FILE);
-        try {
-            currentConfiguration.setProperty(Config.Keys.DISPLAY_FILES_KEY, displayFiles);
-        } catch (NullPointerException e) {
-            currentConfiguration.addProperty(Config.Keys.DISPLAY_FILES_KEY, displayFiles);
-        }
+        synchronized (this) {
+            setCurrentConfiguration(Config.Paths.DISPLAY_FILES_CONFIG_FILE);
+            try {
+                currentConfiguration.setProperty(Config.Keys.DISPLAY_FILES_KEY, displayFiles);
+            } catch (NullPointerException e) {
+                currentConfiguration.addProperty(Config.Keys.DISPLAY_FILES_KEY, displayFiles);
+            }
 
-        currentBuilder.save();
+            currentBuilder.save();
+        }
     }
 
-    public List<String> getDisplayFiles() throws Exception {
+    public synchronized List<String> getDisplayFiles() throws Exception {
         setCurrentConfiguration(Config.Paths.DISPLAY_FILES_CONFIG_FILE);
         return currentConfiguration.getList(String.class, Config.Keys.DISPLAY_FILES_KEY, new ArrayList<String>());
     }
@@ -776,7 +790,7 @@ public class DatabaseManager {
      * @param selectedQuestion Value that should be saved for selectedQuestion.
      * @see #getSelectedQuestion(Integer userID) Read the value of selectedQuestion.
      */
-    public void setSelectedQuestion(Integer userID, int selectedQuestion) throws Exception {
+    public synchronized void setSelectedQuestion(Integer userID, int selectedQuestion) throws Exception {
         setCurrentConfiguration(userID);
         try {
             currentConfiguration.setProperty(Config.Keys.SELECTED_QUESTION, selectedQuestion);
@@ -793,7 +807,7 @@ public class DatabaseManager {
      * @return The value of selectedQuestion.
      * @see #setSelectedQuestion(Integer userID, int selectedQuestion) Save the value of selectedQuestion.
      */
-    public int getSelectedQuestion(Integer userID) throws Exception {
+    public synchronized int getSelectedQuestion(Integer userID) throws Exception {
         setCurrentConfiguration(userID);
         return currentConfiguration.getInt(Config.Keys.SELECTED_QUESTION);
     }
@@ -809,14 +823,16 @@ public class DatabaseManager {
             throw new FileAlreadyExistsException("There already is one file with this name.");
         }
 
-        setCurrentConfiguration(userID);
-        try {
-            currentConfiguration.setProperty(Config.Keys.CURRENT_PICTURE_TITLE, title);
-        } catch (NullPointerException e) {
-            currentConfiguration.addProperty(Config.Keys.CURRENT_PICTURE_TITLE, title);
-        }
+        synchronized (this) {
+            setCurrentConfiguration(userID);
+            try {
+                currentConfiguration.setProperty(Config.Keys.CURRENT_PICTURE_TITLE, title);
+            } catch (NullPointerException e) {
+                currentConfiguration.addProperty(Config.Keys.CURRENT_PICTURE_TITLE, title);
+            }
 
-        currentBuilder.save();
+            currentBuilder.save();
+        }
     }
 
     /**
@@ -825,7 +841,7 @@ public class DatabaseManager {
      * @return The currentPictureTitle for the specified user.
      * @see #setCurrentPictureTitle(Integer userID, String title) Save the currentPicture title.
      */
-    public String getCurrentPictureTitle(Integer userID) throws Exception {
+    public synchronized String getCurrentPictureTitle(Integer userID) throws Exception {
         setCurrentConfiguration(userID);
         return  currentConfiguration.getString(Config.Keys.CURRENT_PICTURE_TITLE);
     }
@@ -836,7 +852,7 @@ public class DatabaseManager {
      * @param description The description to be changed.
      * @see #getCurrentPictureDescription(Integer userId) Read the currentPictureDescription.
      */
-    public void setCurrentPictureDescription(Integer userId, String description) throws Exception {
+    public synchronized void setCurrentPictureDescription(Integer userId, String description) throws Exception {
         setCurrentConfiguration(userId);
         try {
             currentConfiguration.setProperty(Config.Keys.CURRENT_PICTURE_DESCRIPTION, description);
@@ -853,7 +869,7 @@ public class DatabaseManager {
      * @return The currentPictureDescription for the specified user.
      * @see #setCurrentPictureDescription(Integer userId, String description) Save the currentPictureDescription.
      */
-    public String getCurrentPictureDescription(Integer userId) throws Exception {
+    public synchronized String getCurrentPictureDescription(Integer userId) throws Exception {
         setCurrentConfiguration(userId);
         return currentConfiguration.getString(Config.Keys.CURRENT_PICTURE_DESCRIPTION);
     }
@@ -864,7 +880,7 @@ public class DatabaseManager {
      * @param duration The new value for the duration.
      * @see #getCurrentPictureDuration(Integer userId) Read the currentPictureDuration.
      */
-    public void setCurrentPictureDuration(Integer userId, int duration) throws Exception {
+    public synchronized void setCurrentPictureDuration(Integer userId, int duration) throws Exception {
         setCurrentConfiguration(userId);
         try {
             currentConfiguration.setProperty(Config.Keys.CURRENT_PICTURE_DURATION, duration);
@@ -881,7 +897,7 @@ public class DatabaseManager {
      * @return The currentPictureDuration for the specified user.
      * @see #setCurrentPictureDuration(Integer userId, int duration) Save the currentPictureDuration.
      */
-    public int getCurrentPictureDuration(Integer userId) throws Exception {
+    public synchronized int getCurrentPictureDuration(Integer userId) throws Exception {
         setCurrentConfiguration(userId);
         return currentConfiguration.getInt(Config.Keys.CURRENT_PICTURE_DURATION, 0);
     }
@@ -897,14 +913,16 @@ public class DatabaseManager {
             throw new FileAlreadyExistsException("There already is one file with this name.");
         }
 
-        setCurrentConfiguration(userID);
-        try {
-            currentConfiguration.setProperty(Config.Keys.CURRENT_VIDEO_TITLE, title);
-        } catch (NullPointerException e) {
-            currentConfiguration.addProperty(Config.Keys.CURRENT_VIDEO_TITLE, title);
-        }
+        synchronized (this) {
+            setCurrentConfiguration(userID);
+            try {
+                currentConfiguration.setProperty(Config.Keys.CURRENT_VIDEO_TITLE, title);
+            } catch (NullPointerException e) {
+                currentConfiguration.addProperty(Config.Keys.CURRENT_VIDEO_TITLE, title);
+            }
 
-        currentBuilder.save();
+            currentBuilder.save();
+        }
     }
 
     /**
@@ -913,7 +931,7 @@ public class DatabaseManager {
      * @return The currentPictureTitle for the specified user.
      * @see #setCurrentVideoTitle(Integer userID, String title) Save the currentVideo title.
      */
-    public String getCurrentVideoTitle(Integer userID) throws Exception {
+    public synchronized String getCurrentVideoTitle(Integer userID) throws Exception {
         setCurrentConfiguration(userID);
         return  currentConfiguration.getString(Config.Keys.CURRENT_VIDEO_TITLE);
     }
@@ -924,7 +942,7 @@ public class DatabaseManager {
      * @param description The description to be changed.
      * @see #getCurrentVideoDescription(Integer userId) Read the currentVideoDescription.
      */
-    public void setCurrentVideoDescription(Integer userId, String description) throws Exception {
+    public synchronized void setCurrentVideoDescription(Integer userId, String description) throws Exception {
         setCurrentConfiguration(userId);
         try {
             currentConfiguration.setProperty(Config.Keys.CURRENT_VIDEO_DESCRIPTION, description);
@@ -941,7 +959,7 @@ public class DatabaseManager {
      * @return The currentVideoDescription for the specified user.
      * @see #setCurrentVideoDescription(Integer userId, String description) Save the currentVideoDescription.
      */
-    public String getCurrentVideoDescription(Integer userId) throws Exception {
+    public synchronized String getCurrentVideoDescription(Integer userId) throws Exception {
         setCurrentConfiguration(userId);
         return currentConfiguration.getString(Config.Keys.CURRENT_VIDEO_DESCRIPTION);
     }
@@ -1001,7 +1019,7 @@ public class DatabaseManager {
      * @return the username for the bot
      * @throws Exception
      */
-    public String getBotUsername() throws Exception {
+    public synchronized String getBotUsername() throws Exception {
         setCurrentConfiguration(Config.Paths.BOT_CONFIG_FILE);
         return currentConfiguration.getString(Config.Keys.BOT_USERNAME_KEY);
     }
@@ -1011,7 +1029,7 @@ public class DatabaseManager {
      * @return the token for the bot
      * @throws Exception
      */
-    public String getBotToken() throws Exception {
+    public synchronized String getBotToken() throws Exception {
         setCurrentConfiguration(Config.Paths.BOT_CONFIG_FILE);
         return currentConfiguration.getString(Config.Keys.BOT_TOKEN_KEY);
     }
@@ -1021,7 +1039,7 @@ public class DatabaseManager {
      * @return the user id of the bot's admin
      * @throws Exception
      */
-    public Integer getAdminUserId() throws Exception {
+    public synchronized Integer getAdminUserId() throws Exception {
         setCurrentConfiguration(Config.Paths.BOT_CONFIG_FILE);
         return currentConfiguration.getInteger(Config.Keys.BOT_ADMIN_USER_ID_KEY, 0);
     }
@@ -1031,7 +1049,7 @@ public class DatabaseManager {
      * @return the chat id of the chat between bot and admin
      * @throws Exception
      */
-    public Integer getAdminChatId() throws Exception {
+    public synchronized Integer getAdminChatId() throws Exception {
         setCurrentConfiguration(Config.Paths.BOT_CONFIG_FILE);
         return currentConfiguration.getInteger(Config.Keys.BOT_ADMIN_CHAT_ID_KEY, 0);
     }
