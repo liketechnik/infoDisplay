@@ -36,6 +36,7 @@ import org.apache.commons.collections.KeyValue;
 import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.apache.commons.lang3.ArrayUtils;
 
+import org.telegram.bot.DisplayBot;
 import org.telegram.bot.database.DatabaseManager;
 import org.telegram.bot.messages.CommandDescription;
 import org.telegram.bot.messages.ContentMessage;
@@ -51,7 +52,12 @@ import org.telegram.telegrambots.logging.BotLogger;
 
 import java.awt.event.KeyEvent;
 import java.io.IOException;
+import java.lang.reflect.Array;
+import java.lang.reflect.Constructor;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -68,15 +74,11 @@ public class HelpCommand extends BotCommand {
 
     private static final String LOGTAG = "HELPCOMMAND";
 
-    private final ICommandRegistry commandRegistry;
-
     /**
      * Set the identifier and a short description of this bot.
-     * @param commandRegistry
      */
-    public HelpCommand(ICommandRegistry commandRegistry) {
+    public HelpCommand() {
         super("help", "Send description of the bot together with a usage guide.");
-        this.commandRegistry = commandRegistry;
     }
 
     /**
@@ -96,7 +98,13 @@ public class HelpCommand extends BotCommand {
 
             StringBuilder additionalContentBuilder = new StringBuilder();
 
-            for (BotCommand botCommand : commandRegistry.getRegisteredCommands()) {
+            List<BotCommand> botCommands = new ArrayList<BotCommand>();
+            DisplayBot bot = new DisplayBot();
+            for (Constructor<BotCommand> commandConstructor : bot.getRegisteredCommands()) {
+                botCommands.add(commandConstructor.newInstance());
+            }
+
+            for (BotCommand botCommand : botCommands) {
                 if (!botCommand.getCommandIdentifier().equals("help") &&
                         !botCommand.getCommandIdentifier().equals("start") &&
                         !botCommand.getCommandIdentifier().equals("stop") &&
@@ -126,9 +134,9 @@ public class HelpCommand extends BotCommand {
             }
 
             if (user.getId().equals(DatabaseManager.getInstance().getAdminUserId())) {
-                additionalContentBuilder.append("/").append(commandRegistry.getRegisteredCommand("answer")
-                        .getCommandIdentifier()).append(":\n    ").append(commandRegistry.getRegisteredCommand("answer")
-                        .getDescription()).append("\n");
+                additionalContentBuilder.append("/").append(bot.getRegisteredCommand("answer")
+                        .newInstance().getCommandIdentifier()).append(":\n    ").append(bot.getRegisteredCommand("answer")
+                        .newInstance().getDescription()).append("\n");
             }
 
             HashMap<String, String> additionalContent = new HashMap<>();

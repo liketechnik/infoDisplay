@@ -100,7 +100,7 @@ public class SendOnErrorOccurred extends BotCommand {
             ResetRecentlyError.setRecentlyError(true);
             new ResetRecentlyError().start();
 
-            new CancelCommand(new DisplayBot().getICommandRegistry()).execute(absSender, user, chat, new String[]{});
+            new CancelCommand().execute(absSender, user, chat, new String[]{});
         }
     }
 }

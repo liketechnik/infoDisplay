@@ -199,6 +199,20 @@ project(':bot') {
         include "LICENSE-**"
         into "LICENSES"
     }
+
+    task createStopScript(type: CreateStartScripts) {
+        mainClassName = ""
+        applicationName = "stopBot"
+        outputDir = new File(project.buildDir, 'scripts')
+        classpath = jar.outputs.files + project.configurations.runtime
+        unixStartScriptGenerator.template = resources.text.fromFile('stopBotUnixStartScript.txt')
+        windowsStartScriptGenerator.template = resources.text.fromFile('stopBotWindowsStartScript.txt')
+    }
+
+    applicationDistribution.into("bin") {
+        from(createStopScript)
+        fileMode = 0755
+    }
 }
 
 project(':displayFile') {
