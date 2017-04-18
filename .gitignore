@@ -4,5 +4,4 @@
 *build*
 !build.gradle
 infoDisplay.i[a-z][a-z]
-gradle/
 !.gitignore

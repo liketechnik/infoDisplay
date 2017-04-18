@@ -1,5 +1,5 @@
 language: java
-script: gradle :bot:distZip :bot:distTar :display:distTar :display:distZip
+script: ./gradlew :bot:distZip :bot:distTar :display:distTar :display:distZip
 jdk:
   - oraclejdk8
 before_cache:
