@@ -216,8 +216,13 @@ project(':bot') {
 }
 
 project(':displayFile') {
+    mainClassName = ""
     dependencies {
         compile project(':config')
     }
+}
+
+project(':config') {
+    mainClassName = ""
 }
 
