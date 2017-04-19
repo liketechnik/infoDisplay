@@ -226,3 +226,5 @@ project(':config') {
     mainClassName = ""
 }
 
+
+mainClassName = ""
