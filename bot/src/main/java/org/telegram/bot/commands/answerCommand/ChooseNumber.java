@@ -31,6 +31,7 @@
 
 package org.telegram.bot.commands.answerCommand;
 
+import org.telegram.bot.api.SendMessages;
 import org.telegram.bot.commands.SendOnErrorOccurred;
 import org.telegram.bot.database.DatabaseManager;
 import org.telegram.bot.messages.Message;
@@ -76,8 +77,6 @@ public class ChooseNumber extends BotCommand {
      */
     public void execute(AbsSender absSender, User user, Chat chat, String[] arguments) {
 
-        SendMessage answer = new SendMessage();
-
         try {
             int selectedQuestion;
             DatabaseManager databaseManager = DatabaseManager.getInstance();
@@ -106,20 +105,14 @@ public class ChooseNumber extends BotCommand {
                         this.getCommandIdentifier() + "_command", "invalid");
             }
 
-            answer.setChatId(chat.getId().toString());
-            answer.setText(situationalContentMessage.getContent(user.getId(), false));
+            String messageText = situationalContentMessage.getContent(user.getId(), false);
+            SendMessages.getInstance().addMessage(situationalContentMessage.calculateHash(), messageText, chat.getId().toString(), absSender);
         } catch (Exception e) {
             BotLogger.error(LOGTAG, e);
 
             new SendOnErrorOccurred().execute(absSender, user, chat, new String[]{LOGTAG});
 
             return;
-        }
-
-        try {
-            absSender.sendMessage(answer);
-        } catch (TelegramApiException e) {
-            BotLogger.error(LOGTAG, e);
         }
     }
 }

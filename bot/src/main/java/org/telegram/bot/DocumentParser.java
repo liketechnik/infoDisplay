@@ -7,10 +7,13 @@ import org.telegram.bot.commands.pinPictureCommand.SendPicture;
 import org.telegram.bot.commands.pinVideoCommand.SendVideo;
 import org.telegram.bot.database.DatabaseManager;
 import org.telegram.telegrambots.api.objects.Message;
+import org.telegram.telegrambots.api.objects.PhotoSize;
 import org.telegram.telegrambots.api.objects.Update;
 import org.telegram.telegrambots.logging.BotLogger;
 
 import java.lang.reflect.Constructor;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author liketechnik
@@ -36,25 +39,51 @@ public class DocumentParser extends Parser {
 
             if (userCommandState.equals(Bot.NO_COMMAND)) {
                 return false;
+            } else if (userCommandState.equals(Bot.PIN_PICTURE_COMMAND_SEND_PICTURE)) {
+                if (hasPhoto(message)) {
+                    List<String> arguments = new ArrayList<>();
+                    arguments.add(Bot.HAS_PHOTO);
+                    if (message.hasPhoto()) {
+                        List<PhotoSize> photos = update.getMessage().getPhoto();
+
+                        int width = 0;
+                        int height = 0;
+
+                        int biggestPhoto = 0;
+
+                        for (int x = 0; x < photos.size(); x++) {
+                            if (width < photos.get(x).getWidth() || height < photos.get(x).getHeight()) {
+                                biggestPhoto = x;
+                            }
+                        }
+
+                        arguments.add(message.getPhoto().get(biggestPhoto).getFileId());
+                    } else if (message.getDocument().getMimeType().contains("image")) {
+                        arguments.add(message.getDocument().getFileId());
+                    }
+                    this.arguments = arguments.toArray(new String[]{});
+                } else {
+                    this.arguments = new String[] {Bot.HAS_NO_PHOTO};
+                }
+                this.commandConstructor = (Constructor) SendPicture.class.getConstructor();
+                return true;
+            } else if (userCommandState.equals(Bot.PIN_VIDEO_COMMAND_SEND_VIDEO)) {
+                if (hasVideo(message)) {
+                    List<String> arguments = new ArrayList<>();
+                    arguments.add(Bot.HAS_VIDEO);
+                    if (message.getVideo() != null) {
+                        arguments.add(message.getVideo().getFileId());
+                    } else if (message.getDocument().getMimeType().contains("video")) {
+                        arguments.add(message.getDocument().getFileId());
+                    }
+                    this.arguments = arguments.toArray(new String[]{});
+                } else {
+                    this.arguments = new String[] {Bot.HAS_NO_VIDEO};
+                }
+                this.commandConstructor = (Constructor) SendVideo.class.getConstructor();
+                return true;
             }
 
-            if (hasPhoto(message)) {
-                if (userCommandState.equals(Bot.PIN_PICTURE_COMMAND_SEND_PICTURE)) {
-                    this.arguments = new String[] {Bot.HAS_PHOTO, message.getDocument().getFileId()}    ;
-                    this.commandConstructor = (Constructor) SendPicture.class.getConstructor();
-                } else {
-                    return false;
-                }
-                return true;
-            } else if (hasVideo(message)) {
-                if (userCommandState.equals(Bot.PIN_PICTURE_COMMAND_SEND_PICTURE)) {
-                    this.arguments = new String[] {Bot.HAS_VIDEO, message.getDocument().getFileId()}    ;
-                    this.commandConstructor = (Constructor) SendVideo.class.getConstructor();
-                } else {
-                    return false;
-                }
-                return true;
-            }
             return false;
 
         } catch (Exception e) {
@@ -64,26 +93,42 @@ public class DocumentParser extends Parser {
     }
 
     private boolean hasPhoto(Message message) {
+//        if (message.hasDocument() || message.hasPhoto()) {
+//            if (message.getDocument().getMimeType().contains("image") || message.hasPhoto()) {
+//                return true;
+//            } else {
+//                return false;
+//            }
+//        } else {
+//            return false;
+//        }
         if (message.hasDocument()) {
-            if (message.getDocument().getMimeType().contains("image") || message.hasPhoto()) {
+            if (message.getDocument().getMimeType().contains("image")) {
                 return true;
-            } else {
-                return false;
             }
-        } else {
-            return false;
+        } else if (message.hasPhoto()) {
+            return true;
         }
+        return false;
     }
 
     private boolean hasVideo(Message message) {
+//        if (message.hasDocument() || message.getVideo() != null) {
+//            if (message.getDocument().getMimeType().contains("video") || message.getVideo() != null) {
+//                return true;
+//            } else {
+//                return false;
+//            }
+//        } else {
+//            return false;
+//        }
         if (message.hasDocument()) {
             if (message.getDocument().getMimeType().contains("video")) {
                 return true;
-            } else {
-                return false;
             }
-        } else {
-            return false;
+        } else if (message.getVideo() != null) {
+            return true;
         }
+        return false;
     }
 }

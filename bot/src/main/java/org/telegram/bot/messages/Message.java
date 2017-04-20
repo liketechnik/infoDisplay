@@ -156,6 +156,14 @@ public class Message {
         }
     }
 
+    public Integer calculateHash() throws InterruptedException {
+        synchronized (Message.class) {
+            String hash = this.message + System.currentTimeMillis();
+            Thread.sleep(1);
+            return hash.hashCode();
+        }
+    }
+
     /**
      * Load a message file in a user specific language.
      * @param userID The user who's language is used.

@@ -31,6 +31,7 @@
 
 package org.telegram.bot.commands;
 
+import org.telegram.bot.api.SendMessages;
 import org.telegram.bot.database.DatabaseManager;
 import org.telegram.bot.messages.SituationalContentMessage;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
@@ -73,8 +74,6 @@ public class StartCommand extends BotCommand {
     @Override
     public void execute(AbsSender absSender, User user, Chat chat, String[] strings) {
 
-        SendMessage answer = new SendMessage();
-
         try {
             DatabaseManager databaseManager = DatabaseManager.getInstance();
 
@@ -114,8 +113,8 @@ public class StartCommand extends BotCommand {
 
             situationalContentMessage.setAdditionalContent(additionalContent);
 
-            answer.setChatId(chat.getId().toString());
-            answer.setText(situationalContentMessage.getContent(user.getId(), false));
+            String messageText = situationalContentMessage.getContent(user.getId(), false);
+            SendMessages.getInstance().addMessage(situationalContentMessage.calculateHash(), messageText, chat.getId().toString(), absSender);
 
         } catch (Exception e) {
             BotLogger.error(LOGTAG, e);
@@ -123,12 +122,6 @@ public class StartCommand extends BotCommand {
             new SendOnErrorOccurred().execute(absSender, user, chat, new String[]{LOGTAG});
 
             return;
-        }
-
-        try {
-            absSender.sendMessage(answer);
-        } catch (TelegramApiException e) {
-            BotLogger.error(LOGTAG, e);
         }
     }
 }

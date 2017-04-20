@@ -32,6 +32,7 @@
 package org.telegram.bot.commands.answerCommand;
 
 
+import org.telegram.bot.api.SendMessages;
 import org.telegram.bot.commands.SendOnErrorOccurred;
 import org.telegram.bot.database.DatabaseManager;
 import org.telegram.bot.messages.Message;
@@ -77,9 +78,6 @@ public class WriteAnswer extends BotCommand {
     @Override
     public void execute(AbsSender absSender, User user, Chat chat, String[] arguments) {
 
-        SendMessage answer = new SendMessage();
-        SendMessage confirmation = new SendMessage();
-
         try {
 
             DatabaseManager databaseManager = DatabaseManager.getInstance();
@@ -101,11 +99,14 @@ public class WriteAnswer extends BotCommand {
                     this.getCommandIdentifier() + "_command", "answer");
 
 
-            answer.setChatId(databaseManager.getQuestionChatID(selectedQuestion - 1).toString());
-            answer.setText(explanationMessage.getContent(user.getId(), false));
+            SendMessages sendMessages = SendMessages.getInstance();
 
-            confirmation.setChatId(databaseManager.getAdminChatId().toString());
-            confirmation.setText(confirmationMessage.getContent(user.getId(), true));
+            String messageText = explanationMessage.getContent(user.getId(), false);
+            sendMessages.addMessage(explanationMessage.calculateHash(), messageText,
+                    databaseManager.getQuestionChatID(selectedQuestion -1).toString(), absSender);
+
+            messageText = confirmationMessage.getContent(databaseManager.getAdminUserId(), true);
+            sendMessages.addMessage(confirmationMessage.calculateHash(), messageText, databaseManager.getAdminChatId().toString(), absSender);
 
             databaseManager.deleteQuestion(selectedQuestion - 1);
             databaseManager.setSelectedQuestion(user.getId(), -1);
@@ -115,13 +116,6 @@ public class WriteAnswer extends BotCommand {
             new SendOnErrorOccurred().execute(absSender, user, chat, new String[]{LOGTAG});
 
             return;
-        }
-
-        try {
-            absSender.sendMessage(confirmation);
-            absSender.sendMessage(answer);
-        } catch (TelegramApiException e) {
-            BotLogger.error(LOGTAG, e);
         }
     }
 }

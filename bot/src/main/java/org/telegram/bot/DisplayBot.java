@@ -70,7 +70,6 @@ public class DisplayBot extends TelegramLongPollingThreadBot {
         registerCommand(AboutCommand.class);
         registerCommand(CancelCommand.class);
         registerCommand(HelpCommand.class);
-        BotLogger.info(LOGTAG, "Starting bot now!");
     }
 
     /**

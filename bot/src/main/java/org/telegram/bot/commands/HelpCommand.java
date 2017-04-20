@@ -37,6 +37,7 @@ import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.apache.commons.lang3.ArrayUtils;
 
 import org.telegram.bot.DisplayBot;
+import org.telegram.bot.api.SendMessages;
 import org.telegram.bot.database.DatabaseManager;
 import org.telegram.bot.messages.CommandDescription;
 import org.telegram.bot.messages.ContentMessage;
@@ -90,8 +91,6 @@ public class HelpCommand extends BotCommand {
      */
     @Override
     public void execute(AbsSender absSender, User user, Chat chat, String[] arguments) {
-
-        SendMessage answer = new SendMessage();
 
         try {
             DatabaseManager.getInstance().setUserState(user.getId(), true);
@@ -147,20 +146,13 @@ public class HelpCommand extends BotCommand {
 
 //            BotLogger.info(LOGTAG, contentMessage.getContent(user.getId(), false));
 
-            answer.setChatId(chat.getId().toString());
-            answer.enableMarkdown(true);
-            answer.setText(contentMessage.getContent(user.getId(), false));
+            String messageText = contentMessage.getContent(user.getId(), false);
+            SendMessages.getInstance().addMessage(contentMessage.calculateHash(), messageText, chat.getId().toString(), absSender, true);
 
         } catch (Exception e) {
             BotLogger.error(LOGTAG, e);
 
             new SendOnErrorOccurred().execute(absSender, user, chat, new String[]{LOGTAG});
-        }
-
-        try {
-            absSender.sendMessage(answer);
-        } catch (TelegramApiException e) {
-            BotLogger.error(LOGTAG, e);
         }
     }
 }

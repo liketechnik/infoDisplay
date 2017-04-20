@@ -1,5 +1,6 @@
 package org.telegram.bot.commands.pinVideoCommand;
 
+import org.telegram.bot.api.SendMessages;
 import org.telegram.bot.commands.SendOnErrorOccurred;
 import org.telegram.bot.database.DatabaseManager;
 import org.telegram.bot.messages.Message;
@@ -30,8 +31,6 @@ public class SendTitle extends BotCommand {
     @Override
     public void execute(AbsSender absSender, User user, Chat chat, String[] arguments) {
 
-        SendMessage answer = new SendMessage();
-
         try {
 
             DatabaseManager databaseManager = DatabaseManager.getInstance();
@@ -55,20 +54,14 @@ public class SendTitle extends BotCommand {
                         this.getCommandIdentifier() + "_command","already_used");
             }
 
-            answer.setChatId(chat.getId().toString());
-            answer.setText(situationalMessage.getContent(user.getId(), false));
+            String messageText = situationalMessage.getContent(user.getId(), false);
+            SendMessages.getInstance().addMessage(situationalMessage.calculateHash(), messageText, chat.getId().toString(), absSender);
         } catch (Exception e) {
             BotLogger.error(LOGTAG, e);
 
             new SendOnErrorOccurred().execute(absSender, user, chat, new String[]{LOGTAG});
 
             return;
-        }
-
-        try {
-            absSender.sendMessage(answer);
-        } catch (TelegramApiException e) {
-            BotLogger.error(LOGTAG, e);
         }
     }
 }

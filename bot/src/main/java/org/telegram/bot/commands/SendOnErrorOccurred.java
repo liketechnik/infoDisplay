@@ -34,6 +34,7 @@ package org.telegram.bot.commands;
 
 import org.telegram.bot.DisplayBot;
 import org.telegram.bot.ResetRecentlyError;
+import org.telegram.bot.api.SendMessages;
 import org.telegram.bot.messages.Message;
 import org.telegram.bot.messages.SituationalMessage;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
@@ -72,10 +73,6 @@ public class SendOnErrorOccurred extends BotCommand {
     @Override
     public void execute(AbsSender absSender, User user, Chat chat, String[] LOGTAG) {
 
-        SendMessage answer = new SendMessage();
-
-        answer.setChatId(chat.getId().toString());
-
         SituationalMessage situationalMessage = new SituationalMessage(
                 this.getCommandIdentifier() + "_command");
 
@@ -86,11 +83,11 @@ public class SendOnErrorOccurred extends BotCommand {
             situationalMessage.setMessageName(this.getCommandIdentifier() + "_command", "not_terminating");
         }
 
-        answer.setText(situationalMessage.getContent(user.getId(), false));
+        String messageText = situationalMessage.getContent(user.getId(), false);
 
         try {
-            absSender.sendMessage(answer);
-        } catch (TelegramApiException e) {
+            SendMessages.getInstance().addMessage(situationalMessage.calculateHash(), messageText, chat.getId().toString(), absSender);
+        } catch (InterruptedException e) {
             BotLogger.error(LOGTAG[0], e);
         }
 

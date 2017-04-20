@@ -90,7 +90,7 @@ public abstract class TelegramLongPollingThreadBot extends TelegramLongPollingBo
             if (update.hasCallbackQuery()) {
                 parser = getCallbackParser().newInstance(update, this);
             } else if (update.hasMessage()) {
-                if (update.getMessage().hasDocument()) {
+                if (update.getMessage().hasDocument() || update.getMessage().hasPhoto() || update.getMessage().getVideo() != null) {
                     parser = getDocumentParser().newInstance(update, this);
                 } else {
                     parser = getMessageParser().newInstance(update, this);

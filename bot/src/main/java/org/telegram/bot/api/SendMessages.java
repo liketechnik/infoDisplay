@@ -29,6 +29,7 @@ public class SendMessages extends Thread {
         messages = new ConcurrentHashMap<>();
         absSender = new ConcurrentHashMap<>();
         chatIds = new ConcurrentHashMap<>();
+        enableMarkdown = new ConcurrentHashMap<>();
     }
 
     public static SendMessages getInstance() {
@@ -76,18 +77,18 @@ public class SendMessages extends Thread {
     }
 
     public void addMessage(Integer messageHash, String message, String chatId, AbsSender absSender) {
-        this.messageHashes.add(messageHash);
         this.messages.putIfAbsent(messageHash, message);
         this.chatIds.putIfAbsent(messageHash, chatId);
         this.absSender.putIfAbsent(messageHash, absSender);
         this.enableMarkdown.putIfAbsent(messageHash, false);
+        this.messageHashes.add(messageHash);
     }
 
     public void addMessage(Integer messageHash, String message, String chatId, AbsSender absSender, boolean enableMarkdown) {
-        this.messageHashes.add(messageHash);
         this.messages.putIfAbsent(messageHash, message);
         this.chatIds.putIfAbsent(messageHash, chatId);
         this.absSender.putIfAbsent(messageHash, absSender);
         this.enableMarkdown.putIfAbsent(messageHash, enableMarkdown);
+        this.messageHashes.add(messageHash);
     }
 }
