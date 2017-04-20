@@ -50,6 +50,7 @@ public class SendMessages extends Thread {
     private ConcurrentHashMap<Integer, String> messages;
     private ConcurrentHashMap<Integer, AbsSender> absSender;
     private ConcurrentHashMap<Integer, String> chatIds;
+    private ConcurrentHashMap<Integer, Boolean> enableMarkdown;
 
     @Override
     public void run() {
@@ -61,7 +62,9 @@ public class SendMessages extends Thread {
                 String currentMessage = this.messages.remove(currentMessageHash);
                 String currentChatId = this.chatIds.remove(currentMessageHash);
                 AbsSender currentAbsSender = this.absSender.remove(currentMessageHash);
+                boolean currentEnableMarkdown = this.enableMarkdown.remove(currentMessageHash);
 
+                message.enableMarkdown(currentEnableMarkdown);
                 message.setText(currentMessage);
                 message.setChatId(currentChatId);
                 currentAbsSender.sendMessage(message);
@@ -77,5 +80,14 @@ public class SendMessages extends Thread {
         this.messages.putIfAbsent(messageHash, message);
         this.chatIds.putIfAbsent(messageHash, chatId);
         this.absSender.putIfAbsent(messageHash, absSender);
+        this.enableMarkdown.putIfAbsent(messageHash, false);
+    }
+
+    public void addMessage(Integer messageHash, String message, String chatId, AbsSender absSender, boolean enableMarkdown) {
+        this.messageHashes.add(messageHash);
+        this.messages.putIfAbsent(messageHash, message);
+        this.chatIds.putIfAbsent(messageHash, chatId);
+        this.absSender.putIfAbsent(messageHash, absSender);
+        this.enableMarkdown.putIfAbsent(messageHash, enableMarkdown);
     }
 }
