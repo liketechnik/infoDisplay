@@ -3,6 +3,7 @@ package org.telegram.bot;
 import Config.Bot;
 import org.telegram.bot.api.TelegramLongPollingThreadBot;
 import org.telegram.bot.api.Parser;
+import org.telegram.bot.commands.CancelCommand;
 import org.telegram.bot.commands.answerCommand.ChooseNumber;
 import org.telegram.bot.commands.answerCommand.WriteAnswer;
 import org.telegram.bot.commands.askCommand.WriteQuestion;
@@ -45,10 +46,17 @@ public class MessageParser extends Parser {
             String command = text.substring(1);
             String[] commandSplit = command.split(" ");
 
-            if (this.bot.getCommandsMap().containsKey(commandSplit[0])) {
-                this.arguments = Arrays.copyOfRange(commandSplit, 1, commandSplit.length);
-                this.commandConstructor = this.bot.getRegisteredCommand(commandSplit[0]);
-                return true;
+            try {
+                // check if either the user sent a new, known command or he sent the cancel command
+                if ((this.bot.getCommandsMap().containsKey(commandSplit[0]) &&
+                        DatabaseManager.getInstance().getUserCommandState(this.user.getId()).equals(Bot.NO_COMMAND))
+                        || commandSplit[0].equals(CancelCommand.class.getConstructor().newInstance().getCommandIdentifier())) {
+                    this.arguments = Arrays.copyOfRange(commandSplit, 1, commandSplit.length);
+                    this.commandConstructor = this.bot.getRegisteredCommand(commandSplit[0]);
+                    return true;
+                }
+            } catch (Exception e) {
+                BotLogger.error(LOGTAG, e);
             }
             return false;
         // Check if the user executed a command and the message is a response
