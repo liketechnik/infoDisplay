@@ -85,6 +85,7 @@ public class Message {
     public void setMessageName(String command) {
         this.messageName = command;
         this.xmlQuarry = "command_message[@command='" + command + "']/command_content";
+        this.message = null; // force reload of the message
     }
 
     /**
@@ -96,6 +97,7 @@ public class Message {
         this.messageName = command;
         this.xmlQuarry = "command_package[@command='" + commandPackage +
                 "']/command_message[@command='" + command + "']/command_content";
+        this.message = null; // force reload of the message
     }
 
     /**

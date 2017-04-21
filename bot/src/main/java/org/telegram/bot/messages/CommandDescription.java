@@ -17,6 +17,7 @@ public class CommandDescription extends Message {
     public void setMessageName(String command) {
         super.messageName = command + "_description";
         super.xmlQuarry = "command_message[@command='" + command + "']/command_description";
+        this.message = null; // force reload of the message
     }
 
     @Override
@@ -24,5 +25,6 @@ public class CommandDescription extends Message {
         super.messageName = command + "_description";
         super.xmlQuarry = "command_package[@command='" + commandPackage + "']/command_message[@command='" + command +
                 "']/command_description";
+        this.message = null; // force reload of the message
     }
 }
