@@ -7,7 +7,7 @@ package Config;
  */
 public final class CallbackData {
 
-    public final static String SET_LANGUAGE_ENGLISH = "set_language_english";
-    public final static String SET_LANGUAGE_GERMAN = "set_language_german";
-    public final static String SET_LANGUAGE_DEFAULT = "set_language_default";
+    public enum SET_LANGUAGE {
+        set_language_english, set_language_german, set_language_default
+    }
 }

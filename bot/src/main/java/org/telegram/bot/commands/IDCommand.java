@@ -31,6 +31,7 @@
 
 package org.telegram.bot.commands;
 
+import org.telegram.bot.api.SendMessages;
 import org.telegram.bot.messages.ContentMessage;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Chat;
@@ -71,8 +72,6 @@ public class IDCommand extends BotCommand {
     @Override
     public void execute(AbsSender absSender, User user, Chat chat, String[] arguments) {
 
-        SendMessage answer = new SendMessage();
-
         try {
             HashMap<String, String> additionalContent  = new HashMap<>();
             additionalContent.put("userId", user.getId().toString());
@@ -81,8 +80,8 @@ public class IDCommand extends BotCommand {
             ContentMessage contentMessage = new ContentMessage(this.getCommandIdentifier() + "_command");
             contentMessage.setAdditionalContent(additionalContent);
 
-            answer.setChatId(chat.getId().toString());
-            answer.setText(contentMessage.getContent(user.getId(), true));
+            String messageText = contentMessage.getContent(user.getId(), true);
+            SendMessages.getInstance().addMessage(contentMessage.calculateHash(), messageText, chat.getId().toString(), absSender);
 
         } catch (Exception e) {
             BotLogger.error(LOGTAG, e);
@@ -90,12 +89,6 @@ public class IDCommand extends BotCommand {
             new SendOnErrorOccurred().execute(absSender, user, chat, new String[]{LOGTAG});
 
             return;
-        }
-
-        try {
-            absSender.sendMessage(answer);
-        } catch (TelegramApiException e) {
-            BotLogger.error(LOGTAG, e);
         }
     }
 }

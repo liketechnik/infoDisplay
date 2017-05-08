@@ -29,6 +29,7 @@ public class  InlineKeyboard extends Message {
     public void setMessageName(String command) {
         super.messageName = command + "_description";
         super.xmlQuarry = "command_message[@command='" + command + "']/reply_keyboard/keyboard_button";
+        this.keyboard = null; // force reload
     }
 
     @Override
@@ -36,6 +37,7 @@ public class  InlineKeyboard extends Message {
         super.messageName = command + "_reply_keyboard";
         super.xmlQuarry = "command_package[@command='" + commandPackage + "']/command_message[@command='" + command +
                 "']/reply_keyboard/keyboard_button";
+        this.keyboard = null; // force reload
     }
 
     @Override

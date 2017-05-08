@@ -32,6 +32,7 @@
 package org.telegram.bot.commands;
 
 import org.apache.commons.configuration2.ex.ConfigurationException;
+import org.telegram.bot.api.SendMessages;
 import org.telegram.bot.database.DatabaseManager;
 import org.telegram.bot.messages.Message;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
@@ -73,14 +74,13 @@ public class AdministratorCommand extends BotCommand {
      */
     public void execute(AbsSender absSender, User user, Chat chat, String[] arguments) {
 
-        SendMessage answer = new SendMessage();
-
         try {
             DatabaseManager.getInstance().setUserState(user.getId(), true);
 
-            answer.setChatId(chat.getId().toString());
-            answer.setText(new Message(this.getCommandIdentifier() + "_command")
-                    .getContent(user.getId(), true));
+            Message message = new Message(this.getCommandIdentifier() + "_command");
+
+            String messageText = message.getContent(user.getId(), true);
+            SendMessages.getInstance().addMessage(message.calculateHash(), messageText, chat.getId().toString(), absSender);
 
         // catch every error that could occur, log it and inform the user about the occurrence of an error.
         } catch (Exception e) {
@@ -89,12 +89,6 @@ public class AdministratorCommand extends BotCommand {
             new SendOnErrorOccurred().execute(absSender, user, chat, new String[]{LOGTAG});
 
             return;
-        }
-        // Send the message
-        try {
-            absSender.sendMessage(answer);
-        } catch (TelegramApiException e) {
-            BotLogger.error(LOGTAG, e);
         }
     }
 }

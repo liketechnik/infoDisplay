@@ -33,6 +33,7 @@ package org.telegram.bot.commands.answerCommand;
 
 import org.apache.commons.configuration2.ex.ConfigurationException;
 
+import org.telegram.bot.api.SendMessages;
 import org.telegram.bot.commands.SendOnErrorOccurred;
 import org.telegram.bot.database.DatabaseManager;
 import org.telegram.bot.messages.ContentMessage;
@@ -79,7 +80,6 @@ public class AnswerCommand extends BotCommand {
     public void execute(AbsSender absSender, User user, Chat chat, String[] arguments) {
 
         StringBuilder questionsBuilder = new StringBuilder();
-        SendMessage answer = new SendMessage();
 
         try {
             DatabaseManager databaseManager = DatabaseManager.getInstance();
@@ -104,8 +104,9 @@ public class AnswerCommand extends BotCommand {
                     ""), this.getCommandIdentifier() + "_command");
             contentMessage.setAdditionalContent(additionalContent);
 
-            answer.setChatId(chat.getId().toString());
-            answer.setText(contentMessage.getContent(user.getId(), false));
+
+            String messageText = contentMessage.getContent(user.getId(), false);
+            SendMessages.getInstance().addMessage(contentMessage.calculateHash(), messageText, chat.getId().toString(), absSender);
 
             databaseManager.setUserCommandState(user.getId(), Config.Bot.ANSWER_COMMAND_CHOOSE_NUMBER);
         } catch (Exception e) {
@@ -114,12 +115,6 @@ public class AnswerCommand extends BotCommand {
             new SendOnErrorOccurred().execute(absSender, user, chat, new String[]{LOGTAG});
 
             return;
-        }
-
-        try {
-            absSender.sendMessage(answer);
-        } catch (TelegramApiException e) {
-            BotLogger.error(LOGTAG, e);
         }
     }
 }

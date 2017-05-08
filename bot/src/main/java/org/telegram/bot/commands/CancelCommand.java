@@ -57,15 +57,12 @@ public class CancelCommand extends BotCommand {
 
     public static final String LOGTAG = "CANCELCOMMAND";
 
-    private final ICommandRegistry commandRegistry;
-
     /**
      * Set the identifier and a short description for the command.
      * @param commandRegistry
      */
-    public CancelCommand(ICommandRegistry commandRegistry) {
+    public CancelCommand() {
         super("cancel", "Cancel the running command (e.g. uploading of a new picture).");
-        this.commandRegistry = commandRegistry;
     }
 
     /**
@@ -82,7 +79,7 @@ public class CancelCommand extends BotCommand {
         try {
             DatabaseManager.getInstance().setUserCommandState(user.getId(), Config.Bot.NO_COMMAND);
 
-            HelpCommand helpCommand = new HelpCommand(commandRegistry);
+            HelpCommand helpCommand = new HelpCommand();
             helpCommand.execute(absSender, user, chat, arguments);
 
         } catch (Exception e) {

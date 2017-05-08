@@ -32,6 +32,7 @@
 package org.telegram.bot.commands.pinPictureCommand;
 
 import org.apache.commons.configuration2.ex.ConfigurationException;
+import org.telegram.bot.api.SendMessages;
 import org.telegram.bot.commands.SendOnErrorOccurred;
 import org.telegram.bot.database.DatabaseManager;
 import org.telegram.bot.messages.Message;
@@ -74,8 +75,6 @@ public class PinPictureCommand extends BotCommand {
      */
     public void execute(AbsSender absSender, User user, Chat chat, String[] arguments) {
 
-        SendMessage answerMessage = new SendMessage();
-
         try {
             DatabaseManager databaseManager = DatabaseManager.getInstance();
 
@@ -93,20 +92,14 @@ public class PinPictureCommand extends BotCommand {
                         "has_permission");
             }
 
-            answerMessage.setText(situationalMessage.getContent(user.getId(), false));
-            answerMessage.setChatId(user.getId().toString());
+            String messageText = situationalMessage.getContent(user.getId(), false);
+            SendMessages.getInstance().addMessage(situationalMessage.calculateHash(), messageText, chat.getId().toString(), absSender);
         } catch (Exception e) {
             BotLogger.error(LOGTAG, e);
 
             new SendOnErrorOccurred().execute(absSender, user, chat, new String[]{LOGTAG});
 
             return;
-        }
-
-        try {
-            absSender.sendMessage(answerMessage);
-        } catch (TelegramApiException e) {
-            BotLogger.error(LOGTAG, e);
         }
     }
 

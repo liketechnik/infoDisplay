@@ -31,6 +31,7 @@
 
 package org.telegram.bot;
 
+import org.telegram.bot.api.SendMessages;
 import org.telegram.bot.commands.CancelCommand;
 import org.telegram.bot.commands.HelpCommand;
 import org.telegram.telegrambots.ApiContext;
@@ -41,10 +42,17 @@ import org.telegram.telegrambots.api.objects.Chat;
 import org.telegram.telegrambots.api.objects.User;
 import org.telegram.telegrambots.bots.AbsSender;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
+import org.telegram.telegrambots.generics.BotSession;
 import org.telegram.telegrambots.logging.BotLogger;
 import org.telegram.telegrambots.logging.BotsFileHandler;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Scanner;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
 
@@ -67,12 +75,21 @@ public class Main {
             BotLogger.severe(LOGTAG, e);
         }
 
+        //BotLogger.error(LOGTAG, "main");
+
         ApiContextInitializer.init();
 
         try {
             TelegramBotsApi telegramBotsApi = createTelegramBotsApi();
             try {
-                telegramBotsApi.registerBot(new DisplayBot());
+                BotSession displayBot = telegramBotsApi.registerBot(new DisplayBot());
+                BotLogger.info(LOGTAG, "Starting bot now!");
+                SendMessages.getInstance().start();
+                while (Files.notExists(FileSystems.getDefault().getPath("./stop"))) {
+                    Thread.sleep(5000);
+                }
+                displayBot.stop();
+                //System.exit(0);
             } catch (TelegramApiException e) {
                 BotLogger.error(LOGTAG, e);
             }
@@ -170,7 +187,7 @@ public class Main {
             BotLogger.error(LOGTAG, e);
         }
 
-        new CancelCommand(new DisplayBot().getICommandRegistry()).execute(absSender, user, chat, new String[]{});
+        new CancelCommand().execute(absSender, user, chat, new String[]{});
     }
 }
 

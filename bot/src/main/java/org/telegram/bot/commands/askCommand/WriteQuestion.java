@@ -31,6 +31,7 @@
 
 package org.telegram.bot.commands.askCommand;
 
+import org.telegram.bot.api.SendMessages;
 import org.telegram.bot.commands.SendOnErrorOccurred;
 import org.telegram.bot.database.DatabaseManager;
 import org.telegram.bot.messages.Message;
@@ -77,8 +78,8 @@ public class WriteQuestion extends BotCommand {
     @Override
     public void execute(AbsSender absSender, User user, Chat chat, String[] arguments) {
 
-        SendMessage question = new SendMessage();
-        SendMessage answer = new SendMessage();
+        String messageText;
+        SendMessages sendMessages = SendMessages.getInstance();
 
         try {
             DatabaseManager.getInstance().setUserCommandState(user.getId(), Config.Bot.NO_COMMAND);
@@ -92,8 +93,9 @@ public class WriteQuestion extends BotCommand {
             additionalContent.put("userName", getSpecialFilteredUsername(user));
             situationalContentMessage.setAdditionalContent(additionalContent);
 
-            question.setChatId(DatabaseManager.getInstance().getAdminChatId().toString());
-            question.setText(situationalContentMessage.getContent(user.getId(), false));
+            messageText = situationalContentMessage.getContent(DatabaseManager.getInstance().getAdminUserId(), false);
+            sendMessages.addMessage(situationalContentMessage.calculateHash(), messageText,
+                    DatabaseManager.getInstance().getAdminChatId().toString(), absSender);
 
             DatabaseManager.getInstance().createQuestion(situationalContentMessage.getContent(
                     user.getId(), false), chat.getId().longValue());
@@ -101,21 +103,14 @@ public class WriteQuestion extends BotCommand {
             situationalContentMessage.setMessageName(this.getClass().getPackage().getName().replaceAll("org.telegram.bot.commands.", ""),
                     this.getCommandIdentifier() + "_command", "response");
 
-            answer.setChatId(chat.getId().toString());
-            answer.setText(situationalContentMessage.getContent(user.getId(), true));
+            messageText = situationalContentMessage.getContent(user.getId(), true);
+            sendMessages.addMessage(situationalContentMessage.calculateHash(), messageText, chat.getId().toString(), absSender);
         } catch (Exception e) {
             BotLogger.error(LOGTAG, e);
 
             new SendOnErrorOccurred().execute(absSender, user, chat, new String[]{LOGTAG});
 
             return;
-        }
-
-        try {
-            absSender.sendMessage(question);
-            absSender.sendMessage(answer);
-        } catch (TelegramApiException e) {
-            BotLogger.error(LOGTAG, e);
         }
     }
 }

@@ -25,6 +25,7 @@ public class SituationalContentMessage extends ContentMessage {
 
         super.xmlQuarry = "command_message[@command='" + command + "']/case[@case='" +
                 situation +  "']/command_content";
+        this.message = null; // force reload of the message
     }
 
     public void setMessageName(String commandPackage, String command, String situation) {
@@ -34,6 +35,7 @@ public class SituationalContentMessage extends ContentMessage {
         super.xmlQuarry = "command_package[@command='" +  commandPackage +
                 "']/command_message[@command='" + command + "']/case[@case='" +
                 situation + "']/command_content";
+        this.message = null; // force reload of the message
     }
 
     public String getSituation() {

@@ -1,5 +1,6 @@
 package org.telegram.bot.commands.setLanguageCommand;
 
+import org.telegram.bot.api.SendMessages;
 import org.telegram.bot.commands.SendOnErrorOccurred;
 import org.telegram.bot.database.DatabaseManager;
 import org.telegram.bot.messages.InlineKeyboard;
@@ -29,11 +30,7 @@ public class SetLanguageCommand extends BotCommand {
     @Override
     public void execute(AbsSender absSender, User user, Chat chat, String[] arguments) {
 
-        SendMessage answer = new SendMessage();
-
         try {
-
-            DatabaseManager databaseManager = DatabaseManager.getInstance();
 
             org.telegram.bot.messages.Message message = new org.telegram.bot.messages.Message(this.getCommandIdentifier() +
                 "_command");
@@ -47,23 +44,15 @@ public class SetLanguageCommand extends BotCommand {
             InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
             inlineKeyboardMarkup.setKeyboard(inlineKeyboard.getKeyboard(user.getId()));
 
-            databaseManager.setUserCommandState(user.getId(), Config.Bot.SET_LANGUAGE_COMMAND);
-
-            answer.setReplyMarkup(inlineKeyboardMarkup);
-            answer.setChatId(chat.getId().toString());
-            answer.setText(message.getContent(user.getId(), false));
+            String messageText = message.getContent(user.getId(), false);
+            SendMessages.getInstance().addMessage(message.calculateHash(), messageText, chat.getId().toString(), absSender,
+                    inlineKeyboardMarkup);
         } catch (Exception e) {
             BotLogger.error(LOGTAG, e);
 
             new SendOnErrorOccurred().execute(absSender, user, chat, new String[]{LOGTAG});
 
             return;
-        }
-
-        try {
-            absSender.sendMessage(answer);
-        } catch (TelegramApiException e) {
-            BotLogger.error(LOGTAG, e);
         }
     }
 }

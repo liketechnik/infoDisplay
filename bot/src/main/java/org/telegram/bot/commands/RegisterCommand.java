@@ -33,6 +33,7 @@ package org.telegram.bot.commands;
 
 import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.apache.commons.io.output.StringBuilderWriter;
+import org.telegram.bot.api.SendMessages;
 import org.telegram.bot.database.DatabaseManager;
 import org.telegram.bot.messages.Message;
 import org.telegram.bot.messages.SituationalContentMessage;
@@ -79,8 +80,6 @@ public class RegisterCommand extends BotCommand {
     @Override
     public void execute(AbsSender absSender, User user, Chat chat, String[] arguments) {
 
-        SendMessage answer = new SendMessage();
-
         try {
 
             DatabaseManager databaseManager = DatabaseManager.getInstance();
@@ -109,19 +108,16 @@ public class RegisterCommand extends BotCommand {
                     situationalContentMessage.setMessageName(
                             this.getCommandIdentifier() + "_command", "toAdmin");
 
-                    SendMessage request = new SendMessage();
-                    request.setChatId(databaseManager.getAdminChatId().toString());
-                    request.setText(situationalContentMessage.getContent(user.getId(), true));
-
-                    absSender.sendMessage(request);
+                    String messageText  = situationalContentMessage.getContent(databaseManager.getAdminUserId(), true);
+                    SendMessages.getInstance().addMessage(situationalContentMessage.calculateHash(), messageText, databaseManager.getAdminChatId().toString(), absSender);
 
                     situationalContentMessage.setMessageName(
                             this.getCommandIdentifier() + "_command", "sendRegistrationRequest");
                 }
             }
 
-            answer.setChatId(chat.getId().toString());
-            answer.setText(situationalContentMessage.getContent(user.getId(), true));
+            String messageText = situationalContentMessage.getContent(user.getId(), true);
+            SendMessages.getInstance().addMessage(situationalContentMessage.calculateHash(), messageText, chat.getId().toString(), absSender);
 
         } catch (Exception e) {
             BotLogger.error(LOGTAG, e);
@@ -129,12 +125,6 @@ public class RegisterCommand extends BotCommand {
             new SendOnErrorOccurred().execute(absSender, user, chat, new String[]{LOGTAG});
 
             return;
-        }
-
-        try {
-            absSender.sendMessage(answer);
-        } catch (TelegramApiException e) {
-            BotLogger.error(LOGTAG, e);
         }
 
     }

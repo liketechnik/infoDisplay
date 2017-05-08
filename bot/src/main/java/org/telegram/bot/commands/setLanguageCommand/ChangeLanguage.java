@@ -5,6 +5,7 @@ import Config.CallbackData;
 import Config.Languages;
 import jdk.nashorn.internal.codegen.CompilerConstants;
 import org.apache.commons.configuration2.XMLConfiguration;
+import org.telegram.bot.api.SendMessages;
 import org.telegram.bot.commands.SendOnErrorOccurred;
 import org.telegram.bot.database.DatabaseManager;
 import org.telegram.bot.messages.ContentMessage;
@@ -37,9 +38,6 @@ public class ChangeLanguage extends BotCommand {
     @Override
     public void execute(AbsSender absSender, User user, Chat chat, String[] arguments) {
 
-        EditMessageText answer = new EditMessageText();
-        String additionalContent;
-
         try {
 
             DatabaseManager databaseManager = DatabaseManager.getInstance();
@@ -49,13 +47,13 @@ public class ChangeLanguage extends BotCommand {
                             .replaceAll("org.telegram.bot.commands.", ""), this.getCommandIdentifier() + "_command",
                     "language");
 
-            if (arguments[0].equals(CallbackData.SET_LANGUAGE_ENGLISH)) {
+            if (arguments[0].equals(CallbackData.SET_LANGUAGE.set_language_english.name())) {
                 databaseManager.setUserLanguage(user.getId(), Languages.ENGLISH);
-            } else if (arguments[0].equals(CallbackData.SET_LANGUAGE_GERMAN)) {
+            } else if (arguments[0].equals(CallbackData.SET_LANGUAGE.set_language_german.name())) {
                 databaseManager.setUserLanguage(user.getId(), Languages.GERMAN);
             }
 
-            if (arguments[0].equals(CallbackData.SET_LANGUAGE_DEFAULT)) {
+            if (arguments[0].equals(CallbackData.SET_LANGUAGE.set_language_default.name())) {
                 databaseManager.setUserLanguage(user.getId(), Languages.NONE);
 
                 message.setMessageName(this.getClass().getPackage().getName()
@@ -64,23 +62,15 @@ public class ChangeLanguage extends BotCommand {
 
             }
 
-            databaseManager.setUserCommandState(user.getId(), Bot.NO_COMMAND);
-
-            answer.setChatId(chat.getId());
-            answer.setMessageId(Integer.valueOf(arguments[1]));
-            answer.setText(message.getContent(user.getId(), true));
+            String messageText = message.getContent(user.getId(), true);
+            SendMessages.getInstance().addEditMessage(message.calculateHash(), messageText, chat.getId().toString(),
+                    absSender, Integer.valueOf(arguments[1]));
         } catch (Exception e) {
             BotLogger.error(LOGTAG, e);
 
             new SendOnErrorOccurred().execute(absSender, user, chat, new String[]{LOGTAG, arguments[2]});
 
             return;
-        }
-
-        try {
-            absSender.editMessageText(answer);
-        } catch (TelegramApiException e) {
-            BotLogger.error(LOGTAG, e);
         }
     }
 }

@@ -34,6 +34,7 @@ package org.telegram.bot.commands;
 import org.apache.commons.configuration2.ex.ConfigurationException;
 
 import org.telegram.bot.Main;
+import org.telegram.bot.api.SendMessages;
 import org.telegram.bot.database.DatabaseManager;
 import org.telegram.bot.messages.ContentMessage;
 import org.telegram.bot.messages.Message;
@@ -78,8 +79,6 @@ public class StopCommand extends BotCommand {
     @Override
     public void execute(AbsSender absSender, User user, Chat chat, String[] arguments) {
 
-        SendMessage answer = new SendMessage();
-
         try {
             DatabaseManager databaseManager = DatabaseManager.getInstance();
 
@@ -102,8 +101,9 @@ public class StopCommand extends BotCommand {
             ContentMessage contentMessage = new ContentMessage(this.getCommandIdentifier() + "_command");
             contentMessage.setAdditionalContent(additionalContent);
 
-            answer.setChatId(chat.getId().toString());
-            answer.setText(contentMessage.getContent(user.getId(), false));
+
+            String messageText = contentMessage.getContent(user.getId(), false);
+            SendMessages.getInstance().addMessage(contentMessage.calculateHash(), messageText, chat.getId().toString(), absSender);
 
         } catch (Exception e) {
             BotLogger.error(LOGTAG, e);
@@ -111,12 +111,6 @@ public class StopCommand extends BotCommand {
             new SendOnErrorOccurred().execute(absSender, user, chat, new String[]{LOGTAG});
 
             return;
-        }
-
-        try {
-            absSender.sendMessage(answer);
-        } catch (TelegramApiException e) {
-            BotLogger.error(LOGTAG, e);
         }
     }
 }

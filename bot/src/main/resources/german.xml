@@ -261,7 +261,7 @@
             <command_description>Speichert die Beschreibung eines neuen Videos.</command_description>
             <command_content>Sende mir nun bitte das Video.</command_content>
         </command_message>
-        <command_message command="send_video_comamand">
+        <command_message command="send_video_command">
             <command_description>Speichert das neue Video als displayFile.</command_description>
             <case case="no_picture">
                 <command_content>Sende mir bitte ein Bild.</command_content>

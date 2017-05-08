@@ -1,0 +1,66 @@
+package org.telegram.bot.api;
+
+import org.telegram.bot.api.TelegramLongPollingThreadBot;
+import org.telegram.telegrambots.api.methods.send.SendChatAction;
+import org.telegram.telegrambots.api.objects.Chat;
+import org.telegram.telegrambots.api.objects.Update;
+import org.telegram.telegrambots.api.objects.User;
+import org.telegram.telegrambots.bots.AbsSender;
+import org.telegram.telegrambots.bots.commands.BotCommand;
+import org.telegram.telegrambots.logging.BotLogger;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+
+/**
+ * @author Florian Warzecha
+ * @version 1.0
+ * @date 13 of April 2017
+ */
+public abstract class Parser implements Runnable {
+
+    public final String LOGTAG = "PARSER";
+
+    protected Update update;
+    protected TelegramLongPollingThreadBot bot;
+
+    protected Constructor<BotCommand> commandConstructor;
+
+    protected User user;
+    protected Chat chat;
+    protected String[] arguments;
+
+    public Parser(Update update, TelegramLongPollingThreadBot bot) {
+        this.update = update;
+        this.bot = bot;
+    }
+
+    /**
+     * Create a new instance of a BotCommand and run it.
+     */
+    protected void executeCommand() {
+        try {
+            BotCommand command = this.commandConstructor.newInstance();
+            command.execute(this.bot, this.user, this.chat, this.arguments); // every bot is an absSender
+        } catch (Exception e) {
+            BotLogger.error(LOGTAG, e);
+        }
+    }
+
+    /**
+     * Parse a new update.
+     *
+     * Parses a new update for information on how to set parameters of a command and the choice of the command.
+     * @return If the message was successfully parsed.
+     */
+    protected abstract boolean parse();
+
+
+    public void run() {
+        if (!this.parse()) {
+            //TODO set help command with attributes
+        }
+        this.executeCommand();
+    }
+
+}
