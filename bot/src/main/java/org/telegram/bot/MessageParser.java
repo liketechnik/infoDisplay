@@ -4,6 +4,8 @@ import Config.Bot;
 import org.telegram.bot.api.TelegramLongPollingThreadBot;
 import org.telegram.bot.api.Parser;
 import org.telegram.bot.commands.CancelCommand;
+import org.telegram.bot.commands.StartCommand;
+import org.telegram.bot.commands.StopCommand;
 import org.telegram.bot.commands.answerCommand.ChooseNumber;
 import org.telegram.bot.commands.answerCommand.WriteAnswer;
 import org.telegram.bot.commands.askCommand.WriteQuestion;
@@ -48,12 +50,21 @@ public class MessageParser extends Parser {
 
             try {
                 // check if either the user sent a new, known command or he sent the cancel command
-                if ((this.bot.getCommandsMap().containsKey(commandSplit[0]) &&
-                        DatabaseManager.getInstance().getUserCommandState(this.user.getId()).equals(Bot.NO_COMMAND))
-                        || commandSplit[0].equals(CancelCommand.class.getConstructor().newInstance().getCommandIdentifier())) {
-                    this.arguments = Arrays.copyOfRange(commandSplit, 1, commandSplit.length);
-                    this.commandConstructor = this.bot.getRegisteredCommand(commandSplit[0]);
-                    return true;
+//                if ((this.bot.getCommandsMap().containsKey(commandSplit[0]) &&
+//                        DatabaseManager.getInstance().getUserCommandState(this.user.getId()).equals(Bot.NO_COMMAND))
+//                        || commandSplit[0].equals(CancelCommand.class.getConstructor().newInstance().getCommandIdentifier())
+//                        || commandSplit[0].equals(StartCommand.class.getConstructor().newInstance().getCommandIdentifier())
+//                        || commandSplit[0].equals(StopCommand.class.getConstructor().newInstance().getCommandIdentifier())) {
+                String userC = DatabaseManager.getInstance().getUserCommandState(user.getId());
+                if (DatabaseManager.getInstance().getUserCommandState(user.getId()).equals(Bot.NO_COMMAND)
+                        || commandSplit[0].equals(CancelCommand.class.getConstructor().newInstance().getCommandIdentifier())
+                        || commandSplit[0].equals(StartCommand.class.getConstructor().newInstance().getCommandIdentifier())
+                        || commandSplit[0].equals(StopCommand.class.getConstructor().newInstance().getCommandIdentifier())) {
+                    if (this.bot.getCommandsMap().containsKey(commandSplit[0])) {
+                        this.arguments = Arrays.copyOfRange(commandSplit, 1, commandSplit.length);
+                        this.commandConstructor = this.bot.getRegisteredCommand(commandSplit[0]);
+                        return true;
+                    }
                 }
             } catch (Exception e) {
                 BotLogger.error(LOGTAG, e);

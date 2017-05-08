@@ -85,8 +85,15 @@ public class SendOnErrorOccurred extends BotCommand {
 
         String messageText = situationalMessage.getContent(user.getId(), false);
 
+        String chatId;
+        if (chat == null) {
+            chatId = LOGTAG[1];
+        } else {
+            chatId = chat.getId().toString();
+        }
+
         try {
-            SendMessages.getInstance().addMessage(situationalMessage.calculateHash(), messageText, chat.getId().toString(), absSender);
+            SendMessages.getInstance().addMessage(situationalMessage.calculateHash(), messageText, chatId, absSender);
         } catch (InterruptedException e) {
             BotLogger.error(LOGTAG[0], e);
         }

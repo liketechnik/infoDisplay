@@ -33,6 +33,7 @@ package org.telegram.bot.database;
 
 
 import Config.Bot;
+import Config.Keys;
 import Config.Paths;
 import org.apache.commons.configuration2.Configuration;
 import org.apache.commons.configuration2.FileBasedConfiguration;
@@ -193,9 +194,7 @@ public class DatabaseManager {
      * @see #getUserLanguage(Integer userId) Get the language prefernce of a user.
      */
     public synchronized void setUserLanguage(Integer userId, String language) throws Exception {
-        if (!language.equals(Config.Languages.ENGLISH) &&
-                !language.equals(Config.Languages.GERMAN) &&
-                !language.equals(Config.Languages.NONE)) {
+        if (!validLanguage(language)) {
             throw new IllegalArgumentException("No supported language.");
         }
 
@@ -219,9 +218,29 @@ public class DatabaseManager {
     public synchronized String getUserLanguage(Integer userId) throws Exception {
         setCurrentConfiguration(userId);
         if (currentConfiguration.getString(Config.Keys.USER_LANGUAGE).equals(Config.Languages.NONE)) {
-            throw new IllegalArgumentException("No language preference set for this user.");
+            setCurrentConfiguration(Paths.BOT_CONFIG_FILE);
+            String language = currentConfiguration.getString(Keys.DEFAULT_LANGUAGE);
+            if(!validLanguage(language)) {
+                throw new IllegalArgumentException("No valid default language set.");
+            } else {
+                return language;
+            }
         }
         return currentConfiguration.getString(Config.Keys.USER_LANGUAGE);
+    }
+
+    private boolean validLanguage(String language) {
+        try {
+            if (!language.equals(Config.Languages.ENGLISH) &&
+                    !language.equals(Config.Languages.GERMAN) &&
+                    !language.equals(Config.Languages.NONE)) {
+                return false;
+            } else {
+                return true;
+            }
+        } catch (NullPointerException e) {
+            return false;
+        }
     }
 
     /**
@@ -455,7 +474,7 @@ public class DatabaseManager {
     public synchronized String getUserCommandState(Integer userID) throws Exception {
         setCurrentConfiguration(userID);
 
-        return  currentConfiguration.getString(Config.Keys.USER_COMMAND_STATE);
+        return  currentConfiguration.getString(Config.Keys.USER_COMMAND_STATE, Bot.NO_COMMAND);
     }
 
     /**
@@ -611,8 +630,10 @@ public class DatabaseManager {
         createConfigurationFile(questionFile);
 
         setCurrentConfiguration(questionFile);
+
         currentConfiguration.addProperty(Config.Keys.QUESTION, question);
         currentConfiguration.addProperty(Config.Keys.CHAT_ID, chatID);
+
         currentBuilder.save();
     }
 
@@ -684,6 +705,7 @@ public class DatabaseManager {
                 }
             }
         }
+
     }
 
     /**

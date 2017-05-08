@@ -32,11 +32,15 @@
 package org.telegram.bot;
 
 import org.telegram.bot.api.TelegramLongPollingThreadBot;
+import Config.Bot;
+import Config.CallbackData;
 import org.telegram.bot.commands.*;
 import org.telegram.bot.commands.answerCommand.AnswerCommand;
 import org.telegram.bot.commands.askCommand.AskCommand;
 import org.telegram.bot.commands.pinPictureCommand.*;
 import org.telegram.bot.commands.pinVideoCommand.*;
+import org.telegram.bot.commands.setLanguageCommand.ChangeLanguage;
+import org.telegram.bot.commands.setLanguageCommand.SetLanguageCommand;
 import org.telegram.bot.database.DatabaseManager;
 import org.telegram.telegrambots.api.objects.*;
 import org.telegram.telegrambots.logging.BotLogger;
@@ -69,6 +73,7 @@ public class DisplayBot extends TelegramLongPollingThreadBot {
         registerCommand(PinVideoCommand.class);
         registerCommand(AboutCommand.class);
         registerCommand(CancelCommand.class);
+        registerCommand(SetLanguageCommand.class);
         registerCommand(HelpCommand.class);
     }
 

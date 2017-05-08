@@ -44,7 +44,7 @@
 allprojects {
     group 'liketechnik'
 
-    version '1.2.3'
+    version '1.2.3-dev#6'
 
     //apply plugin: 'distribution'
     apply plugin: 'java'
@@ -174,7 +174,7 @@ project(':display') {
         compile project(':config')
         compile project(':displayFile')
         compile 'com.github.caprica:vlcj:vlcj-3.10.+'
-        compile 'ch.qos.logback:logback-classic:1.1.8'
+        compile 'ch.qos.logback:logback-classic:1.1.11'
     }
     applicationDistribution.from("${rootProject.projectDir}/") {
         include "README.md"
