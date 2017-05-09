@@ -35,6 +35,10 @@
 
 <language xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="language.xsd">
     <name>en</name>
+    <command_message command="unknown">
+        <command_description>This text is send, when the bot receives a text messages.</command_description>
+        <command_content>I can't handle this. Here you have some instructions on how to work with me: </command_content>
+    </command_message>
     <command_message command="cancel_command">
         <command_description>Cancel the running command (e.g. uploading of a new picture).</command_description>
     </command_message>

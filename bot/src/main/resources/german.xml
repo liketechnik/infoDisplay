@@ -35,6 +35,10 @@
 
 <language xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="language.xsd">
     <name>ger</name>
+    <command_message command="unknown">
+        <command_description>Dieser Text wird gesendet, wenn der Bot eine Textnachricht empfängt.</command_description>
+        <command_content>Damit kann ich nichts anfangen. Hier ist das Hilfe-Menu: </command_content>
+    </command_message>
     <command_message command="cancel_command">
         <command_description>Bricht den laufenden Befehl ab (z. Bsp. das Hochladen eines Bildes).</command_description>
     </command_message>

@@ -1,7 +1,11 @@
 package org.telegram.bot.api;
 
 import org.telegram.bot.api.TelegramLongPollingThreadBot;
+import org.telegram.bot.commands.HelpCommand;
+import org.telegram.bot.messages.ContentMessage;
+import org.telegram.bot.messages.Message;
 import org.telegram.telegrambots.api.methods.send.SendChatAction;
+import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Chat;
 import org.telegram.telegrambots.api.objects.Update;
 import org.telegram.telegrambots.api.objects.User;
@@ -58,7 +62,20 @@ public abstract class Parser implements Runnable {
 
     public void run() {
         if (!this.parse()) {
-            //TODO set help command with attributes
+            Message message = new Message("unknown");
+            String messageText = message.getContent(user.getId(), false);
+            try {
+                SendMessages.getInstance().addMessage(message.calculateHash(), messageText, chat.getId().toString(), this.bot);
+            } catch (InterruptedException e) {
+                BotLogger.error(LOGTAG, e);
+            }
+
+            this.arguments = new String[]{};
+            try {
+                this.commandConstructor = (Constructor) HelpCommand.class.getConstructor();
+            } catch (Exception e) {
+                BotLogger.error(LOGTAG, e);
+            }
         }
         this.executeCommand();
     }
