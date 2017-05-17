@@ -177,4 +177,12 @@ public class SendMessages extends Thread {
         this.messageTypes.putIfAbsent(messageHash, types.edit_message.name());
         this.messageHashes.add(messageHash);
     }
+
+    /**
+     * Get the number of messages that need to be send.
+     * @return an integer that represents the number of not yet send messages.
+     */
+    public int getMessages() {
+        return  this.messages.size();
+    }
 }

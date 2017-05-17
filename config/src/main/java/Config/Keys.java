@@ -41,6 +41,8 @@ public final class Keys {
     public static final String DISPLAY_FILE_DURATION_KEY = "displayDuration";
     public static final String DISPLAY_FILE_TYPE_KEY = "type";
     public static final String DISPLAY_FILE_DESCRIPTION = "description";
+    public static final String DISPLAY_FILE_UPLOAD_INFO = "uploadedBy";
+    public static final String DISPLAY_FILE_ID = "fileId";
 
     public static final String USER_ACTIVE = "userActive";
     public static final String USER_REGISTERED = "userRegistered";

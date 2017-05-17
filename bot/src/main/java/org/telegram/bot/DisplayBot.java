@@ -42,6 +42,7 @@ import org.telegram.bot.commands.pinVideoCommand.*;
 import org.telegram.bot.commands.setLanguageCommand.ChangeLanguage;
 import org.telegram.bot.commands.setLanguageCommand.SetLanguageCommand;
 import org.telegram.bot.database.DatabaseManager;
+import org.telegram.bot.database.SaveThread;
 import org.telegram.telegrambots.api.objects.*;
 import org.telegram.telegrambots.logging.BotLogger;
 
@@ -75,6 +76,7 @@ public class DisplayBot extends TelegramLongPollingThreadBot {
         registerCommand(CancelCommand.class);
         registerCommand(SetLanguageCommand.class);
         registerCommand(HelpCommand.class);
+        SaveThread.getInstance(this).start();
     }
 
     /**

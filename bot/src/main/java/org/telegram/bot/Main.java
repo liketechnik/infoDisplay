@@ -75,8 +75,6 @@ public class Main {
             BotLogger.severe(LOGTAG, e);
         }
 
-        //BotLogger.error(LOGTAG, "main");
-
         ApiContextInitializer.init();
 
         try {
@@ -188,6 +186,14 @@ public class Main {
         }
 
         new CancelCommand().execute(absSender, user, chat, new String[]{});
+    }
+
+    public static Exception mergeExceptions(Exception[] exceptions) {
+        Exception exception = exceptions[0];
+        for (int x = 1; x < exceptions.length; x++) {
+            exception.addSuppressed(exceptions[x]);
+        }
+        return exception;
     }
 }
 
