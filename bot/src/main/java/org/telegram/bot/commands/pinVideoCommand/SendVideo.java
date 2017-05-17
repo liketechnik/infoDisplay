@@ -4,6 +4,7 @@ import Config.Bot;
 import org.glassfish.jersey.internal.ServiceFinder;
 import org.telegram.bot.api.SendMessages;
 import org.telegram.bot.commands.SendOnErrorOccurred;
+import org.telegram.bot.database.DatabaseException;
 import org.telegram.bot.database.DatabaseManager;
 import org.telegram.bot.messages.Message;
 import org.telegram.bot.messages.SituationalMessage;
@@ -58,7 +59,7 @@ public class SendVideo extends BotCommand {
 
             String messageText = situationalMessage.getContent(user.getId(), addHelp);
             SendMessages.getInstance().addMessage(situationalMessage.calculateHash(), messageText, chat.getId().toString(), absSender);
-        } catch (Exception e) {
+        } catch (DatabaseException | InterruptedException e) {
             BotLogger.error(LOGTAG, e);
 
             new SendOnErrorOccurred().execute(absSender, user, chat, new String[]{LOGTAG});

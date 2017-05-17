@@ -2,6 +2,7 @@ package org.telegram.bot.api;
 
 import org.telegram.bot.api.TelegramLongPollingThreadBot;
 import org.telegram.bot.commands.HelpCommand;
+import org.telegram.bot.database.DatabaseException;
 import org.telegram.bot.messages.ContentMessage;
 import org.telegram.bot.messages.Message;
 import org.telegram.telegrambots.api.methods.send.SendChatAction;
@@ -46,7 +47,7 @@ public abstract class Parser implements Runnable {
         try {
             BotCommand command = this.commandConstructor.newInstance();
             command.execute(this.bot, this.user, this.chat, this.arguments); // every bot is an absSender
-        } catch (Exception e) {
+        } catch (IllegalAccessException | InstantiationException | InvocationTargetException e) {
             BotLogger.error(LOGTAG, e);
         }
     }
@@ -73,7 +74,7 @@ public abstract class Parser implements Runnable {
             this.arguments = new String[]{};
             try {
                 this.commandConstructor = (Constructor) HelpCommand.class.getConstructor();
-            } catch (Exception e) {
+            } catch (NoSuchMethodException e) {
                 BotLogger.error(LOGTAG, e);
             }
         }

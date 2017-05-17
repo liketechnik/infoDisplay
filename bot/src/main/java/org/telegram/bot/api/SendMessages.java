@@ -1,9 +1,11 @@
 package org.telegram.bot.api;
 
+import org.telegram.bot.database.DatabaseException;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.bots.AbsSender;
+import org.telegram.telegrambots.exceptions.TelegramApiException;
 import org.telegram.telegrambots.logging.BotLogger;
 
 import java.util.concurrent.ConcurrentHashMap;
@@ -105,7 +107,7 @@ public class SendMessages extends Thread {
                     BotLogger.error(LOGTAG, "Registered message without known type.");
                 }
                 TimeUnit.SECONDS.sleep(1); // sleep one second yo avoid sending to many messages in a short interval
-            } catch (Exception e) {
+            } catch (InterruptedException | TelegramApiException e) {
                 BotLogger.error(LOGTAG, e);
             } finally {
                 try {

@@ -35,6 +35,7 @@ import org.apache.commons.configuration2.ex.ConfigurationException;
 
 import org.telegram.bot.Main;
 import org.telegram.bot.api.SendMessages;
+import org.telegram.bot.database.DatabaseException;
 import org.telegram.bot.database.DatabaseManager;
 import org.telegram.bot.messages.ContentMessage;
 import org.telegram.bot.messages.Message;
@@ -85,13 +86,14 @@ public class StopCommand extends BotCommand {
 
             try {
                 databaseManager.setUserState(user.getId(), false);
-            } catch (ConfigurationException | IOException e) {
+            } catch (DatabaseException e) {
                 BotLogger.error(LOGTAG, "Error saving new user state for user: " + user.getId(), e);
             }
+            // Attention: This needs to be changed if we're going to work with the user active/inactive state
 
             try {
                 databaseManager.setUserCommandState(user.getId(), Config.Bot.NO_COMMAND);
-            } catch (ConfigurationException e) {
+            } catch (DatabaseException e) {
                 BotLogger.error(LOGTAG, e);
             }
 
@@ -105,7 +107,7 @@ public class StopCommand extends BotCommand {
             String messageText = contentMessage.getContent(user.getId(), false);
             SendMessages.getInstance().addMessage(contentMessage.calculateHash(), messageText, chat.getId().toString(), absSender);
 
-        } catch (Exception e) {
+        } catch (InterruptedException e) {
             BotLogger.error(LOGTAG, e);
 
             new SendOnErrorOccurred().execute(absSender, user, chat, new String[]{LOGTAG});

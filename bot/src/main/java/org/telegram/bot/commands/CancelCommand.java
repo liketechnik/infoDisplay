@@ -35,6 +35,7 @@ import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.apache.commons.lang3.ArrayUtils;
 
 import org.telegram.bot.DisplayBot;
+import org.telegram.bot.database.DatabaseException;
 import org.telegram.bot.database.DatabaseManager;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Chat;
@@ -82,7 +83,7 @@ public class CancelCommand extends BotCommand {
             HelpCommand helpCommand = new HelpCommand();
             helpCommand.execute(absSender, user, chat, arguments);
 
-        } catch (Exception e) {
+        } catch (DatabaseException e) {
             BotLogger.error(LOGTAG, e);
 
             new SendOnErrorOccurred().execute(absSender, user, chat, new String[]{LOGTAG});

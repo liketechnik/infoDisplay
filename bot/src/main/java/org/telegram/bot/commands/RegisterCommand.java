@@ -34,6 +34,7 @@ package org.telegram.bot.commands;
 import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.apache.commons.io.output.StringBuilderWriter;
 import org.telegram.bot.api.SendMessages;
+import org.telegram.bot.database.DatabaseException;
 import org.telegram.bot.database.DatabaseManager;
 import org.telegram.bot.messages.Message;
 import org.telegram.bot.messages.SituationalContentMessage;
@@ -119,7 +120,7 @@ public class RegisterCommand extends BotCommand {
             String messageText = situationalContentMessage.getContent(user.getId(), true);
             SendMessages.getInstance().addMessage(situationalContentMessage.calculateHash(), messageText, chat.getId().toString(), absSender);
 
-        } catch (Exception e) {
+        } catch (DatabaseException | InterruptedException e) {
             BotLogger.error(LOGTAG, e);
 
             new SendOnErrorOccurred().execute(absSender, user, chat, new String[]{LOGTAG});

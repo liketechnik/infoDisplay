@@ -14,12 +14,14 @@ import org.telegram.bot.commands.pinPictureCommand.SendDuration;
 import org.telegram.bot.commands.pinPictureCommand.SendPicture;
 import org.telegram.bot.commands.pinPictureCommand.SendTitle;
 import org.telegram.bot.commands.pinVideoCommand.SendVideo;
+import org.telegram.bot.database.DatabaseException;
 import org.telegram.bot.database.DatabaseManager;
 import org.telegram.telegrambots.api.objects.Message;
 import org.telegram.telegrambots.api.objects.Update;
 import org.telegram.telegrambots.logging.BotLogger;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 
 /**
@@ -66,7 +68,7 @@ public class MessageParser extends Parser {
                         return true;
                     }
                 }
-            } catch (Exception e) {
+            } catch (DatabaseException | IllegalAccessException | InstantiationException | InvocationTargetException | NoSuchMethodException e) {
                 BotLogger.error(LOGTAG, e);
             }
             return false;
@@ -107,7 +109,7 @@ public class MessageParser extends Parser {
                 }
 
                 return true;
-            } catch (Exception e) {
+            } catch (DatabaseException | NoSuchMethodException e) {
                 BotLogger.error(LOGTAG, e);
                 return false;
             }

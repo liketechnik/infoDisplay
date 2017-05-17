@@ -41,6 +41,7 @@ import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.apache.commons.configuration2.io.ClasspathLocationStrategy;
 import org.apache.commons.configuration2.io.FileLocationStrategy;
 import org.apache.commons.configuration2.tree.xpath.XPathExpressionEngine;
+import org.telegram.bot.database.DatabaseException;
 import org.telegram.bot.database.DatabaseManager;
 import org.telegram.telegrambots.api.objects.User;
 import org.telegram.telegrambots.logging.BotLogger;
@@ -187,7 +188,7 @@ public class Message {
             language = DatabaseManager.getInstance().getUserLanguage(userID);
         } catch (IllegalArgumentException e) {
             language = Config.Languages.ENGLISH;
-        } catch (Exception e) {
+        } catch (DatabaseException e) {
             BotLogger.error(LOGTAG, e);
             System.exit(10);
         }

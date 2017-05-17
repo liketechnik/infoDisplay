@@ -5,6 +5,7 @@ import Config.CallbackData;
 import org.telegram.bot.api.TelegramLongPollingThreadBot;
 import org.telegram.bot.api.Parser;
 import org.telegram.bot.commands.setLanguageCommand.ChangeLanguage;
+import org.telegram.bot.database.DatabaseException;
 import org.telegram.bot.database.DatabaseManager;
 import org.telegram.telegrambots.api.objects.CallbackQuery;
 import org.telegram.telegrambots.api.objects.Update;
@@ -56,7 +57,7 @@ public class CallbackParser extends Parser {
                 }
             }
             return false;
-        } catch (Exception e) {
+        } catch (NoSuchMethodException e) {
             BotLogger.error(LOGTAG, e);
             return false;
         }

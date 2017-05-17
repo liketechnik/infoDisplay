@@ -32,6 +32,7 @@
 package org.telegram.bot.commands;
 
 import org.telegram.bot.api.SendMessages;
+import org.telegram.bot.database.DatabaseException;
 import org.telegram.bot.messages.ContentMessage;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Chat;
@@ -83,7 +84,7 @@ public class IDCommand extends BotCommand {
             String messageText = contentMessage.getContent(user.getId(), true);
             SendMessages.getInstance().addMessage(contentMessage.calculateHash(), messageText, chat.getId().toString(), absSender);
 
-        } catch (Exception e) {
+        } catch (InterruptedException e) {
             BotLogger.error(LOGTAG, e);
 
             new SendOnErrorOccurred().execute(absSender, user, chat, new String[]{LOGTAG});

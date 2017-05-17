@@ -2,6 +2,7 @@ package org.telegram.bot.api;
 
 import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
 import org.apache.commons.configuration2.ex.ConfigurationException;
+import org.telegram.bot.database.DatabaseException;
 import org.telegram.bot.database.DatabaseManager;
 import org.telegram.telegrambots.api.objects.Update;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -10,6 +11,7 @@ import org.telegram.telegrambots.logging.BotLogger;
 
 import javax.xml.crypto.Data;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
@@ -52,7 +54,7 @@ public abstract class TelegramLongPollingThreadBot extends TelegramLongPollingBo
             }
             commandsMap.put(commandIdentifier, botCommandConstructor);
             return true;
-        } catch (Exception e) {
+        } catch (IllegalAccessException | InstantiationException | InvocationTargetException | NoSuchMethodException e) {
             BotLogger.error(LOGTAG, e);
             return false;
         }
@@ -66,7 +68,7 @@ public abstract class TelegramLongPollingThreadBot extends TelegramLongPollingBo
                 return true;
             }
             return false;
-        } catch (Exception e) {
+        } catch (IllegalAccessException | InstantiationException | InvocationTargetException | NoSuchMethodException e) {
             BotLogger.error(LOGTAG, e);
             return false;
         }
@@ -109,7 +111,7 @@ public abstract class TelegramLongPollingThreadBot extends TelegramLongPollingBo
                 return;
             }
             this.executor.execute(parser);
-        } catch (Exception e) {
+        } catch (IllegalAccessException | InstantiationException | InvocationTargetException e) {
             BotLogger.error(LOGTAG, e);
         }
     }

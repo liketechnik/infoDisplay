@@ -411,7 +411,7 @@ public final class DatabaseManager {
      * @see #getUserRegistrationState(Integer userID) Look up the registration state.
      */
     public void setUserRegistrationState(Integer userID, boolean registered)
-            throws Exception {
+            throws DatabaseException {
 
         FileBasedConfiguration configuration = getConfiguration(userID);
 

@@ -34,6 +34,7 @@ package org.telegram.bot;
 import org.telegram.bot.api.SendMessages;
 import org.telegram.bot.commands.CancelCommand;
 import org.telegram.bot.commands.HelpCommand;
+import org.telegram.bot.database.DatabaseException;
 import org.telegram.telegrambots.ApiContext;
 import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.TelegramBotsApi;
@@ -91,7 +92,7 @@ public class Main {
             } catch (TelegramApiException e) {
                 BotLogger.error(LOGTAG, e);
             }
-        } catch (Exception e) {
+        } catch (InterruptedException | TelegramApiException e) {
             BotLogger.error(LOGTAG, e);
         }
     }
