@@ -46,6 +46,7 @@ import org.telegram.telegrambots.exceptions.TelegramApiException;
 import org.telegram.telegrambots.logging.BotLogger;
 
 import java.util.HashMap;
+import java.util.Optional;
 
 import static org.telegram.bot.Main.getSpecialFilteredUsername;
 
@@ -96,7 +97,7 @@ public class WriteQuestion extends BotCommand {
 
             messageText = situationalContentMessage.getContent(DatabaseManager.getInstance().getAdminUserId(), false);
             sendMessages.addMessage(situationalContentMessage.calculateHash(), messageText,
-                    DatabaseManager.getInstance().getAdminChatId().toString(), absSender);
+                    DatabaseManager.getInstance().getAdminChatId().toString(), absSender, Optional.empty(), Optional.empty());
 
             DatabaseManager.getInstance().createQuestion(situationalContentMessage.getContent(
                     user.getId(), false), chat.getId().longValue());
@@ -105,7 +106,7 @@ public class WriteQuestion extends BotCommand {
                     this.getCommandIdentifier() + "_command", "response");
 
             messageText = situationalContentMessage.getContent(user.getId(), true);
-            sendMessages.addMessage(situationalContentMessage.calculateHash(), messageText, chat.getId().toString(), absSender);
+            sendMessages.addMessage(situationalContentMessage.calculateHash(), messageText, chat.getId().toString(), absSender, Optional.empty(), Optional.empty());
         } catch (DatabaseException | InterruptedException e) {
             BotLogger.error(LOGTAG, e);
 

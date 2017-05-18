@@ -45,6 +45,8 @@ import org.telegram.telegrambots.bots.commands.BotCommand;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 import org.telegram.telegrambots.logging.BotLogger;
 
+import java.util.Optional;
+
 /**
  * @author Florian Warzecha
  * @version 1.0.1
@@ -89,7 +91,7 @@ public class SendDescription extends BotCommand {
                     this.getCommandIdentifier() + "_command");
 
             String messageText = message.getContent(user.getId(), false);
-            SendMessages.getInstance().addMessage(message.calculateHash(), messageText, chat.getId().toString(), absSender);
+            SendMessages.getInstance().addMessage(message.calculateHash(), messageText, chat.getId().toString(), absSender, Optional.empty(), Optional.empty());
         } catch (DatabaseException | InterruptedException e) {
             BotLogger.error(LOGTAG, e);
 

@@ -57,10 +57,7 @@ import java.io.IOException;
 import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -149,7 +146,7 @@ public class HelpCommand extends BotCommand {
 //            BotLogger.info(LOGTAG, contentMessage.getContent(user.getId(), false));
 
             String messageText = contentMessage.getContent(user.getId(), false);
-            SendMessages.getInstance().addMessage(contentMessage.calculateHash(), messageText, chat.getId().toString(), absSender, true);
+            SendMessages.getInstance().addMessage(contentMessage.calculateHash(), messageText, chat.getId().toString(), absSender, Optional.of(true), Optional.empty());
 
         } catch (DatabaseException | IllegalAccessException | InterruptedException | InstantiationException | InvocationTargetException e) {
             BotLogger.error(LOGTAG, e);

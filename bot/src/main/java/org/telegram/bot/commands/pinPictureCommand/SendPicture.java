@@ -51,6 +51,7 @@ import org.telegram.telegrambots.logging.BotLogger;
 import java.net.URL;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
+import java.util.Optional;
 
 /**
  * @author Florian Warzecha
@@ -110,7 +111,7 @@ public class SendPicture extends BotCommand {
             }
 
             String messageText = situationalMessage.getContent(user.getId(), addHelp);
-            SendMessages.getInstance().addMessage(situationalMessage.calculateHash(), messageText, chat.getId().toString(), absSender);
+            SendMessages.getInstance().addMessage(situationalMessage.calculateHash(), messageText, chat.getId().toString(), absSender, Optional.empty(), Optional.empty());
         } catch (DatabaseException | InterruptedException e) {
             BotLogger.error(LOGTAG, e);
 

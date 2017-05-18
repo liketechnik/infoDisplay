@@ -49,6 +49,7 @@ import org.telegram.telegrambots.logging.BotLogger;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Optional;
 
 import static org.telegram.bot.Main.getFilteredUsername;
 
@@ -105,7 +106,7 @@ public class StopCommand extends BotCommand {
 
 
             String messageText = contentMessage.getContent(user.getId(), false);
-            SendMessages.getInstance().addMessage(contentMessage.calculateHash(), messageText, chat.getId().toString(), absSender);
+            SendMessages.getInstance().addMessage(contentMessage.calculateHash(), messageText, chat.getId().toString(), absSender, Optional.empty(), Optional.empty());
 
         } catch (InterruptedException e) {
             BotLogger.error(LOGTAG, e);

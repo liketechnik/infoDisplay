@@ -43,6 +43,7 @@ import org.telegram.telegrambots.exceptions.TelegramApiException;
 import org.telegram.telegrambots.logging.BotLogger;
 
 import java.util.HashMap;
+import java.util.Optional;
 
 
 /**
@@ -82,7 +83,7 @@ public class IDCommand extends BotCommand {
             contentMessage.setAdditionalContent(additionalContent);
 
             String messageText = contentMessage.getContent(user.getId(), true);
-            SendMessages.getInstance().addMessage(contentMessage.calculateHash(), messageText, chat.getId().toString(), absSender);
+            SendMessages.getInstance().addMessage(contentMessage.calculateHash(), messageText, chat.getId().toString(), absSender, Optional.empty(), Optional.empty());
 
         } catch (InterruptedException e) {
             BotLogger.error(LOGTAG, e);

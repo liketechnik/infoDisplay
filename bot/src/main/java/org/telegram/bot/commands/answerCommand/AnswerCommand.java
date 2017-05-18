@@ -49,6 +49,7 @@ import org.telegram.telegrambots.logging.BotLogger;
 
 import javax.xml.crypto.Data;
 import java.util.HashMap;
+import java.util.Optional;
 
 
 /**
@@ -107,7 +108,7 @@ public class AnswerCommand extends BotCommand {
 
 
             String messageText = contentMessage.getContent(user.getId(), false);
-            SendMessages.getInstance().addMessage(contentMessage.calculateHash(), messageText, chat.getId().toString(), absSender);
+            SendMessages.getInstance().addMessage(contentMessage.calculateHash(), messageText, chat.getId().toString(), absSender, Optional.empty(), Optional.empty());
 
             databaseManager.setUserCommandState(user.getId(), Config.Bot.ANSWER_COMMAND_CHOOSE_NUMBER);
         } catch (DatabaseException | InterruptedException e) {

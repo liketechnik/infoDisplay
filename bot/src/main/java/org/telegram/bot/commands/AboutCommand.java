@@ -44,6 +44,8 @@ import org.telegram.telegrambots.bots.commands.BotCommand;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 import org.telegram.telegrambots.logging.BotLogger;
 
+import java.util.Optional;
+
 /**
  * @author liketechnik
  * @version 1.0
@@ -66,7 +68,7 @@ public class  AboutCommand extends BotCommand {
             Message message = new Message(this.getCommandIdentifier() + "_command");
 
             String messageText = message.getContent(user.getId(), true);
-            SendMessages.getInstance().addMessage(message.calculateHash(), messageText, chat.getId().toString(), absSender);
+            SendMessages.getInstance().addMessage(message.calculateHash(), messageText, chat.getId().toString(), absSender, Optional.empty(), Optional.empty());
         } catch (InterruptedException e) {
             BotLogger.error(LOGTAG, e);
 

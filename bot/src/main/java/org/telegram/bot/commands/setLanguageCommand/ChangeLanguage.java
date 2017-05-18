@@ -22,6 +22,7 @@ import org.telegram.telegrambots.exceptions.TelegramApiException;
 import org.telegram.telegrambots.logging.BotLogger;
 
 import java.util.HashMap;
+import java.util.Optional;
 
 /**
  * @author liketechnik
@@ -65,7 +66,7 @@ public class ChangeLanguage extends BotCommand {
 
             String messageText = message.getContent(user.getId(), true);
             SendMessages.getInstance().addEditMessage(message.calculateHash(), messageText, chat.getId().toString(),
-                    absSender, Integer.valueOf(arguments[1]));
+                    absSender, Integer.valueOf(arguments[1]), Optional.empty(), Optional.empty());
         } catch (DatabaseException | InterruptedException e) {
             BotLogger.error(LOGTAG, e);
 

@@ -16,6 +16,7 @@ import org.telegram.telegrambots.logging.BotLogger;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Optional;
 
 /**
  * @author Florian Warzecha
@@ -66,7 +67,7 @@ public abstract class Parser implements Runnable {
             Message message = new Message("unknown");
             String messageText = message.getContent(user.getId(), false);
             try {
-                SendMessages.getInstance().addMessage(message.calculateHash(), messageText, chat.getId().toString(), this.bot);
+                SendMessages.getInstance().addMessage(message.calculateHash(), messageText, chat.getId().toString(), this.bot, Optional.empty(), Optional.empty());
             } catch (InterruptedException e) {
                 BotLogger.error(LOGTAG, e);
             }

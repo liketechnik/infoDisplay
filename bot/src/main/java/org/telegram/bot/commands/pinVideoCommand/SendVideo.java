@@ -16,6 +16,8 @@ import org.telegram.telegrambots.bots.commands.BotCommand;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 import org.telegram.telegrambots.logging.BotLogger;
 
+import java.util.Optional;
+
 /**
  * @author liketechnik
  * @version ${VERSION}
@@ -58,7 +60,7 @@ public class SendVideo extends BotCommand {
             }
 
             String messageText = situationalMessage.getContent(user.getId(), addHelp);
-            SendMessages.getInstance().addMessage(situationalMessage.calculateHash(), messageText, chat.getId().toString(), absSender);
+            SendMessages.getInstance().addMessage(situationalMessage.calculateHash(), messageText, chat.getId().toString(), absSender, Optional.empty(), Optional.empty());
         } catch (DatabaseException | InterruptedException e) {
             BotLogger.error(LOGTAG, e);
 
