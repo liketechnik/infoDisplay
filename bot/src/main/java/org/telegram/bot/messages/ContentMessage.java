@@ -31,16 +31,13 @@ public class ContentMessage extends Message {
         if (this.additionalContent != null) {
             return this.additionalContent;
         } else {
-            BotLogger.warn(LOGTAG, "No additional text set yet!");
-            return new HashMap<String, String>();
+            throw new IllegalStateException("No additional content added yet!");
         }
     }
 
     public String getContent(int userId, boolean addHelp) {
         if (super.xmlQuarry == null) {
-            BotLogger.error(LOGTAG, "Can't load message text without setting " +
-                    "message name");
-            return null;
+            throw new IllegalStateException("No xml quarry set yet!");
         }
 
         if (super.message == null) {

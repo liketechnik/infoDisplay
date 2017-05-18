@@ -112,9 +112,7 @@ public class Message {
 //        BotLogger.info(LOGTAG, this.xmlQuarry);
 
         if (this.xmlQuarry == null) {
-            BotLogger.error(LOGTAG, "Can't load message text without setting " +
-                    "message name");
-            return null;
+            throw new IllegalStateException("No xml quarry set yet!");
         }
 
 //        BotLogger.info(LOGTAG, this.xmlQuarry);
@@ -140,8 +138,7 @@ public class Message {
         if (this.messageName != null) {
             return this.messageName;
         } else {
-            BotLogger.warn(LOGTAG, "Not set message name requested!");
-            return "No name set.";
+            throw new IllegalStateException("No message set yet!");
 
         }
     }
@@ -154,8 +151,7 @@ public class Message {
         if (this.xmlQuarry != null) {
             return this.xmlQuarry;
         } else {
-            BotLogger.warn(LOGTAG, "Not set xmlConfiguration requested!");
-            return  "No xmlQuarry set.";
+            throw new IllegalStateException("No xml quarry set yet!");
         }
     }
 

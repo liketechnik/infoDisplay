@@ -253,4 +253,44 @@
             </case>
         </command_message>
     </command_package>
+    <command_package command="deleteMediaCommand">
+        <command_message command="delete_media_command">
+            <command_description>Delete a media file you have uploaded.</command_description>
+            <case case="information">
+                <command_content>Please select a media to delete:</command_content>
+            </case>
+            <case case="keyboard">
+                <command_content>Title: /title>/n>
+                    Description: /title>/n>
+                    Duration: /duration>/n>
+                    Uploaded by: /title></command_content>
+                <reply_keyboard>
+                    <keyboard_button row="1" column="1" callback_data="delete_media_/index>">last</keyboard_button>
+                    <keyboard_button row="1" column="2" callback_data="delete_media_delete">Delete media file!</keyboard_button>
+                    <keyboard_button row="1" column="3" callback_data="delete_media_/index>">next</keyboard_button>
+                    <keyboard_button row="2" column="1" callback_data="delete_media_first">first media file</keyboard_button>
+                    <keyboard_button row="2" column="2" callback_data="delete_media_middle">middle media file</keyboard_button>
+                    <keyboard_button row="2" column="3" callback_data="delete_media_last">last media file</keyboard_button>
+                </reply_keyboard>
+            </case>
+        </command_message>
+        <command_message command="confirm_delete_media">
+            <command_description>Make sure the user wants to delete a file.</command_description>
+            <command_content>Title: /title>/n>
+                Description: /title>/n>
+                Duration: /duration>/n>
+                Uploaded by: /title>/n>
+
+                Are you really sure you want to delete this media?</command_content>
+            <reply_keyboard>
+                <keyboard_button row="1" column="1" callback_data="confirm_delete_media_yes_/timestamp>">Yes, delete this file.</keyboard_button>
+                <keyboard_button row="2" column="2" callback_data="confirm_delete_media_back">No, let me choose a different one.</keyboard_button>
+                <keyboard_button row="2" column="3" callback_data="confirm_delete_media_cancel">No, and I don't want to delete any other media files.</keyboard_button>
+            </reply_keyboard>
+        </command_message>
+        <command_message command="deleted_media">
+            <command_description>Confirms deletion of a media file.</command_description>
+            <command_content>Successfully deleted the selected file.</command_content>
+        </command_message>
+    </command_package>
 </language>
