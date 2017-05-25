@@ -40,6 +40,9 @@ public final class Bot {
 
     public static final String DISPLAY_FILE_TYPE_IMAGE = "image";
     public static final String DISPLAY_FILE_TYPE_VIDEO = "video";
+    public static final String DISPLAY_FILE_TG_TYPE_IMAGE = "tgImage";
+    public static final String DISPLAY_FILE_TG_TYPE_VIDEO = "tgVideo";
+    public static final String DISPLAY_FILE_TG_TYPE_AS_DOCUMENT = "tgAsDocument";
 
     public static final String HAS_PHOTO = "hasPhoto";
     public static final String HAS_NO_PHOTO = "hasNoPhoto";

@@ -43,8 +43,8 @@ public class SendVideo extends BotCommand {
 
             if (arguments[0].equals(Config.Bot.HAS_VIDEO)) {
 
-                databaseManager.createNewDisplayFile(absSender, user.getId(), arguments[1],
-                        Bot.DISPLAY_FILE_TYPE_VIDEO);
+                databaseManager.createNewDisplayFile(absSender, user, arguments[1],
+                        Bot.DISPLAY_FILE_TYPE_VIDEO, arguments[2]);
 
                 databaseManager.setUserCommandState(user.getId(), Bot.NO_COMMAND);
 

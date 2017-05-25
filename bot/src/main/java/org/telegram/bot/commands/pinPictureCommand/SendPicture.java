@@ -94,8 +94,8 @@ public class SendPicture extends BotCommand {
 
             if (arguments[0].equals(Config.Bot.HAS_PHOTO)) {
 
-                databaseManager.createNewDisplayFile(absSender, user.getId(), arguments[1],
-                        Config.Bot.DISPLAY_FILE_TYPE_IMAGE);
+                databaseManager.createNewDisplayFile(absSender, user, arguments[1],
+                        Config.Bot.DISPLAY_FILE_TYPE_IMAGE, arguments[2]);
 
                 databaseManager.setUserCommandState(user.getId(), Config.Bot.NO_COMMAND);
 

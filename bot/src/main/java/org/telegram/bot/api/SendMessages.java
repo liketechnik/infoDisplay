@@ -1,12 +1,17 @@
 package org.telegram.bot.api;
 
+import org.telegram.bot.commands.pinPictureCommand.SendPicture;
 import org.telegram.bot.database.DatabaseException;
 import org.telegram.bot.messages.InlineKeyboard;
 import org.telegram.telegrambots.api.methods.send.SendDocument;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.methods.send.SendPhoto;
+import org.telegram.telegrambots.api.methods.send.SendVideo;
+import org.telegram.telegrambots.api.methods.updatingmessages.DeleteMessage;
 import org.telegram.telegrambots.api.methods.updatingmessages.EditMessageText;
+import org.telegram.telegrambots.api.objects.Message;
 import org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.bots.AbsSender;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 import org.telegram.telegrambots.logging.BotLogger;
@@ -27,9 +32,10 @@ public class SendMessages extends Thread {
     public static final String LOGTAG = "SENDMESSAGES";
 
     private static volatile SendMessages instance;
+    private final Object synchronizer = new Object();
 
     public enum types {
-        send_message, edit_message, document_message
+        send_message, edit_message, document_message, delete_message, image_message, video_message;
     }
 
     private SendMessages() {
@@ -77,6 +83,8 @@ public class SendMessages extends Thread {
     private final ConcurrentHashMap<Integer, String> fileIds;
 
     private final boolean enableMarkdownDefault = false;
+
+    //TODO user ReplyKeyboardMarkup instead of InlineKeyboardMarkup to add keyboards to be able to specify resize_keyboard and one_time_keyboard options
 
     @Override
     public void run() {
@@ -139,7 +147,50 @@ public class SendMessages extends Thread {
                     message.setChatId(currentChatId);
                     message.setDocument(currentFileId);
                     currentAbsSender.sendDocument(message);
-                } else {
+                } else if (currentType.equals(types.image_message.name())) {
+                    SendPhoto message = new SendPhoto();
+                    String currentMessage = this.messages.remove(currentMessageHash);
+                    String currentChatId = this.chatIds.remove(currentMessageHash);
+                    AbsSender currentAbsSender = this.absSender.remove(currentMessageHash);
+                    String currentFileId = this.fileIds.remove(currentMessageHash);
+
+                    try {
+                        message.setReplyMarkup(this.inlineKeyboards.remove(currentMessageHash));
+                    } catch (NullPointerException ignored) {
+
+                    }
+
+                    message.setCaption(currentMessage);
+                    message.setChatId(currentChatId);
+                    message.setPhoto(currentFileId);
+                    currentAbsSender.sendPhoto(message);
+                } else if (currentType.equals(types.video_message.name())) {
+                    SendVideo message = new SendVideo();
+                    String currentMessage = this.messages.remove(currentMessageHash);
+                    String currentChatId = this.chatIds.remove(currentMessageHash);
+                    AbsSender currentAbsSender = this.absSender.remove(currentMessageHash);
+                    String currentFileId = this.fileIds.remove(currentMessageHash);
+
+                    try {
+                        message.setReplyMarkup(this.inlineKeyboards.remove(currentMessageHash));
+                    } catch (NullPointerException ignored) {
+
+                    }
+
+                    message.setCaption(currentMessage);
+                    message.setChatId(currentChatId);
+                    message.setVideo(currentFileId);
+                    currentAbsSender.sendVideo(message);
+                } else if (currentType.equals(types.delete_message.name())) {
+                    DeleteMessage message = new DeleteMessage();
+                    String chatId = this.chatIds.remove(currentMessageHash);
+                    Integer messageId = this.messageIds.remove(currentMessageHash);
+                    AbsSender currentAbsSender = this.absSender.remove(currentMessageHash);
+
+                    message.setChatId(chatId);
+                    message.setMessageId(messageId);
+                    currentAbsSender.deleteMessage(message);
+                } else  {
                     BotLogger.error(LOGTAG, "Registered message without known type.");
                 }
                 TimeUnit.SECONDS.sleep(1); // sleep one second yo avoid sending to many messages in a short interval
@@ -192,6 +243,42 @@ public class SendMessages extends Thread {
             this.inlineKeyboards.putIfAbsent(messageHash, inlineKeyboardMarkup);
         });
         this.messageTypes.putIfAbsent(messageHash, types.document_message.name());
+        this.messageHashes.add(messageHash);
+    }
+
+    public void addImageMessage(Integer messsageHash, String caption, String chatId, AbsSender absSender, String fileId, Optional<InlineKeyboardMarkup> inlineKeyboard) {
+        this.messages.putIfAbsent(messsageHash, caption);
+        this.chatIds.putIfAbsent(messsageHash, chatId);
+        this.absSender.putIfAbsent(messsageHash, absSender);
+        this.fileIds.putIfAbsent(messsageHash, fileId);
+        inlineKeyboard.ifPresent(inlineKeyboardMarkup -> {
+            this.inlineKeyboards.putIfAbsent(messsageHash, inlineKeyboardMarkup);
+        });
+        this.messageTypes.putIfAbsent(messsageHash, types.image_message.name());
+        this.messageHashes.add(messsageHash);
+    }
+
+    public void addVideoMessage(Integer messsageHash, String caption, String chatId, AbsSender absSender, String fileId, Optional<InlineKeyboardMarkup> inlineKeyboard) {
+        this.messages.putIfAbsent(messsageHash, caption);
+        this.chatIds.putIfAbsent(messsageHash, chatId);
+        this.absSender.putIfAbsent(messsageHash, absSender);
+        this.fileIds.putIfAbsent(messsageHash, fileId);
+        inlineKeyboard.ifPresent(inlineKeyboardMarkup -> {
+            this.inlineKeyboards.putIfAbsent(messsageHash, inlineKeyboardMarkup);
+        });
+        this.messageTypes.putIfAbsent(messsageHash, types.video_message.name());
+        this.messageHashes.add(messsageHash);
+    }
+
+    public void addDeleteMessage(String chatId, Integer messageId, AbsSender absSender) {
+        Integer messageHash;
+        synchronized (this.synchronizer) {
+            messageHash = (chatId + messageId.toString() + System.currentTimeMillis()).hashCode();
+        }
+        this.chatIds.putIfAbsent(messageHash, chatId);
+        this.messageIds.putIfAbsent(messageHash, messageId);
+        this.absSender.putIfAbsent(messageHash, absSender);
+        this.messageTypes.putIfAbsent(messageHash, types.delete_message.name());
         this.messageHashes.add(messageHash);
     }
 

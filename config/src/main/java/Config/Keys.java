@@ -40,8 +40,10 @@ public final class Keys {
     public static final String DISPLAY_FILES_KEY = "displayFiles";
     public static final String DISPLAY_FILE_DURATION_KEY = "displayDuration";
     public static final String DISPLAY_FILE_TYPE_KEY = "type";
+    public static final String DISPLAY_FILE_TG_TYPE_KEY = "tgType";
     public static final String DISPLAY_FILE_DESCRIPTION = "description";
-    public static final String DISPLAY_FILE_UPLOAD_INFO = "uploadedBy";
+    public static final String DISPLAY_FILE_UPLOAD_INFO_ID = "uploadedById";
+    public static final String DISPLAY_FILE_UPLOAD_INFO_NAME = "uploadedByName";
     public static final String DISPLAY_FILE_ID = "fileId";
 
     public static final String USER_ACTIVE = "userActive";

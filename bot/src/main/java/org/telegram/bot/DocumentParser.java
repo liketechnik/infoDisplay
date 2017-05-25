@@ -59,8 +59,10 @@ public class DocumentParser extends Parser {
                         }
 
                         arguments.add(message.getPhoto().get(biggestPhoto).getFileId());
+                        arguments.add(Bot.DISPLAY_FILE_TG_TYPE_IMAGE);
                     } else if (message.getDocument().getMimeType().contains("image")) {
                         arguments.add(message.getDocument().getFileId());
+                        arguments.add(Bot.DISPLAY_FILE_TG_TYPE_AS_DOCUMENT);
                     }
                     this.arguments = arguments.toArray(new String[]{});
                 } else {
@@ -74,8 +76,10 @@ public class DocumentParser extends Parser {
                     arguments.add(Bot.HAS_VIDEO);
                     if (message.getVideo() != null) {
                         arguments.add(message.getVideo().getFileId());
+                        arguments.add(Bot.DISPLAY_FILE_TG_TYPE_VIDEO);
                     } else if (message.getDocument().getMimeType().contains("video")) {
                         arguments.add(message.getDocument().getFileId());
+                        arguments.add(Bot.DISPLAY_FILE_TG_TYPE_AS_DOCUMENT);
                     }
                     this.arguments = arguments.toArray(new String[]{});
                 } else {
