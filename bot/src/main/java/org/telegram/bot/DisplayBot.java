@@ -37,6 +37,7 @@ import Config.CallbackData;
 import org.telegram.bot.commands.*;
 import org.telegram.bot.commands.answerCommand.AnswerCommand;
 import org.telegram.bot.commands.askCommand.AskCommand;
+import org.telegram.bot.commands.deleteMediaCommand.DeleteMediaCommand;
 import org.telegram.bot.commands.pinPictureCommand.*;
 import org.telegram.bot.commands.pinVideoCommand.*;
 import org.telegram.bot.commands.setLanguageCommand.ChangeLanguage;
@@ -76,8 +77,8 @@ public class DisplayBot extends TelegramLongPollingThreadBot {
         registerCommand(AboutCommand.class);
         registerCommand(CancelCommand.class);
         registerCommand(SetLanguageCommand.class);
+        registerCommand(DeleteMediaCommand.class);
         registerCommand(HelpCommand.class);
-        SaveThread.getInstance(this).start();
     }
 
     /**

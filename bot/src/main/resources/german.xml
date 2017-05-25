@@ -304,4 +304,52 @@
             </case>
         </command_message>
     </command_package>
+    <command_package command="deleteMediaCommand">
+        <command_message command="delete_media_command">
+            <command_description>Lösche Medien vom Brett.</command_description>
+            <case case="information">
+                <command_content>Bitte wähle eine Datei zum löschen aus:</command_content>
+            </case>
+            <case case="keyboard">
+                <command_content>Titel: /title>/n>
+                    Beschreibung: /description>/n>
+                    Dauer (nur für Bilder): /duration>/n>
+                    Hochgeladen von: /uploadInfo></command_content>
+                <reply_keyboard>
+                    <keyboard_button row="1" column="1" callback_data="delete_media_/last_index>">zurück</keyboard_button>
+                    <keyboard_button row="1" column="2" callback_data="delete_media_delete_/current_index>">Löschen!</keyboard_button>
+                    <keyboard_button row="1" column="3" callback_data="delete_media_/next_index>">vor</keyboard_button>
+                    <keyboard_button row="2" column="1" callback_data="delete_media_first">erste Datei</keyboard_button>
+                    <keyboard_button row="2" column="2" callback_data="delete_media_middle">mittlere Datei</keyboard_button>
+                    <keyboard_button row="2" column="3" callback_data="delete_media_last">letzte Datei</keyboard_button>
+                </reply_keyboard>
+            </case>
+        </command_message>
+        <command_message command="confirm_delete_media_command">
+            <command_description>Frage nach ob der Benutzer sich sicher ist.</command_description>
+            <command_content>Titel: /title>/n>
+                Beschreibung: /description>/n>
+                Dauer (nur für Bilder): /duration>/n>
+                Hochgeladen von: /uploadInfo>/n>
+
+                Bist du dir sicher, dass du diese Datei löschen willst? /n>
+                    (Beachte: Du hast nur eine Minute Zeit, bevor du die Datei nicht mehr löschen kannst.)</command_content>
+            <reply_keyboard>
+                <keyboard_button row="1" column="1" callback_data="confirm_delete_media_yes_/timestamp>_/index>">Ja, lösche die Datei.</keyboard_button>
+                <keyboard_button row="2" column="1" callback_data="confirm_delete_media_back_/index>">Nein, ich meinte eine andere.</keyboard_button>
+                <keyboard_button row="2" column="2" callback_data="confirm_delete_media_cancel">Nein, und ich möchte auch nichts anderes löschen.</keyboard_button>
+            </reply_keyboard>
+        </command_message>
+        <command_message command="deleted_media_command">
+            <command_description>Bestätigt löschung einer Datei.</command_description>
+            <case case="yes"> <!-- User decided to delete file. See callback data for confirm_delete_media -->
+                <command_content>Die gewählte Datei wurde erfolgreich gelöscht.</command_content>
+            </case>
+            <case case="cancel">
+                <command_content>Lösche nichts. /n>
+                    (Es ist möglich, dass du diese Nachricht erhälst weil du zu lange gewartet hast, bevor dich entschieden hast.
+                    Versuch es einfach erneut.)</command_content>
+            </case>
+        </command_message>
+    </command_package>
 </language>
