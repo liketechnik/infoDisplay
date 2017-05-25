@@ -31,20 +31,12 @@
 
 package org.telegram.bot.commands;
 
-import org.apache.commons.configuration2.ex.ConfigurationException;
-import org.apache.commons.lang3.ArrayUtils;
-
-import org.telegram.bot.DisplayBot;
 import org.telegram.bot.database.DatabaseException;
 import org.telegram.bot.database.DatabaseManager;
-import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Chat;
 import org.telegram.telegrambots.api.objects.User;
 import org.telegram.telegrambots.bots.AbsSender;
-import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.bots.commands.BotCommand;
-import org.telegram.telegrambots.bots.commands.ICommandRegistry;
-import org.telegram.telegrambots.exceptions.TelegramApiException;
 import org.telegram.telegrambots.logging.BotLogger;
 
 /**

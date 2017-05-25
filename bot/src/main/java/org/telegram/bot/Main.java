@@ -33,10 +33,7 @@ package org.telegram.bot;
 
 import org.telegram.bot.api.SendMessages;
 import org.telegram.bot.commands.CancelCommand;
-import org.telegram.bot.commands.HelpCommand;
-import org.telegram.bot.database.DatabaseException;
 import org.telegram.bot.database.SaveThread;
-import org.telegram.telegrambots.ApiContext;
 import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.TelegramBotsApi;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
@@ -48,13 +45,9 @@ import org.telegram.telegrambots.generics.BotSession;
 import org.telegram.telegrambots.logging.BotLogger;
 import org.telegram.telegrambots.logging.BotsFileHandler;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Scanner;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
 

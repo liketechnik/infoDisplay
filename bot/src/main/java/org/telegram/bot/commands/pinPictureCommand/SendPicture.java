@@ -36,21 +36,13 @@ import org.telegram.bot.api.SendMessages;
 import org.telegram.bot.commands.SendOnErrorOccurred;
 import org.telegram.bot.database.DatabaseException;
 import org.telegram.bot.database.DatabaseManager;
-import org.telegram.bot.messages.Message;
 import org.telegram.bot.messages.SituationalMessage;
-import org.telegram.telegrambots.api.methods.GetFile;
-import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Chat;
-import org.telegram.telegrambots.api.objects.File;
 import org.telegram.telegrambots.api.objects.User;
 import org.telegram.telegrambots.bots.AbsSender;
 import org.telegram.telegrambots.bots.commands.BotCommand;
-import org.telegram.telegrambots.exceptions.TelegramApiException;
 import org.telegram.telegrambots.logging.BotLogger;
 
-import java.net.URL;
-import java.nio.file.FileSystems;
-import java.nio.file.Path;
 import java.util.Optional;
 
 /**

@@ -37,9 +37,9 @@ public class MessageParser extends Parser {
         super(update, bot);
     }
 
+    /** Parsing taken from {@link org.telegram.telegrambots.bots.commands.CommandRegistry} **/
     @Override
     protected boolean parse() {
-        /** Parsing taken from {@link org.telegram.telegrambots.bots.commands.CommandRegistry.ececuteCommand} **/
         Message message = this.update.getMessage();
         this.user = message.getFrom();
         this.chat = message.getChat();
@@ -82,30 +82,41 @@ public class MessageParser extends Parser {
 
                 this.arguments = new String[]{text};
 
-                if (userCommandState.equals(Bot.ASK_COMMAND_WRITE_QUESTION)) {
-                    this.commandConstructor = (Constructor) WriteQuestion.class.getConstructor();
-                } else if (userCommandState.equals(Bot.ANSWER_COMMAND_CHOOSE_NUMBER)) {
-                    this.commandConstructor = (Constructor) ChooseNumber.class.getConstructor();
-                } else if (userCommandState.equals(Bot.ANSWER_COMMAND_WRITE_ANSWER)) {
-                    this.commandConstructor = (Constructor) WriteAnswer.class.getConstructor();
-                } else if (userCommandState.equals(Bot.PIN_PICTURE_COMMAND_SEND_TITLE)) {
-                    this.commandConstructor = (Constructor) SendTitle.class.getConstructor();
-                } else if (userCommandState.equals(Bot.PIN_PICTURE_COMMAND_SEND_DESCRIPTION)) {
-                    this.commandConstructor = (Constructor) SendDescription.class.getConstructor();
-                } else if (userCommandState.equals(Bot.PIN_PICTURE_COMMAND_SEND_DURATION)) {
-                    this.commandConstructor = (Constructor) SendDuration.class.getConstructor();
-                } else if (userCommandState.equals(Bot.PIN_PICTURE_COMMAND_SEND_PICTURE)) {
-                    this.arguments = new String[]{Bot.HAS_NO_PHOTO};
-                    this.commandConstructor = (Constructor) SendPicture.class.getConstructor();
-                } else if (userCommandState.equals(Bot.PIN_VIDEO_COMMAND_SEND_VIDEO)) {
-                    this.arguments = new String[]{Bot.HAS_NO_VIDEO};
-                    this.commandConstructor = (Constructor) SendVideo.class.getConstructor();
-                } else if (userCommandState.equals(Bot.PIN_VIDEO_COMMAND_SEND_DESCRIPTION)) {
-                    this.commandConstructor = (Constructor) org.telegram.bot.commands.pinVideoCommand.
-                            SendDescription.class.getConstructor();
-                } else if (userCommandState.equals(Bot.PIN_VIDEO_COMMAND_SEND_TITLE)) {
-                    this.commandConstructor = (Constructor) org.telegram.bot.commands.pinVideoCommand.
-                            SendTitle.class.getConstructor();
+                switch (userCommandState) {
+                    case Bot.ASK_COMMAND_WRITE_QUESTION:
+                        this.commandConstructor = (Constructor) WriteQuestion.class.getConstructor();
+                        break;
+                    case Bot.ANSWER_COMMAND_CHOOSE_NUMBER:
+                        this.commandConstructor = (Constructor) ChooseNumber.class.getConstructor();
+                        break;
+                    case Bot.ANSWER_COMMAND_WRITE_ANSWER:
+                        this.commandConstructor = (Constructor) WriteAnswer.class.getConstructor();
+                        break;
+                    case Bot.PIN_PICTURE_COMMAND_SEND_TITLE:
+                        this.commandConstructor = (Constructor) SendTitle.class.getConstructor();
+                        break;
+                    case Bot.PIN_PICTURE_COMMAND_SEND_DESCRIPTION:
+                        this.commandConstructor = (Constructor) SendDescription.class.getConstructor();
+                        break;
+                    case Bot.PIN_PICTURE_COMMAND_SEND_DURATION:
+                        this.commandConstructor = (Constructor) SendDuration.class.getConstructor();
+                        break;
+                    case Bot.PIN_PICTURE_COMMAND_SEND_PICTURE:
+                        this.arguments = new String[]{Bot.HAS_NO_PHOTO};
+                        this.commandConstructor = (Constructor) SendPicture.class.getConstructor();
+                        break;
+                    case Bot.PIN_VIDEO_COMMAND_SEND_VIDEO:
+                        this.arguments = new String[]{Bot.HAS_NO_VIDEO};
+                        this.commandConstructor = (Constructor) SendVideo.class.getConstructor();
+                        break;
+                    case Bot.PIN_VIDEO_COMMAND_SEND_DESCRIPTION:
+                        this.commandConstructor = (Constructor) org.telegram.bot.commands.pinVideoCommand.
+                                SendDescription.class.getConstructor();
+                        break;
+                    case Bot.PIN_VIDEO_COMMAND_SEND_TITLE:
+                        this.commandConstructor = (Constructor) org.telegram.bot.commands.pinVideoCommand.
+                                SendTitle.class.getConstructor();
+                        break;
                 }
 
                 return true;

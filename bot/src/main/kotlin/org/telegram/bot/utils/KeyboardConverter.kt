@@ -13,9 +13,9 @@ internal fun convertDeleteMediaKeyboard(regexReplacementMap: HashMap<String, Int
     for (inlineKeyboardButtons in keyboard) {
         for (button in inlineKeyboardButtons) {
             for (regexp in regexReplacementMap.keys) {
-                button.callbackData = button.callbackData.replace(regexp, regexReplacementMap[regexp].toString());
+                button.callbackData = button.callbackData.replace(regexp, regexReplacementMap[regexp].toString())
             }
         }
     }
-    return keyboard;
+    return keyboard
 }

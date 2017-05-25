@@ -38,55 +38,56 @@ public class DocumentParser extends Parser {
         try {
             String userCommandState = DatabaseManager.getInstance().getUserCommandState(this.user.getId());
 
-            if (userCommandState.equals(Bot.NO_COMMAND)) {
-                return false;
-            } else if (userCommandState.equals(Bot.PIN_PICTURE_COMMAND_SEND_PICTURE)) {
-                if (hasPhoto(message)) {
-                    List<String> arguments = new ArrayList<>();
-                    arguments.add(Bot.HAS_PHOTO);
-                    if (message.hasPhoto()) {
-                        List<PhotoSize> photos = update.getMessage().getPhoto();
+            switch (userCommandState) {
+                case Bot.NO_COMMAND:
+                    return false;
+                case Bot.PIN_PICTURE_COMMAND_SEND_PICTURE:
+                    if (hasPhoto(message)) {
+                        List<String> arguments = new ArrayList<>();
+                        arguments.add(Bot.HAS_PHOTO);
+                        if (message.hasPhoto()) {
+                            List<PhotoSize> photos = update.getMessage().getPhoto();
 
-                        int width = 0;
-                        int height = 0;
+                            int width = 0;
+                            int height = 0;
 
-                        int biggestPhoto = 0;
+                            int biggestPhoto = 0;
 
-                        for (int x = 0; x < photos.size(); x++) {
-                            if (width < photos.get(x).getWidth() || height < photos.get(x).getHeight()) {
-                                biggestPhoto = x;
+                            for (int x = 0; x < photos.size(); x++) {
+                                if (width < photos.get(x).getWidth() || height < photos.get(x).getHeight()) {
+                                    biggestPhoto = x;
+                                }
                             }
-                        }
 
-                        arguments.add(message.getPhoto().get(biggestPhoto).getFileId());
-                        arguments.add(Bot.DISPLAY_FILE_TG_TYPE_IMAGE);
-                    } else if (message.getDocument().getMimeType().contains("image")) {
-                        arguments.add(message.getDocument().getFileId());
-                        arguments.add(Bot.DISPLAY_FILE_TG_TYPE_AS_DOCUMENT);
+                            arguments.add(message.getPhoto().get(biggestPhoto).getFileId());
+                            arguments.add(Bot.DISPLAY_FILE_TG_TYPE_IMAGE);
+                        } else if (message.getDocument().getMimeType().contains("image")) {
+                            arguments.add(message.getDocument().getFileId());
+                            arguments.add(Bot.DISPLAY_FILE_TG_TYPE_AS_DOCUMENT);
+                        }
+                        this.arguments = arguments.toArray(new String[]{});
+                    } else {
+                        this.arguments = new String[]{Bot.HAS_NO_PHOTO};
                     }
-                    this.arguments = arguments.toArray(new String[]{});
-                } else {
-                    this.arguments = new String[] {Bot.HAS_NO_PHOTO};
-                }
-                this.commandConstructor = (Constructor) SendPicture.class.getConstructor();
-                return true;
-            } else if (userCommandState.equals(Bot.PIN_VIDEO_COMMAND_SEND_VIDEO)) {
-                if (hasVideo(message)) {
-                    List<String> arguments = new ArrayList<>();
-                    arguments.add(Bot.HAS_VIDEO);
-                    if (message.getVideo() != null) {
-                        arguments.add(message.getVideo().getFileId());
-                        arguments.add(Bot.DISPLAY_FILE_TG_TYPE_VIDEO);
-                    } else if (message.getDocument().getMimeType().contains("video")) {
-                        arguments.add(message.getDocument().getFileId());
-                        arguments.add(Bot.DISPLAY_FILE_TG_TYPE_AS_DOCUMENT);
+                    this.commandConstructor = (Constructor) SendPicture.class.getConstructor();
+                    return true;
+                case Bot.PIN_VIDEO_COMMAND_SEND_VIDEO:
+                    if (hasVideo(message)) {
+                        List<String> arguments = new ArrayList<>();
+                        arguments.add(Bot.HAS_VIDEO);
+                        if (message.getVideo() != null) {
+                            arguments.add(message.getVideo().getFileId());
+                            arguments.add(Bot.DISPLAY_FILE_TG_TYPE_VIDEO);
+                        } else if (message.getDocument().getMimeType().contains("video")) {
+                            arguments.add(message.getDocument().getFileId());
+                            arguments.add(Bot.DISPLAY_FILE_TG_TYPE_AS_DOCUMENT);
+                        }
+                        this.arguments = arguments.toArray(new String[]{});
+                    } else {
+                        this.arguments = new String[]{Bot.HAS_NO_VIDEO};
                     }
-                    this.arguments = arguments.toArray(new String[]{});
-                } else {
-                    this.arguments = new String[] {Bot.HAS_NO_VIDEO};
-                }
-                this.commandConstructor = (Constructor) SendVideo.class.getConstructor();
-                return true;
+                    this.commandConstructor = (Constructor) SendVideo.class.getConstructor();
+                    return true;
             }
 
             return false;

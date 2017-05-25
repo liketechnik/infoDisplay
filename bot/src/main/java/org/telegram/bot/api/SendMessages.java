@@ -1,17 +1,12 @@
 package org.telegram.bot.api;
 
-import org.telegram.bot.commands.pinPictureCommand.SendPicture;
-import org.telegram.bot.database.DatabaseException;
-import org.telegram.bot.messages.InlineKeyboard;
 import org.telegram.telegrambots.api.methods.send.SendDocument;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.api.methods.send.SendVideo;
 import org.telegram.telegrambots.api.methods.updatingmessages.DeleteMessage;
 import org.telegram.telegrambots.api.methods.updatingmessages.EditMessageText;
-import org.telegram.telegrambots.api.objects.Message;
 import org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup;
-import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.bots.AbsSender;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 import org.telegram.telegrambots.logging.BotLogger;
@@ -20,7 +15,6 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Consumer;
 
 /**
  * @author liketechnik
@@ -35,7 +29,7 @@ public class SendMessages extends Thread {
     private final Object synchronizer = new Object();
 
     public enum types {
-        send_message, edit_message, document_message, delete_message, image_message, video_message;
+        send_message, edit_message, document_message, delete_message, image_message, video_message
     }
 
     private SendMessages() {

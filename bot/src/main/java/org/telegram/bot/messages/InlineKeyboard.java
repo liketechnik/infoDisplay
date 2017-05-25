@@ -1,11 +1,7 @@
 package org.telegram.bot.messages;
 
-import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.apache.commons.configuration2.XMLConfiguration;
-import org.apache.http.annotation.Obsolete;
 import org.telegram.telegrambots.api.objects.replykeyboard.buttons.InlineKeyboardButton;
-import org.telegram.telegrambots.api.objects.replykeyboard.buttons.KeyboardRow;
-import org.telegram.telegrambots.logging.BotLogger;
 
 import java.util.ArrayList;
 import java.util.List;

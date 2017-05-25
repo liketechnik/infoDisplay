@@ -1,7 +1,5 @@
 package org.telegram.bot.messages;
 
-import org.telegram.telegrambots.logging.BotLogger;
-
 /**
  * @author liketechnik
  * @version 1.2.1

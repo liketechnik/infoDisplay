@@ -12,9 +12,9 @@ import java.util.*
  * @date 21 of Mai 2017
  */
 
-internal val currentIndexRegex: String = "/current_index>";
-internal val lastIndexRegex: String = "/last_index>";
-internal val nextIndexRegex: String = "/next_index>";
+internal val currentIndexRegex: String = "/current_index>"
+internal val lastIndexRegex: String = "/last_index>"
+internal val nextIndexRegex: String = "/next_index>"
 
 internal val indexRegex: String = "/index>"
 internal val timestampRegex: String = "/timestamp>"
@@ -43,7 +43,7 @@ internal fun  getAdditionalContent(displayFileName: String): HashMap<String, Str
 }
 
 internal fun getIndex(arguments: Array<out String>): Int {
-    var index: Int
+    val index: Int
     val argumentsSplit: List<String> = arguments[0].split("_")
     index = argumentsSplit.last().toInt()
     return index
@@ -51,11 +51,11 @@ internal fun getIndex(arguments: Array<out String>): Int {
 
 internal fun sendMediaMessage(tgType: String, messageHash: Int, messageText: String, chatId: String, absSender: AbsSender,
                               fileId: String, keyboardMarkup: Optional<InlineKeyboardMarkup>) {
-    if (tgType.equals(Config.Bot.DISPLAY_FILE_TG_TYPE_AS_DOCUMENT)) {
-        SendMessages.getInstance().addDocumentMessage(messageHash, messageText, chatId, absSender, fileId, keyboardMarkup);
-    } else if (tgType.equals(Config.Bot.DISPLAY_FILE_TG_TYPE_IMAGE)) {
-        SendMessages.getInstance().addImageMessage(messageHash, messageText, chatId, absSender, fileId, keyboardMarkup);
-    } else if (tgType.equals(Config.Bot.DISPLAY_FILE_TG_TYPE_VIDEO)) {
-        SendMessages.getInstance().addVideoMessage(messageHash, messageText, chatId, absSender, fileId, keyboardMarkup);
+    if (tgType == Config.Bot.DISPLAY_FILE_TG_TYPE_AS_DOCUMENT) {
+        SendMessages.getInstance().addDocumentMessage(messageHash, messageText, chatId, absSender, fileId, keyboardMarkup)
+    } else if (tgType == Config.Bot.DISPLAY_FILE_TG_TYPE_IMAGE) {
+        SendMessages.getInstance().addImageMessage(messageHash, messageText, chatId, absSender, fileId, keyboardMarkup)
+    } else if (tgType == Config.Bot.DISPLAY_FILE_TG_TYPE_VIDEO) {
+        SendMessages.getInstance().addVideoMessage(messageHash, messageText, chatId, absSender, fileId, keyboardMarkup)
     }
 }

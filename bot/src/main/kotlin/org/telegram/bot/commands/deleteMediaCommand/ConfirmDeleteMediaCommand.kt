@@ -1,13 +1,11 @@
 package org.telegram.bot.commands.deleteMediaCommand
 
-import Config.CallbackData
 import org.telegram.bot.api.SendMessages
 import org.telegram.bot.commands.SendOnErrorOccurred
 import org.telegram.bot.database.DatabaseException
 import org.telegram.bot.database.DatabaseManager
 import org.telegram.bot.messages.ContentMessage
 import org.telegram.bot.messages.InlineKeyboard
-import org.telegram.bot.messages.SituationalContentMessage
 import org.telegram.bot.utils.convertDeleteMediaKeyboard
 import org.telegram.bot.utils.getCommandName
 import org.telegram.bot.utils.getPackageName
@@ -75,7 +73,7 @@ class ConfirmDeleteMediaCommand : BotCommand(commandIdentifier, description) {
 
                 return
             } else {
-                throw e;
+                throw e
             }
         }
     }

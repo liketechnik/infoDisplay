@@ -32,25 +32,18 @@
 package org.telegram.bot.messages;
 
 
-import Config.Bot;
 import org.apache.commons.configuration2.XMLConfiguration;
 import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
 import org.apache.commons.configuration2.builder.fluent.Parameters;
 import org.apache.commons.configuration2.builder.fluent.XMLBuilderParameters;
 import org.apache.commons.configuration2.ex.ConfigurationException;
-import org.apache.commons.configuration2.io.ClasspathLocationStrategy;
-import org.apache.commons.configuration2.io.FileLocationStrategy;
 import org.apache.commons.configuration2.tree.xpath.XPathExpressionEngine;
 import org.telegram.bot.database.DatabaseException;
 import org.telegram.bot.database.DatabaseManager;
-import org.telegram.telegrambots.api.objects.User;
 import org.telegram.telegrambots.logging.BotLogger;
 
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
-
-import static org.telegram.bot.Main.getFilteredUsername;
-import static org.telegram.bot.Main.getSpecialFilteredUsername;
 
 /**
  * @author Florian Warzecha

@@ -1,7 +1,6 @@
 package org.telegram.bot.messages;
 
 import org.apache.commons.configuration2.XMLConfiguration;
-import org.telegram.telegrambots.logging.BotLogger;
 
 
 import java.util.*;

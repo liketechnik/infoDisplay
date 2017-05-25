@@ -9,7 +9,6 @@ import org.telegram.bot.utils.getCommandName
 import org.telegram.bot.utils.getPackageName
 import org.telegram.telegrambots.api.objects.Chat
 import org.telegram.telegrambots.api.objects.User
-import org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup
 import org.telegram.telegrambots.bots.AbsSender
 import org.telegram.telegrambots.bots.commands.BotCommand
 import org.telegram.telegrambots.logging.BotLogger
@@ -38,7 +37,7 @@ class DeletedMediaCommand : BotCommand(commandIdentifier, description) {
 
     override fun execute(absSender: AbsSender, user: User, chat: Chat, arguments: Array<out String>) {
         try {
-            if (arguments[0].equals(FUNCTIONS.delete.name)) {
+            if (arguments[0] == FUNCTIONS.delete.name) {
                 val argumentsSplit: List<String> = arguments[1].split("_")
 
                 val sendTime: Int = argumentsSplit[argumentsSplit.size - 2].toInt() // access the second last element containing the timestamp

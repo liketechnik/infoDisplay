@@ -1,15 +1,11 @@
 package org.telegram.bot.api;
 
-import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
-import org.apache.commons.configuration2.ex.ConfigurationException;
-import org.telegram.bot.database.DatabaseException;
 import org.telegram.bot.database.DatabaseManager;
 import org.telegram.telegrambots.api.objects.Update;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.bots.commands.BotCommand;
 import org.telegram.telegrambots.logging.BotLogger;
 
-import javax.xml.crypto.Data;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;

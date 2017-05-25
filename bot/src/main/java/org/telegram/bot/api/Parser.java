@@ -1,16 +1,10 @@
 package org.telegram.bot.api;
 
-import org.telegram.bot.api.TelegramLongPollingThreadBot;
 import org.telegram.bot.commands.HelpCommand;
-import org.telegram.bot.database.DatabaseException;
-import org.telegram.bot.messages.ContentMessage;
 import org.telegram.bot.messages.Message;
-import org.telegram.telegrambots.api.methods.send.SendChatAction;
-import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Chat;
 import org.telegram.telegrambots.api.objects.Update;
 import org.telegram.telegrambots.api.objects.User;
-import org.telegram.telegrambots.bots.AbsSender;
 import org.telegram.telegrambots.bots.commands.BotCommand;
 import org.telegram.telegrambots.logging.BotLogger;
 
