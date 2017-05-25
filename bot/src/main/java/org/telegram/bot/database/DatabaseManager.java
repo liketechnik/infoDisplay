@@ -1227,6 +1227,7 @@ public final class DatabaseManager {
         } catch (IOException e) {
             throw new DatabaseException(fileUrl, displayFile, e);
         }
+        this.saveBuilders();
     }
 
     /**
@@ -1255,6 +1256,7 @@ public final class DatabaseManager {
         if (!file.delete()) {
             throw new DatabaseException(file);
         }
+        this.saveBuilders();
     }
 
     /**
