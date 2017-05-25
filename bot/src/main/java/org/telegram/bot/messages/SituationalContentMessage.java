@@ -42,8 +42,7 @@ public class SituationalContentMessage extends ContentMessage {
         if (this.situation != null) {
             return this.situation;
         } else {
-            BotLogger.warn(LOGTAG, "No situation set yet!");
-            return "No situation set.";
+            throw new IllegalStateException("No situation set yet!");
         }
     }
 }

@@ -7,6 +7,7 @@ import jdk.nashorn.internal.codegen.CompilerConstants;
 import org.apache.commons.configuration2.XMLConfiguration;
 import org.telegram.bot.api.SendMessages;
 import org.telegram.bot.commands.SendOnErrorOccurred;
+import org.telegram.bot.database.DatabaseException;
 import org.telegram.bot.database.DatabaseManager;
 import org.telegram.bot.messages.ContentMessage;
 import org.telegram.bot.messages.Message;
@@ -21,6 +22,7 @@ import org.telegram.telegrambots.exceptions.TelegramApiException;
 import org.telegram.telegrambots.logging.BotLogger;
 
 import java.util.HashMap;
+import java.util.Optional;
 
 /**
  * @author liketechnik
@@ -64,8 +66,8 @@ public class ChangeLanguage extends BotCommand {
 
             String messageText = message.getContent(user.getId(), true);
             SendMessages.getInstance().addEditMessage(message.calculateHash(), messageText, chat.getId().toString(),
-                    absSender, Integer.valueOf(arguments[1]));
-        } catch (Exception e) {
+                    absSender, Integer.valueOf(arguments[1]), Optional.empty(), Optional.empty());
+        } catch (DatabaseException | InterruptedException e) {
             BotLogger.error(LOGTAG, e);
 
             new SendOnErrorOccurred().execute(absSender, user, chat, new String[]{LOGTAG, arguments[2]});

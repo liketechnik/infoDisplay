@@ -34,6 +34,7 @@ package org.telegram.bot.commands;
 import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.apache.commons.io.output.StringBuilderWriter;
 import org.telegram.bot.api.SendMessages;
+import org.telegram.bot.database.DatabaseException;
 import org.telegram.bot.database.DatabaseManager;
 import org.telegram.bot.messages.Message;
 import org.telegram.bot.messages.SituationalContentMessage;
@@ -48,6 +49,7 @@ import org.telegram.telegrambots.logging.BotLogger;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Optional;
 
 import static org.telegram.bot.Main.getSpecialFilteredUsername;
 
@@ -109,7 +111,7 @@ public class RegisterCommand extends BotCommand {
                             this.getCommandIdentifier() + "_command", "toAdmin");
 
                     String messageText  = situationalContentMessage.getContent(databaseManager.getAdminUserId(), true);
-                    SendMessages.getInstance().addMessage(situationalContentMessage.calculateHash(), messageText, databaseManager.getAdminChatId().toString(), absSender);
+                    SendMessages.getInstance().addMessage(situationalContentMessage.calculateHash(), messageText, databaseManager.getAdminChatId().toString(), absSender, Optional.empty(), Optional.empty());
 
                     situationalContentMessage.setMessageName(
                             this.getCommandIdentifier() + "_command", "sendRegistrationRequest");
@@ -117,9 +119,9 @@ public class RegisterCommand extends BotCommand {
             }
 
             String messageText = situationalContentMessage.getContent(user.getId(), true);
-            SendMessages.getInstance().addMessage(situationalContentMessage.calculateHash(), messageText, chat.getId().toString(), absSender);
+            SendMessages.getInstance().addMessage(situationalContentMessage.calculateHash(), messageText, chat.getId().toString(), absSender, Optional.empty(), Optional.empty());
 
-        } catch (Exception e) {
+        } catch (DatabaseException | InterruptedException e) {
             BotLogger.error(LOGTAG, e);
 
             new SendOnErrorOccurred().execute(absSender, user, chat, new String[]{LOGTAG});

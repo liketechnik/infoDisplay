@@ -41,6 +41,7 @@ import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.apache.commons.configuration2.io.ClasspathLocationStrategy;
 import org.apache.commons.configuration2.io.FileLocationStrategy;
 import org.apache.commons.configuration2.tree.xpath.XPathExpressionEngine;
+import org.telegram.bot.database.DatabaseException;
 import org.telegram.bot.database.DatabaseManager;
 import org.telegram.telegrambots.api.objects.User;
 import org.telegram.telegrambots.logging.BotLogger;
@@ -111,9 +112,7 @@ public class Message {
 //        BotLogger.info(LOGTAG, this.xmlQuarry);
 
         if (this.xmlQuarry == null) {
-            BotLogger.error(LOGTAG, "Can't load message text without setting " +
-                    "message name");
-            return null;
+            throw new IllegalStateException("No xml quarry set yet!");
         }
 
 //        BotLogger.info(LOGTAG, this.xmlQuarry);
@@ -139,8 +138,7 @@ public class Message {
         if (this.messageName != null) {
             return this.messageName;
         } else {
-            BotLogger.warn(LOGTAG, "Not set message name requested!");
-            return "No name set.";
+            throw new IllegalStateException("No message set yet!");
 
         }
     }
@@ -153,8 +151,7 @@ public class Message {
         if (this.xmlQuarry != null) {
             return this.xmlQuarry;
         } else {
-            BotLogger.warn(LOGTAG, "Not set xmlConfiguration requested!");
-            return  "No xmlQuarry set.";
+            throw new IllegalStateException("No xml quarry set yet!");
         }
     }
 
@@ -187,7 +184,7 @@ public class Message {
             language = DatabaseManager.getInstance().getUserLanguage(userID);
         } catch (IllegalArgumentException e) {
             language = Config.Languages.ENGLISH;
-        } catch (Exception e) {
+        } catch (DatabaseException e) {
             BotLogger.error(LOGTAG, e);
             System.exit(10);
         }

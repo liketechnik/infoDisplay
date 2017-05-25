@@ -1,11 +1,17 @@
 package org.telegram.bot.api;
 
+import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
+import org.apache.commons.configuration2.ex.ConfigurationException;
+import org.telegram.bot.database.DatabaseException;
+import org.telegram.bot.database.DatabaseManager;
 import org.telegram.telegrambots.api.objects.Update;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.bots.commands.BotCommand;
 import org.telegram.telegrambots.logging.BotLogger;
 
+import javax.xml.crypto.Data;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
@@ -35,6 +41,8 @@ public abstract class TelegramLongPollingThreadBot extends TelegramLongPollingBo
     private Constructor<Parser> messageParser;
     private Constructor<Parser> callbackParser;
 
+    private boolean closing = false;
+
     public final boolean registerCommand(Class<?> commandClass) {
         try {
             Class<BotCommand> botCommandClass = (Class<BotCommand>) commandClass;
@@ -46,7 +54,7 @@ public abstract class TelegramLongPollingThreadBot extends TelegramLongPollingBo
             }
             commandsMap.put(commandIdentifier, botCommandConstructor);
             return true;
-        } catch (Exception e) {
+        } catch (IllegalAccessException | InstantiationException | InvocationTargetException | NoSuchMethodException e) {
             BotLogger.error(LOGTAG, e);
             return false;
         }
@@ -60,7 +68,7 @@ public abstract class TelegramLongPollingThreadBot extends TelegramLongPollingBo
                 return true;
             }
             return false;
-        } catch (Exception e) {
+        } catch (IllegalAccessException | InstantiationException | InvocationTargetException | NoSuchMethodException e) {
             BotLogger.error(LOGTAG, e);
             return false;
         }
@@ -85,6 +93,9 @@ public abstract class TelegramLongPollingThreadBot extends TelegramLongPollingBo
 
     @Override
     public final void onUpdateReceived(Update update) {
+        if (closing) {
+            return;
+        }
         Parser parser;
         try {
             if (update.hasCallbackQuery()) {
@@ -100,13 +111,14 @@ public abstract class TelegramLongPollingThreadBot extends TelegramLongPollingBo
                 return;
             }
             this.executor.execute(parser);
-        } catch (Exception e) {
+        } catch (IllegalAccessException | InstantiationException | InvocationTargetException e) {
             BotLogger.error(LOGTAG, e);
         }
     }
 
     @Override
     public void onClosing() {
+        closing = true;
         BotLogger.info(LOGTAG, "Shutting down bot...");
         if (!this.executor.isShutdown()) {
             this.executor.shutdown();
@@ -114,14 +126,26 @@ public abstract class TelegramLongPollingThreadBot extends TelegramLongPollingBo
             try {
                 if (this.executor.awaitTermination(1, TimeUnit.MINUTES)) {
                     BotLogger.info(LOGTAG, "All commands finished!");
-                    return;
+                } else {
+                    BotLogger.info(LOGTAG, "Not all commands finished, stopping remaining ones.");
+                    BotLogger.info(LOGTAG, this.executor.shutdownNow().toString());
                 }
             } catch (InterruptedException e) {
                 BotLogger.error(LOGTAG, e);
             }
-            BotLogger.info(LOGTAG, "Not all commands finished, stopping remaining ones.");
-            BotLogger.debug(LOGTAG, this.executor.shutdownNow().toString());
         }
+
+        long messageSendTime = SendMessages.getInstance().getMessages() * (long)  1.5; // one second between each message + some spare time
+        if (messageSendTime != 0) {
+            BotLogger.info(LOGTAG, "Sending remaining messages, this will take " + messageSendTime + " minutes.");
+            try {
+                TimeUnit.MINUTES.sleep(messageSendTime);
+            } catch (InterruptedException e) {
+                BotLogger.info(LOGTAG, "Could not send all remaining messages.", e);
+            }
+        }
+
+        DatabaseManager.getInstance().saveBuilders();
     }
 
     public abstract Constructor<Parser> getDocumentParser();
@@ -130,5 +154,8 @@ public abstract class TelegramLongPollingThreadBot extends TelegramLongPollingBo
 
     public abstract Constructor<Parser> getCallbackParser();
 
+    public boolean isClosing() {
+        return closing;
+    }
 
 }

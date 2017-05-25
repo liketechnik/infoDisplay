@@ -38,6 +38,7 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import org.telegram.bot.DisplayBot;
 import org.telegram.bot.api.SendMessages;
+import org.telegram.bot.database.DatabaseException;
 import org.telegram.bot.database.DatabaseManager;
 import org.telegram.bot.messages.CommandDescription;
 import org.telegram.bot.messages.ContentMessage;
@@ -55,10 +56,8 @@ import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
+import java.lang.reflect.InvocationTargetException;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -147,9 +146,9 @@ public class HelpCommand extends BotCommand {
 //            BotLogger.info(LOGTAG, contentMessage.getContent(user.getId(), false));
 
             String messageText = contentMessage.getContent(user.getId(), false);
-            SendMessages.getInstance().addMessage(contentMessage.calculateHash(), messageText, chat.getId().toString(), absSender, true);
+            SendMessages.getInstance().addMessage(contentMessage.calculateHash(), messageText, chat.getId().toString(), absSender, Optional.of(true), Optional.empty());
 
-        } catch (Exception e) {
+        } catch (DatabaseException | IllegalAccessException | InterruptedException | InstantiationException | InvocationTargetException e) {
             BotLogger.error(LOGTAG, e);
 
             new SendOnErrorOccurred().execute(absSender, user, chat, new String[]{LOGTAG});

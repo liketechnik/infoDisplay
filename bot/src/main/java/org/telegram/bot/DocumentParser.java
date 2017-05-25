@@ -5,6 +5,7 @@ import org.telegram.bot.api.TelegramLongPollingThreadBot;
 import org.telegram.bot.api.Parser;
 import org.telegram.bot.commands.pinPictureCommand.SendPicture;
 import org.telegram.bot.commands.pinVideoCommand.SendVideo;
+import org.telegram.bot.database.DatabaseException;
 import org.telegram.bot.database.DatabaseManager;
 import org.telegram.telegrambots.api.objects.Message;
 import org.telegram.telegrambots.api.objects.PhotoSize;
@@ -58,8 +59,10 @@ public class DocumentParser extends Parser {
                         }
 
                         arguments.add(message.getPhoto().get(biggestPhoto).getFileId());
+                        arguments.add(Bot.DISPLAY_FILE_TG_TYPE_IMAGE);
                     } else if (message.getDocument().getMimeType().contains("image")) {
                         arguments.add(message.getDocument().getFileId());
+                        arguments.add(Bot.DISPLAY_FILE_TG_TYPE_AS_DOCUMENT);
                     }
                     this.arguments = arguments.toArray(new String[]{});
                 } else {
@@ -73,8 +76,10 @@ public class DocumentParser extends Parser {
                     arguments.add(Bot.HAS_VIDEO);
                     if (message.getVideo() != null) {
                         arguments.add(message.getVideo().getFileId());
+                        arguments.add(Bot.DISPLAY_FILE_TG_TYPE_VIDEO);
                     } else if (message.getDocument().getMimeType().contains("video")) {
                         arguments.add(message.getDocument().getFileId());
+                        arguments.add(Bot.DISPLAY_FILE_TG_TYPE_AS_DOCUMENT);
                     }
                     this.arguments = arguments.toArray(new String[]{});
                 } else {
@@ -86,7 +91,7 @@ public class DocumentParser extends Parser {
 
             return false;
 
-        } catch (Exception e) {
+        } catch (DatabaseException | NoSuchMethodException e) {
             BotLogger.error(LOGTAG, e);
             return false;
         }

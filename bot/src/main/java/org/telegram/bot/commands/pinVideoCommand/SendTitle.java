@@ -2,6 +2,7 @@ package org.telegram.bot.commands.pinVideoCommand;
 
 import org.telegram.bot.api.SendMessages;
 import org.telegram.bot.commands.SendOnErrorOccurred;
+import org.telegram.bot.database.DatabaseException;
 import org.telegram.bot.database.DatabaseManager;
 import org.telegram.bot.messages.Message;
 import org.telegram.bot.messages.SituationalMessage;
@@ -14,6 +15,7 @@ import org.telegram.telegrambots.exceptions.TelegramApiException;
 import org.telegram.telegrambots.logging.BotLogger;
 
 import java.nio.file.FileAlreadyExistsException;
+import java.util.Optional;
 
 /**
  * @author liketechnik
@@ -55,8 +57,8 @@ public class SendTitle extends BotCommand {
             }
 
             String messageText = situationalMessage.getContent(user.getId(), false);
-            SendMessages.getInstance().addMessage(situationalMessage.calculateHash(), messageText, chat.getId().toString(), absSender);
-        } catch (Exception e) {
+            SendMessages.getInstance().addMessage(situationalMessage.calculateHash(), messageText, chat.getId().toString(), absSender, Optional.empty(), Optional.empty());
+        } catch (DatabaseException | InterruptedException e) {
             BotLogger.error(LOGTAG, e);
 
             new SendOnErrorOccurred().execute(absSender, user, chat, new String[]{LOGTAG});

@@ -34,6 +34,7 @@ package org.telegram.bot.commands.answerCommand;
 
 import org.telegram.bot.api.SendMessages;
 import org.telegram.bot.commands.SendOnErrorOccurred;
+import org.telegram.bot.database.DatabaseException;
 import org.telegram.bot.database.DatabaseManager;
 import org.telegram.bot.messages.Message;
 import org.telegram.bot.messages.SituationalContentMessage;
@@ -47,6 +48,7 @@ import org.telegram.telegrambots.exceptions.TelegramApiException;
 import org.telegram.telegrambots.logging.BotLogger;
 
 import java.util.HashMap;
+import java.util.Optional;
 
 /**
  * @author Florian Warzecha
@@ -103,14 +105,14 @@ public class WriteAnswer extends BotCommand {
 
             String messageText = explanationMessage.getContent(user.getId(), false);
             sendMessages.addMessage(explanationMessage.calculateHash(), messageText,
-                    databaseManager.getQuestionChatID(selectedQuestion -1).toString(), absSender);
+                    databaseManager.getQuestionChatID(selectedQuestion -1).toString(), absSender, Optional.empty(), Optional.empty());
 
             messageText = confirmationMessage.getContent(databaseManager.getAdminUserId(), true);
-            sendMessages.addMessage(confirmationMessage.calculateHash(), messageText, databaseManager.getAdminChatId().toString(), absSender);
+            sendMessages.addMessage(confirmationMessage.calculateHash(), messageText, databaseManager.getAdminChatId().toString(), absSender, Optional.empty(), Optional.empty());
 
             databaseManager.deleteQuestion(selectedQuestion - 1);
             databaseManager.setSelectedQuestion(user.getId(), -1);
-        } catch (Exception e) {
+        } catch (DatabaseException | InterruptedException e) {
             BotLogger.error(LOGTAG, e);
 
             new SendOnErrorOccurred().execute(absSender, user, chat, new String[]{LOGTAG});

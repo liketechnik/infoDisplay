@@ -33,6 +33,7 @@ package org.telegram.bot.commands.askCommand;
 
 import org.telegram.bot.api.SendMessages;
 import org.telegram.bot.commands.SendOnErrorOccurred;
+import org.telegram.bot.database.DatabaseException;
 import org.telegram.bot.database.DatabaseManager;
 import org.telegram.bot.messages.Message;
 import org.telegram.bot.messages.SituationalContentMessage;
@@ -45,6 +46,7 @@ import org.telegram.telegrambots.exceptions.TelegramApiException;
 import org.telegram.telegrambots.logging.BotLogger;
 
 import java.util.HashMap;
+import java.util.Optional;
 
 import static org.telegram.bot.Main.getSpecialFilteredUsername;
 
@@ -95,7 +97,7 @@ public class WriteQuestion extends BotCommand {
 
             messageText = situationalContentMessage.getContent(DatabaseManager.getInstance().getAdminUserId(), false);
             sendMessages.addMessage(situationalContentMessage.calculateHash(), messageText,
-                    DatabaseManager.getInstance().getAdminChatId().toString(), absSender);
+                    DatabaseManager.getInstance().getAdminChatId().toString(), absSender, Optional.empty(), Optional.empty());
 
             DatabaseManager.getInstance().createQuestion(situationalContentMessage.getContent(
                     user.getId(), false), chat.getId().longValue());
@@ -104,8 +106,8 @@ public class WriteQuestion extends BotCommand {
                     this.getCommandIdentifier() + "_command", "response");
 
             messageText = situationalContentMessage.getContent(user.getId(), true);
-            sendMessages.addMessage(situationalContentMessage.calculateHash(), messageText, chat.getId().toString(), absSender);
-        } catch (Exception e) {
+            sendMessages.addMessage(situationalContentMessage.calculateHash(), messageText, chat.getId().toString(), absSender, Optional.empty(), Optional.empty());
+        } catch (DatabaseException | InterruptedException e) {
             BotLogger.error(LOGTAG, e);
 
             new SendOnErrorOccurred().execute(absSender, user, chat, new String[]{LOGTAG});

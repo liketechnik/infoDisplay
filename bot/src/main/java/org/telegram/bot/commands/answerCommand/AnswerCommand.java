@@ -35,6 +35,7 @@ import org.apache.commons.configuration2.ex.ConfigurationException;
 
 import org.telegram.bot.api.SendMessages;
 import org.telegram.bot.commands.SendOnErrorOccurred;
+import org.telegram.bot.database.DatabaseException;
 import org.telegram.bot.database.DatabaseManager;
 import org.telegram.bot.messages.ContentMessage;
 import org.telegram.bot.messages.Message;
@@ -48,6 +49,7 @@ import org.telegram.telegrambots.logging.BotLogger;
 
 import javax.xml.crypto.Data;
 import java.util.HashMap;
+import java.util.Optional;
 
 
 /**
@@ -106,10 +108,10 @@ public class AnswerCommand extends BotCommand {
 
 
             String messageText = contentMessage.getContent(user.getId(), false);
-            SendMessages.getInstance().addMessage(contentMessage.calculateHash(), messageText, chat.getId().toString(), absSender);
+            SendMessages.getInstance().addMessage(contentMessage.calculateHash(), messageText, chat.getId().toString(), absSender, Optional.empty(), Optional.empty());
 
             databaseManager.setUserCommandState(user.getId(), Config.Bot.ANSWER_COMMAND_CHOOSE_NUMBER);
-        } catch (Exception e) {
+        } catch (DatabaseException | InterruptedException e) {
             BotLogger.error(LOGTAG, e);
 
             new SendOnErrorOccurred().execute(absSender, user, chat, new String[]{LOGTAG});

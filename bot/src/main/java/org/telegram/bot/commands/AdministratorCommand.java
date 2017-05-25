@@ -33,6 +33,7 @@ package org.telegram.bot.commands;
 
 import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.telegram.bot.api.SendMessages;
+import org.telegram.bot.database.DatabaseException;
 import org.telegram.bot.database.DatabaseManager;
 import org.telegram.bot.messages.Message;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
@@ -44,6 +45,7 @@ import org.telegram.telegrambots.exceptions.TelegramApiException;
 import org.telegram.telegrambots.logging.BotLogger;
 
 import java.io.IOException;
+import java.util.Optional;
 
 
 /**
@@ -80,10 +82,10 @@ public class AdministratorCommand extends BotCommand {
             Message message = new Message(this.getCommandIdentifier() + "_command");
 
             String messageText = message.getContent(user.getId(), true);
-            SendMessages.getInstance().addMessage(message.calculateHash(), messageText, chat.getId().toString(), absSender);
+            SendMessages.getInstance().addMessage(message.calculateHash(), messageText, chat.getId().toString(), absSender, Optional.empty(), Optional.empty());
 
         // catch every error that could occur, log it and inform the user about the occurrence of an error.
-        } catch (Exception e) {
+        } catch (DatabaseException | InterruptedException e) {
             BotLogger.error(LOGTAG, e);
 
             new SendOnErrorOccurred().execute(absSender, user, chat, new String[]{LOGTAG});

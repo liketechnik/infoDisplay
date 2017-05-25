@@ -45,6 +45,8 @@ import org.telegram.telegrambots.bots.commands.BotCommand;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 import org.telegram.telegrambots.logging.BotLogger;
 
+import java.util.Optional;
+
 /**
  * @author Florian Warzecha
  * @version 1.0.1
@@ -93,7 +95,7 @@ public class SendOnErrorOccurred extends BotCommand {
         }
 
         try {
-            SendMessages.getInstance().addMessage(situationalMessage.calculateHash(), messageText, chatId, absSender);
+            SendMessages.getInstance().addMessage(situationalMessage.calculateHash(), messageText, chatId, absSender, Optional.empty(), Optional.empty());
         } catch (InterruptedException e) {
             BotLogger.error(LOGTAG[0], e);
         }

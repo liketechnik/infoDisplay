@@ -34,6 +34,7 @@ package org.telegram.bot.commands.pinPictureCommand;
 
 import org.telegram.bot.api.SendMessages;
 import org.telegram.bot.commands.SendOnErrorOccurred;
+import org.telegram.bot.database.DatabaseException;
 import org.telegram.bot.database.DatabaseManager;
 import org.telegram.bot.messages.Message;
 import org.telegram.bot.messages.SituationalMessage;
@@ -50,6 +51,7 @@ import org.telegram.telegrambots.logging.BotLogger;
 import java.net.URL;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
+import java.util.Optional;
 
 /**
  * @author Florian Warzecha
@@ -92,8 +94,8 @@ public class SendPicture extends BotCommand {
 
             if (arguments[0].equals(Config.Bot.HAS_PHOTO)) {
 
-                databaseManager.createNewDisplayFile(absSender, user.getId(), arguments[1],
-                        Config.Bot.DISPLAY_FILE_TYPE_IMAGE);
+                databaseManager.createNewDisplayFile(absSender, user, arguments[1],
+                        Config.Bot.DISPLAY_FILE_TYPE_IMAGE, arguments[2]);
 
                 databaseManager.setUserCommandState(user.getId(), Config.Bot.NO_COMMAND);
 
@@ -109,8 +111,8 @@ public class SendPicture extends BotCommand {
             }
 
             String messageText = situationalMessage.getContent(user.getId(), addHelp);
-            SendMessages.getInstance().addMessage(situationalMessage.calculateHash(), messageText, chat.getId().toString(), absSender);
-        } catch (Exception e) {
+            SendMessages.getInstance().addMessage(situationalMessage.calculateHash(), messageText, chat.getId().toString(), absSender, Optional.empty(), Optional.empty());
+        } catch (DatabaseException | InterruptedException e) {
             BotLogger.error(LOGTAG, e);
 
             new SendOnErrorOccurred().execute(absSender, user, chat, new String[]{LOGTAG});

@@ -32,6 +32,7 @@
 package org.telegram.bot.commands;
 
 import org.telegram.bot.api.SendMessages;
+import org.telegram.bot.database.DatabaseException;
 import org.telegram.bot.database.DatabaseManager;
 import org.telegram.bot.messages.SituationalContentMessage;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
@@ -43,6 +44,7 @@ import org.telegram.telegrambots.exceptions.TelegramApiException;
 import org.telegram.telegrambots.logging.BotLogger;
 
 import java.util.HashMap;
+import java.util.Optional;
 
 import static org.telegram.bot.Main.getFilteredUsername;
 
@@ -114,9 +116,9 @@ public class StartCommand extends BotCommand {
             situationalContentMessage.setAdditionalContent(additionalContent);
 
             String messageText = situationalContentMessage.getContent(user.getId(), false);
-            SendMessages.getInstance().addMessage(situationalContentMessage.calculateHash(), messageText, chat.getId().toString(), absSender);
+            SendMessages.getInstance().addMessage(situationalContentMessage.calculateHash(), messageText, chat.getId().toString(), absSender, Optional.empty(), Optional.empty());
 
-        } catch (Exception e) {
+        } catch (DatabaseException | InterruptedException e) {
             BotLogger.error(LOGTAG, e);
 
             new SendOnErrorOccurred().execute(absSender, user, chat, new String[]{LOGTAG});

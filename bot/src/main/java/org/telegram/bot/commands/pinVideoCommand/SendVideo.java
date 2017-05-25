@@ -4,6 +4,7 @@ import Config.Bot;
 import org.glassfish.jersey.internal.ServiceFinder;
 import org.telegram.bot.api.SendMessages;
 import org.telegram.bot.commands.SendOnErrorOccurred;
+import org.telegram.bot.database.DatabaseException;
 import org.telegram.bot.database.DatabaseManager;
 import org.telegram.bot.messages.Message;
 import org.telegram.bot.messages.SituationalMessage;
@@ -14,6 +15,8 @@ import org.telegram.telegrambots.bots.AbsSender;
 import org.telegram.telegrambots.bots.commands.BotCommand;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 import org.telegram.telegrambots.logging.BotLogger;
+
+import java.util.Optional;
 
 /**
  * @author liketechnik
@@ -40,8 +43,8 @@ public class SendVideo extends BotCommand {
 
             if (arguments[0].equals(Config.Bot.HAS_VIDEO)) {
 
-                databaseManager.createNewDisplayFile(absSender, user.getId(), arguments[1],
-                        Bot.DISPLAY_FILE_TYPE_VIDEO);
+                databaseManager.createNewDisplayFile(absSender, user, arguments[1],
+                        Bot.DISPLAY_FILE_TYPE_VIDEO, arguments[2]);
 
                 databaseManager.setUserCommandState(user.getId(), Bot.NO_COMMAND);
 
@@ -57,8 +60,8 @@ public class SendVideo extends BotCommand {
             }
 
             String messageText = situationalMessage.getContent(user.getId(), addHelp);
-            SendMessages.getInstance().addMessage(situationalMessage.calculateHash(), messageText, chat.getId().toString(), absSender);
-        } catch (Exception e) {
+            SendMessages.getInstance().addMessage(situationalMessage.calculateHash(), messageText, chat.getId().toString(), absSender, Optional.empty(), Optional.empty());
+        } catch (DatabaseException | InterruptedException e) {
             BotLogger.error(LOGTAG, e);
 
             new SendOnErrorOccurred().execute(absSender, user, chat, new String[]{LOGTAG});
