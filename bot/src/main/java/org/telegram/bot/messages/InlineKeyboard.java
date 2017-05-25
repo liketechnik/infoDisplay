@@ -17,7 +17,7 @@ import java.util.List;
  */
 public class  InlineKeyboard extends Message {
 
-    private List<List<InlineKeyboardButton>> keyboard;
+    List<List<InlineKeyboardButton>> keyboard;
 
     public InlineKeyboard(String command) {
         super(command);
@@ -27,7 +27,7 @@ public class  InlineKeyboard extends Message {
 
     @Override
     public void setMessageName(String command) {
-        super.messageName = command + "_description";
+        super.messageName = command + "_reply_keyboard";
         super.xmlQuarry = "command_message[@command='" + command + "']/reply_keyboard/keyboard_button";
         this.keyboard = null; // force reload
     }
@@ -43,15 +43,13 @@ public class  InlineKeyboard extends Message {
     @Override
     @Deprecated
     public String getContent(int userId, boolean addHelp) {
-        return "No content available!";
+        throw new UnsupportedOperationException("No content available, user getKeyboard()");
     }
 
     public List<List<InlineKeyboardButton>> getKeyboard(int userId) {
 
         if (super.xmlQuarry == null) {
-            BotLogger.error(LOGTAG, "Can't load message text without setting " +
-                    "message name");
-            return null;
+            throw new IllegalStateException("No xml quarry set yet!");
         }
 
         if (this.keyboard == null || this.keyboard.isEmpty()) {
@@ -86,5 +84,11 @@ public class  InlineKeyboard extends Message {
         }
 
         return this.keyboard;
+    }
+
+    @Override
+    @Deprecated
+    public Integer calculateHash() throws InterruptedException {
+        throw new UnsupportedOperationException();
     }
 }
