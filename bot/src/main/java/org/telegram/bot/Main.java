@@ -35,6 +35,7 @@ import org.telegram.bot.api.SendMessages;
 import org.telegram.bot.commands.CancelCommand;
 import org.telegram.bot.commands.HelpCommand;
 import org.telegram.bot.database.DatabaseException;
+import org.telegram.bot.database.SaveThread;
 import org.telegram.telegrambots.ApiContext;
 import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.TelegramBotsApi;
@@ -82,6 +83,7 @@ public class Main {
             TelegramBotsApi telegramBotsApi = createTelegramBotsApi();
             try {
                 BotSession displayBot = telegramBotsApi.registerBot(new DisplayBot());
+                SaveThread.getInstance(new DisplayBot()).start();
                 BotLogger.info(LOGTAG, "Starting bot now!");
                 SendMessages.getInstance().start();
                 while (Files.notExists(FileSystems.getDefault().getPath("./stop"))) {

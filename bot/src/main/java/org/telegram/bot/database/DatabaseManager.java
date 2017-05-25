@@ -42,8 +42,10 @@ import org.apache.commons.configuration2.builder.fluent.Parameters;
 import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.apache.commons.configuration2.sync.ReadWriteSynchronizer;
 import org.apache.commons.io.FileUtils;
+import org.telegram.bot.Main;
 import org.telegram.telegrambots.api.methods.GetFile;
 import org.telegram.telegrambots.api.objects.File;
+import org.telegram.telegrambots.api.objects.User;
 import org.telegram.telegrambots.bots.AbsSender;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 import org.telegram.telegrambots.logging.BotLogger;
@@ -758,7 +760,7 @@ public final class DatabaseManager {
      *
      * @param displayFileName The name of the displayFile to set the description.
      * @param description     The description text.
-     * @see #addDisplayFile(String displayFileName, Integer userId) Create a new displayFile.
+     * @see #addDisplayFile(String displayFileName, User user) Create a new displayFile.
      * @see #setDisplayFileDuration(String displayFileName, int duration) Save the duration for a displayFile.
      * @see #setDisplayFileType(String displayFileName, String type) Save the type of a displayFile.
      */
@@ -773,12 +775,16 @@ public final class DatabaseManager {
         }
     }
 
+    public String getDisplayFileDescription(String displayFileName) throws DatabaseException {
+        return this.getConfiguration(displayFileName).getString(Keys.DISPLAY_FILE_DESCRIPTION);
+    }
+
     /**
      * Set's the display duration of a {@link DisplayFile DisplayFile}.
      *
      * @param displayFileName The name of the displayFile to set the duration.
      * @param duration        The duration in seconds.
-     * @see #addDisplayFile(String displayFileName, Integer userId) Create a new displayFile.
+     * @see #addDisplayFile(String displayFileName, User user) Create a new displayFile.
      * @see #setDisplayFileDescription(String displayFileName, String description) Set the description of a displayFile.
      * @see #setDisplayFileType(String displayFileName, String type) Save the type of a displayFile.
      */
@@ -792,6 +798,10 @@ public final class DatabaseManager {
         }
     }
 
+    public int getDisplayFileDuration(String name) throws DatabaseException {
+        return this.getConfiguration(name).getInt(Keys.DISPLAY_FILE_DURATION_KEY, -1);
+    }
+
     /**
      * Set's the type of a {@link DisplayFile DisplayFile}.
      *
@@ -799,7 +809,7 @@ public final class DatabaseManager {
      * @param type            The type of the displayFile. Can be one of the 'DISPLAY_FILE_TYPE_*' Strings in
      *                        {@link Config.Bot Config.Bot}.
      * @see Config.Bot#DISPLAY_FILE_TYPE_IMAGE
-     * @see #addDisplayFile(String displayFileName, Integer userId) Create a new displayFile.
+     * @see #addDisplayFile(String displayFileName, User user) Create a new displayFile.
      * @see #setDisplayFileDuration(String displayFileName, int duration) Save the duration for a displayFile.
      * @see #setDisplayFileDescription(String displayFileName, String description) Set the description of a displayFile.
      */
@@ -825,9 +835,9 @@ public final class DatabaseManager {
      * @see #setDisplayFileDescription(String displayFileName, String description) Set the description of a displayFile.
      * @see #setDisplayFileType(String displayFileName, String type) Save the type of a displayFile.
      */
-    public void addDisplayFile(String displayFileName, Integer userId) throws DatabaseException {
+    public void addDisplayFile(String displayFileName, User user) throws DatabaseException {
 
-        this.setDisplayFileUploadInfo(displayFileName, userId);
+        this.setDisplayFileUploadInfo(displayFileName, user);
 
         // add image to global image files 'database'
         List<String> displayFiles = getDisplayFiles();
@@ -836,10 +846,10 @@ public final class DatabaseManager {
         this.setDisplayFiles(displayFiles);
 
         // add image to users image files
-        displayFiles = getDisplayFiles(userId);
+        displayFiles = getDisplayFiles(user.getId());
         displayFiles.add(displayFileName);
 
-        this.setDisplayFiles(displayFiles, userId);
+        this.setDisplayFiles(displayFiles, user.getId());
     }
 
     /**
@@ -1090,19 +1100,28 @@ public final class DatabaseManager {
         return getConfiguration(userId).getString(Config.Keys.CURRENT_VIDEO_DESCRIPTION);
     }
 
-    public void setDisplayFileUploadInfo(String title, Integer user) throws DatabaseException {
+    public void setDisplayFileUploadInfo(String title, User user) throws DatabaseException {
         FileBasedConfiguration configuration = getConfiguration(this.getDatabaseDisplayFilePath(title));
+        String userName = Main.getSpecialFilteredUsername(user);
+        Integer userId = user.getId();
         try {
-            configuration.setProperty(Config.Keys.DISPLAY_FILE_UPLOAD_INFO, user);
+            configuration.setProperty(Config.Keys.DISPLAY_FILE_UPLOAD_INFO_NAME, userName);
+            configuration.setProperty(Keys.DISPLAY_FILE_UPLOAD_INFO_ID, userId);
         } catch (NullPointerException e) {
-            configuration.addProperty(Keys.DISPLAY_FILE_UPLOAD_INFO, user);
+            configuration.addProperty(Keys.DISPLAY_FILE_UPLOAD_INFO_NAME, userName);
+            configuration.addProperty(Keys.DISPLAY_FILE_UPLOAD_INFO_ID, userId);
         }
     }
 
-    public Integer getDisplayFileUploadInfo(String title) throws DatabaseException {
+    public String getDisplayFileUploadInfoName(String title) throws DatabaseException {
+        return this.getConfiguration(this.getDatabaseDisplayFilePath(title))
+                .getString(Keys.DISPLAY_FILE_UPLOAD_INFO_NAME);
+    }
+
+    public Integer getDisplayFileUploadInfoId(String title) throws DatabaseException {
         Integer defaultVal = this.getAdminUserId();
         return this.getConfiguration(this.getDatabaseDisplayFilePath(title))
-                .getInteger(Keys.DISPLAY_FILE_UPLOAD_INFO, defaultVal);
+                .getInteger(Keys.DISPLAY_FILE_UPLOAD_INFO_ID, defaultVal);
     }
 
     public void setDisplayFileId(String title, String fileId) throws DatabaseException {
@@ -1118,15 +1137,35 @@ public final class DatabaseManager {
         return this.getConfiguration(title).getString(Keys.DISPLAY_FILE_ID);
     }
 
+    public void setDisplayFileTgType(String displayFileName, String tgType) throws DatabaseException {
+        if (!tgType.equals(Config.Bot.DISPLAY_FILE_TG_TYPE_IMAGE)
+                && !tgType.equals(Bot.DISPLAY_FILE_TG_TYPE_VIDEO)
+                && !tgType.equals(Bot.DISPLAY_FILE_TG_TYPE_AS_DOCUMENT)) {
+            throw new IllegalArgumentException("No known type: " + tgType);
+        }
+
+        FileBasedConfiguration configuration = getConfiguration(displayFileName);
+        try {
+            configuration.setProperty(Config.Keys.DISPLAY_FILE_TG_TYPE_KEY, tgType);
+        } catch (NullPointerException e) {
+            configuration.addProperty(Config.Keys.DISPLAY_FILE_TG_TYPE_KEY, tgType);
+        }
+    }
+
+    public String getDisplayFileTgType(String displayFileName) throws DatabaseException {
+        return this.getConfiguration(displayFileName).getString(Keys.DISPLAY_FILE_TG_TYPE_KEY);
+    }
+
     /**
      * Download the file to display and add it together with its properties to the configuration files.
      *
      * @param absSender Used to get the file to download.
-     * @param userId Used to identify which title, etc. should be set.
+     * @param user Used to identify which title, etc. should be set.
      * @param fileId Used to get the file.
      * @param type Used to differentiate between the download methods.
+     * @param tgType Differentiate between videos, images and images sent as documents.
      */
-    public void createNewDisplayFile(AbsSender absSender, Integer userId, String fileId, String type) throws DatabaseException {
+    public void createNewDisplayFile(AbsSender absSender, User user, String fileId, String type, String tgType) throws DatabaseException {
         String urlParams = null;
         GetFile getFileRequest = new GetFile();
         URL fileUrl = null;
@@ -1134,7 +1173,7 @@ public final class DatabaseManager {
         try {
             switch (type) {
                 case Bot.DISPLAY_FILE_TYPE_IMAGE: {
-                    String pictureTitle = this.getCurrentPictureTitle(userId);
+                    String pictureTitle = this.getCurrentPictureTitle(user.getId());
 
                     getFileRequest.setFileId(fileId);
 
@@ -1149,14 +1188,15 @@ public final class DatabaseManager {
 
                     this.createConfigurationFile(this.getDatabaseDisplayFilePath(pictureTitle)); //io
                     this.setDisplayFileType(pictureTitle, Bot.DISPLAY_FILE_TYPE_IMAGE);
-                    this.setDisplayFileDescription(pictureTitle, this.getCurrentPictureDescription(userId));
-                    this.setDisplayFileDuration(pictureTitle, this.getCurrentPictureDuration(userId));
+                    this.setDisplayFileTgType(pictureTitle, tgType);
+                    this.setDisplayFileDescription(pictureTitle, this.getCurrentPictureDescription(user.getId()));
+                    this.setDisplayFileDuration(pictureTitle, this.getCurrentPictureDuration(user.getId()));
                     this.setDisplayFileId(pictureTitle, fileId);
-                    this.addDisplayFile(pictureTitle, userId);
+                    this.addDisplayFile(pictureTitle, user);
                     break;
                 }
                 case Bot.DISPLAY_FILE_TYPE_VIDEO: {
-                    String videoTitle = this.getCurrentVideoTitle(userId);
+                    String videoTitle = this.getCurrentVideoTitle(user.getId());
 
                     getFileRequest.setFileId(fileId);
 
@@ -1171,9 +1211,10 @@ public final class DatabaseManager {
 
                     this.createConfigurationFile(this.getDatabaseDisplayFilePath(videoTitle));
                     this.setDisplayFileType(videoTitle, Bot.DISPLAY_FILE_TYPE_VIDEO);
-                    this.setDisplayFileDescription(videoTitle, this.getCurrentVideoDescription(userId));
+                    this.setDisplayFileTgType(videoTitle, tgType);
+                    this.setDisplayFileDescription(videoTitle, this.getCurrentVideoDescription(user.getId()));
                     this.setDisplayFileId(videoTitle, fileId);
-                    this.addDisplayFile(videoTitle, userId);
+                    this.addDisplayFile(videoTitle, user);
                     break;
                 }
                 default:
@@ -1194,7 +1235,7 @@ public final class DatabaseManager {
      * @see #deleteDisplayFile(Integer, String) The method that is deleting the display files.
      */
     public void deleteDisplayFile(String name) throws DatabaseException {
-        this.deleteDisplayFile(this.getDisplayFileUploadInfo(name), name);
+        this.deleteDisplayFile(this.getDisplayFileUploadInfoId(name), name);
     }
 
     /**
