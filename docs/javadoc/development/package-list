@@ -1,0 +1,14 @@
+Config
+DisplayFile
+liketechnik.InfoDisplay
+org.telegram.bot
+org.telegram.bot.api
+org.telegram.bot.commands
+org.telegram.bot.commands.answerCommand
+org.telegram.bot.commands.askCommand
+org.telegram.bot.commands.deleteMediaCommand
+org.telegram.bot.commands.pinPictureCommand
+org.telegram.bot.commands.pinVideoCommand
+org.telegram.bot.commands.setLanguageCommand
+org.telegram.bot.database
+org.telegram.bot.messages
