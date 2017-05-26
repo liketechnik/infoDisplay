@@ -45,16 +45,28 @@ import org.telegram.telegrambots.bots.commands.BotCommand
 import org.telegram.telegrambots.logging.BotLogger
 import java.util.*
 
+/**
+ * The identifier of this command.
+ */
 private val commandIdentifier: String = "deleted_media"
+/**
+ *  A short description of this command.
+ */
 private val description: String = "Send confirmation on taken actions of a user while deleting a media file."
+
+/**
+ * Describes which actions this command can do. It allows easy distinguishing between those for the [org.telegram.bot.CallbackParser].
+ */
 internal enum class FUNCTIONS {
     delete, cancel
 }
 
 /**
- * @author liketechnik
+ * @author Florian Warzecha
  * @version 1.0
- * @date 24 of Mai 2017
+ * @since 2.0.0
+ * @date 24 of May 2017
+ * @see DeleteMediaCommand
  */
 class DeletedMediaCommand : BotCommand(commandIdentifier, description) {
 
@@ -62,10 +74,20 @@ class DeletedMediaCommand : BotCommand(commandIdentifier, description) {
     private val packageName: String = getPackageName(this)
     private val commandName: String = getCommandName(this)
 
+    /**
+     * Contains the situations defined in the language files.
+     */
     private enum class SITUATIONS {
         yes, cancel
     }
 
+    /**
+     * Send the user either a message with the deleted media file and a confirmation of the deletion or a message
+     * stating that nothing has been deleted. These two cases have their own methods, here is only checked which is executed
+     * with which parameters.
+     * @see cancel
+     * @see delete
+     */
     override fun execute(absSender: AbsSender, user: User, chat: Chat, arguments: Array<out String>) {
         try {
             if (arguments[0] == FUNCTIONS.delete.name) {
@@ -97,6 +119,9 @@ class DeletedMediaCommand : BotCommand(commandIdentifier, description) {
         }
     }
 
+    /**
+     * Inform the user that nothing was deleted.
+     */
     private fun cancel(absSender: AbsSender, user: User, chat: Chat, arguments: Array<out String>) {
         val message: SituationalMessage = SituationalMessage(commandName)
         message.setMessageName(packageName, commandName, SITUATIONS.cancel.name)
@@ -107,6 +132,9 @@ class DeletedMediaCommand : BotCommand(commandIdentifier, description) {
         SendMessages.getInstance().addMessage(message.calculateHash(), messageText, chat.id.toString(), absSender, Optional.empty(), Optional.empty())
     }
 
+    /**
+     * Tell the user that the media file was deleted. The file is send together with this statement.
+     */
     private fun delete(absSender: AbsSender, user: User, chat: Chat, arguments: Array<out String>) {
         val databaseManager = DatabaseManager.getInstance()
 

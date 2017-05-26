@@ -43,18 +43,29 @@ import org.telegram.telegrambots.logging.BotLogger;
 import java.util.Optional;
 
 /**
- * @author liketechnik
+ * Send a short text about this bot.
+ * @author Florian Warzecha
  * @version 1.0
- * @date 19 of Dezember 2016
+ * @date 19 of December 2016
  */
 public class  AboutCommand extends BotCommand {
 
     public static final String LOGTAG = "ABOUTCOMMAND";
 
+    /**
+     * Set identifier and a short description of this command.
+     */
     public AboutCommand() {
         super("about", "Send information about this bot.");
     }
 
+    /**
+     * Send the user the about information from the language files.
+     * @param absSender
+     * @param user
+     * @param chat
+     * @param arguments
+     */
     @Override
     public void execute(AbsSender absSender, User user, Chat chat, String[] arguments) {
         try {

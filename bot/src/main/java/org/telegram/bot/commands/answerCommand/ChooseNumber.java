@@ -46,11 +46,10 @@ import java.util.HashMap;
 import java.util.Optional;
 
 /**
+ * This command gets executed if a user executed the {@link AnswerCommand}. It sends the user the requested question.
  * @author Florian Warzecha
  * @version 1.0.1
  * @date 01 of November of 2016
- *
- * This command gets executed if a user executed the {@link AnswerCommand}. It sends the user the requested question.
  */
 public class ChooseNumber extends BotCommand {
 

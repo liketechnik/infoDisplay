@@ -32,20 +32,37 @@
 package org.telegram.bot.messages;
 
 /**
- * @author liketechnik
+ * A combination of {@link InlineKeyboard} and {@link SituationalMessage} that combines their features.
+ * @author Florian Warzecha
  * @version 1.0
- * @date 18 of Mai 2017
+ * @date 18 of May 2017
+ * @see InlineKeyboard
+ * @see SituationalMessage
  */
 public class SituationalInlineKeyboard extends InlineKeyboard {
 
     private String situation;
 
+    /**
+     * Initialize a new {@code SituationalInlineKeyboard}.
+     * @param command The command the keyboard belongs to.
+     * @param situation The situation the command is in.
+     * @see SituationalMessage#SituationalMessage(String)
+     * @see InlineKeyboard#InlineKeyboard(String)
+     * @see #setMessageName(String, String)
+     * @see #setMessageName(String, String, String)
+     */
     public SituationalInlineKeyboard(String command, String situation) {
         super(command);
         this.situation = situation;
     }
 
-
+    /**
+     * Handle the xmlQuarry and set the name of the message.
+     * @param command Command the keyboard gets requested for.
+     * @param situation The situation the command is in.
+     * @see #setMessageName(String, String, String)
+     */
     public void setMessageName(String command, String situation) {
         super.messageName = command + "_reply_keyboard";
         this.situation = situation;
@@ -54,6 +71,12 @@ public class SituationalInlineKeyboard extends InlineKeyboard {
         super.keyboard = null; // force reload
     }
 
+    /**
+     * Handle the xmlQuarry and set the name of the message.
+     * @param commandPackage The package the command belongs to.
+     * @param command The command the keyboard gets requested for.
+     * @param situation The situation the command is in.
+     */
     public void setMessageName(String commandPackage, String command, String situation) {
         super.messageName = command + "_reply_keyboard";
         this.situation = situation;
@@ -64,6 +87,10 @@ public class SituationalInlineKeyboard extends InlineKeyboard {
         super.keyboard = null; // force reload
     }
 
+    /**
+     * Get the situation the command is in.
+     * @return The situation set by {@link #setMessageName(String, String)} or {@link #setMessageName(String, String, String)}
+     */
     public String getSituation() {
         if (this.situation != null) {
             return this.situation;

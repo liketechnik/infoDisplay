@@ -44,7 +44,8 @@ import org.telegram.telegrambots.logging.BotLogger;
 import java.util.Optional;
 
 /**
- * @author liketechnik
+ * Let the user change the language of the messages from the bot.
+ * @author Florian Warzecha
  * @version 1.0
  * @date 24 of March 2017
  */
@@ -52,10 +53,20 @@ public class SetLanguageCommand extends BotCommand {
 
     public static final String LOGTAG = "SETLANGUAGECOMMAND";
 
+    /**
+     * Set identifier and a short description of this command.
+     */
     public SetLanguageCommand() {
         super("set_language", "Choose the language the bot uses to respond.");
     }
 
+    /**
+     * Send a keyboard to the user which presents him the available languages.
+     * @param absSender
+     * @param user
+     * @param chat
+     * @param arguments
+     */
     @Override
     public void execute(AbsSender absSender, User user, Chat chat, String[] arguments) {
 

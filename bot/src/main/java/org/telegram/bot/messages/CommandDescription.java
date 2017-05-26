@@ -32,18 +32,33 @@
 package org.telegram.bot.messages;
 
 /**
- * @author liketechnik
- * @version ${VERSION}
- * @date 24 of Februar 2017
+ * Wrapper around {@link Message} to get the command description in a users foreign language.
+ * It works by changing the xmlQuarries from the standard content path to the description path in the xml files.
+ * @author Florian Warzecha
+ * @version 1.0
+ * @date 24 of February 2017
+ * @see Message
  */
 public class CommandDescription extends Message {
 
+    /**
+     * Initialize a new {@link CommandDescription}.
+     * @param command Command the description gets requested for.
+     * @see org.telegram.bot.messages.Message#Message(String)
+     * @see #setMessageName(String)
+     * @see #setMessageName(String, String)
+     */
     public CommandDescription(String command) {
         super(command);
         super.messageName = command + "_description";
         super.xmlQuarry = "command_message[@command='" + command + "']/command_description";
     }
 
+    /**
+     * Handles the xmlQuarry and set the name of the description.
+     * @param command Command the description gets requested for.
+     * @see #setMessageName(String, String)
+     */
     @Override
     public void setMessageName(String command) {
         super.messageName = command + "_description";
@@ -51,6 +66,12 @@ public class CommandDescription extends Message {
         this.message = null; // force reload of the message
     }
 
+    /**
+     * Handles the xmlQuarry and sets the name of the message.
+     * @param commandPackage The package of commands the {@code command} belongs to.
+     * @param command Command the description gets requested for.
+     * @see #setMessageName(String)
+     */
     @Override
     public void setMessageName(String commandPackage, String command) {
         super.messageName = command + "_description";

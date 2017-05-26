@@ -31,15 +31,19 @@
 
 package org.telegram.bot.database;
 
+import org.telegram.bot.DisplayBot;
 import org.telegram.bot.api.TelegramLongPollingThreadBot;
 import org.telegram.telegrambots.logging.BotLogger;
 
 import java.util.concurrent.TimeUnit;
 
 /**
- * @author liketechnik
+ * A {@code Thread} that runs every five minutes the save method of the database manager until the bot starts closing.
+ * This is done to prevent data loss in case of interruption of the bot.
+ * @author Florian Warzecha
  * @version 1.0
- * @date 17 of Mai 2017
+ * @date 17 of May 2017
+ * @see DatabaseManager#saveBuilders() The save method.
  */
 public class SaveThread extends Thread {
 
@@ -49,11 +53,23 @@ public class SaveThread extends Thread {
 
     private final TelegramLongPollingThreadBot bot;
 
+    /**
+     * Initialize as daemon and set to which bot the {@code Thread} belong.
+     * @param bot The bot that the {@code Thread} saves data for. Needed to be able to realize that the bot shuts down.
+     * @see DisplayBot#onClosing()
+     * @see TelegramLongPollingThreadBot#onClosing()
+     */
     private SaveThread(TelegramLongPollingThreadBot bot) {
         setDaemon(true);
         this.bot = bot;
     }
 
+    /**
+     * Make sure there is only one instance of this saving thread in one program.
+     * @param bot Needed to call the constructor.
+     * @return An instance of this class.
+     * @see #SaveThread(TelegramLongPollingThreadBot)
+     */
     public static SaveThread getInstance(TelegramLongPollingThreadBot bot) {
         final SaveThread currentInstance;
         if (instance == null) {
@@ -69,6 +85,10 @@ public class SaveThread extends Thread {
         return currentInstance;
     }
 
+    /**
+     * Wait five minutes, call save method, wait again, and so on, and so on....
+     * @see DatabaseManager#saveBuilders()
+     */
     @Override
     public void run() {
         while (!bot.isClosing()) {

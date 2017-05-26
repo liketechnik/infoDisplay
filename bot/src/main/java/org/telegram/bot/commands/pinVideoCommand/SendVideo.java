@@ -46,18 +46,30 @@ import org.telegram.telegrambots.logging.BotLogger;
 import java.util.Optional;
 
 /**
- * @author liketechnik
- * @version ${VERSION}
- * @date 07 of Februar 2017
+ * @author Florian Warzecha
+ * @version 1.2.1
+ * @date 07 of February 2017
+ * @see PinVideoCommand
  */
 public class SendVideo extends BotCommand {
 
     public static final String LOGTAG = "PINVIDEOCOMMAND_SENDVIDEO";
 
+    /**
+     * Set identifier and a short description of the command.
+     */
     public SendVideo() {
         super("send_video", "Save a new video as displayFile.");
     }
 
+    /**
+     * Save the video from the user and set the settings of the new media file according to the parameters got in
+     * the uploading process.
+     * @param absSender
+     * @param user
+     * @param chat
+     * @param arguments
+     */
     @Override
     public void execute(AbsSender absSender, User user, Chat chat, String[] arguments) {
 

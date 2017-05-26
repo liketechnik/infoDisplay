@@ -63,12 +63,11 @@ import java.util.concurrent.ConcurrentHashMap;
 import static org.telegram.bot.Main.mergeExceptions;
 
 /**
+ * This class accesses the database.
+ * It makes sure there is only one {@link #instance} of it at once to pretend IO errors from happening.
  * @author Florian Warzecha
  * @version 1.0.1
  * @date 22 of October of 2016
- * <p>
- * This class accesses the database.
- * It makes sure there is only one {@link #instance} of it at once to pretend IO errors from happening.
  */
 public final class DatabaseManager {
 
@@ -80,6 +79,7 @@ public final class DatabaseManager {
      * @see #getInstance()
      */
     private static volatile DatabaseManager instance;
+
     /**
      * Map that saves all builders used by the database, so when stopping all files can be saved. (Not sure if it is a
      * good idea to keep all that builders in memory all the time.)
@@ -144,6 +144,9 @@ public final class DatabaseManager {
         return currentInstance;
     }
 
+    /**
+     * Takes all builders from {@link #builders} and calls their save method.
+     */
     public synchronized void saveBuilders() {
         BotLogger.info(LOGTAG, "Saving all builders.");
         for (FileBasedConfigurationBuilder builder : this.builders.values()) {
@@ -1100,6 +1103,14 @@ public final class DatabaseManager {
         return getConfiguration(userId).getString(Config.Keys.CURRENT_VIDEO_DESCRIPTION);
     }
 
+    /**
+     * Set the upload information of a user, e. g. its id and username.
+     * The username is retrieved from {@link User} by {@link Main#getSpecialFilteredUsername(User)}
+     * @param title The name of the display file that is modified.
+     * @param user The {@link User} who uploaded the display file and whose information is used for the display file.
+     * @see #getDisplayFileUploadInfoId(String)
+     * @see #getDisplayFileUploadInfoName(String)
+     */
     public void setDisplayFileUploadInfo(String title, User user) throws DatabaseException {
         FileBasedConfiguration configuration = getConfiguration(this.getDatabaseDisplayFilePath(title));
         String userName = Main.getSpecialFilteredUsername(user);
@@ -1113,17 +1124,37 @@ public final class DatabaseManager {
         }
     }
 
+    /**
+     * Get the name of the user who uploaded the specified display file.
+     * @param title The title of the display file where the name is looked up.
+     * @return The name of the user who uploaded the display file.
+     * @see #getDisplayFileUploadInfoName(String)
+     * @see #setDisplayFileUploadInfo(String, User)
+     */
     public String getDisplayFileUploadInfoName(String title) throws DatabaseException {
         return this.getConfiguration(this.getDatabaseDisplayFilePath(title))
                 .getString(Keys.DISPLAY_FILE_UPLOAD_INFO_NAME);
     }
 
+    /**
+     * Get the id of the user who uploaded the specified display file.
+     * @param title The title of the display file where the id is looked up.
+     * @return The id of the user who uploaded the display file.
+     * @see #getDisplayFileUploadInfoName(String)
+     * @see #setDisplayFileUploadInfo(String, User)
+     */
     public Integer getDisplayFileUploadInfoId(String title) throws DatabaseException {
         Integer defaultVal = this.getAdminUserId();
         return this.getConfiguration(this.getDatabaseDisplayFilePath(title))
                 .getInteger(Keys.DISPLAY_FILE_UPLOAD_INFO_ID, defaultVal);
     }
 
+    /**
+     * Set the Telegram fileID of the media that was saved as a display file.
+     * @param title The title of the display file.
+     * @param fileId The Telegram fileID that links to the media that was saved as specified display file.
+     * @see #getDisplayFileId(String)
+     */
     public void setDisplayFileId(String title, String fileId) throws DatabaseException {
         FileBasedConfiguration configuration = this.getConfiguration(title);
         try {
@@ -1133,10 +1164,25 @@ public final class DatabaseManager {
         }
     }
 
+    /**
+     * Get the Telegram fileId of the media that was saved as a display file.
+     * @param title The title of the display file.
+     * @return The Telegram fileId that link to the media that was saved as specified display file.
+     * @see #setDisplayFileId(String, String)
+     */
     public String getDisplayFileId(String title) throws DatabaseException {
         return this.getConfiguration(title).getString(Keys.DISPLAY_FILE_ID);
     }
 
+    /**
+     * Set the type of message the media was sent over Telegram.
+     * Possible types are {@link Config.Bot#DISPLAY_FILE_TG_TYPE_AS_DOCUMENT} if it was sent as a document,
+     * {@link Config.Bot#DISPLAY_FILE_TG_TYPE_IMAGE} if it was sent as an image or
+     * {@link Config.Bot#DISPLAY_FILE_TG_TYPE_VIDEO} if it was sent as a video.
+     * @param displayFileName The title of the display file.
+     * @param tgType The type of the message that contained the media saved as specified display file.
+     * @see #getDisplayFileTgType(String)
+     */
     public void setDisplayFileTgType(String displayFileName, String tgType) throws DatabaseException {
         if (!tgType.equals(Config.Bot.DISPLAY_FILE_TG_TYPE_IMAGE)
                 && !tgType.equals(Bot.DISPLAY_FILE_TG_TYPE_VIDEO)
@@ -1152,6 +1198,12 @@ public final class DatabaseManager {
         }
     }
 
+    /**
+     * Get the type of message the media was sent over Telegram.
+     * @param displayFileName The title of the display file.
+     * @return The type of the message that contained the media saves as specified display file.
+     * @see #setDisplayFileId(String, String) Possible values for the types are explained here.
+     */
     public String getDisplayFileTgType(String displayFileName) throws DatabaseException {
         return this.getConfiguration(displayFileName).getString(Keys.DISPLAY_FILE_TG_TYPE_KEY);
     }

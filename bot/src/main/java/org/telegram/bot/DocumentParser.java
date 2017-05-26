@@ -48,6 +48,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * A {@link Parser} specialized for documents.
  * @author liketechnik
  * @version 1.0
  * @date 14 of April 2017
@@ -56,6 +57,11 @@ public class DocumentParser extends Parser {
 
     public final String LOGTAG = "DOCUMENTPARSER";
 
+    /**
+     * Create a new parser that can parse the {@code update} and then run a command from the {@code bot}.
+     * @param update The update to parse.
+     * @param bot The bot whose commands are used.
+     */
     public DocumentParser(Update update, TelegramLongPollingThreadBot bot) {
         super(update, bot);
     }
@@ -129,16 +135,12 @@ public class DocumentParser extends Parser {
         }
     }
 
+    /**
+     * A help method to check if a message contains a photo.
+     * @param message The message to check.
+     * @return {@code true} if the message contains an image, false otherwise.
+     */
     private boolean hasPhoto(Message message) {
-//        if (message.hasDocument() || message.hasPhoto()) {
-//            if (message.getDocument().getMimeType().contains("image") || message.hasPhoto()) {
-//                return true;
-//            } else {
-//                return false;
-//            }
-//        } else {
-//            return false;
-//        }
         if (message.hasDocument()) {
             if (message.getDocument().getMimeType().contains("image")) {
                 return true;
@@ -149,16 +151,12 @@ public class DocumentParser extends Parser {
         return false;
     }
 
+    /**
+     * A help method to check if a message contains a video.
+     * @param message The message to check.
+     * @return {@code true} if the message contains an video, false otherwise.
+     */
     private boolean hasVideo(Message message) {
-//        if (message.hasDocument() || message.getVideo() != null) {
-//            if (message.getDocument().getMimeType().contains("video") || message.getVideo() != null) {
-//                return true;
-//            } else {
-//                return false;
-//            }
-//        } else {
-//            return false;
-//        }
         if (message.hasDocument()) {
             if (message.getDocument().getMimeType().contains("video")) {
                 return true;

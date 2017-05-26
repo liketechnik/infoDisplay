@@ -47,11 +47,10 @@ import java.util.Optional;
 import static org.telegram.bot.Main.getSpecialFilteredUsername;
 
 /**
+ * This commands gets executed if a user sends '/register'.
  * @author Florian Warzecha
  * @version 1.0.1
  * @date 24 of October of 2016
- *
- * This commands gets executed if a user sends '/register'.
  */
 public class RegisterCommand extends BotCommand {
 

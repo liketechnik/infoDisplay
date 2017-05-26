@@ -48,7 +48,12 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
 /**
- * @author liketechnik
+ * Accepts new messages and adds them to its internal send-queue.
+ *
+ * This class sends only one message per second so Telegram API limits are not exceeded.
+ * It also automates the process of setting up a new message object.
+ *
+ * @author Florian Warzecha
  * @version 1.0
  * @date 17 of April 2017
  */
@@ -59,10 +64,16 @@ public class SendMessages extends Thread {
     private static volatile SendMessages instance;
     private final Object synchronizer = new Object();
 
-    public enum types {
+    /**
+     * Possible types of messages
+     */
+    private enum types {
         send_message, edit_message, document_message, delete_message, image_message, video_message
     }
 
+    /**
+     * Demonize and initialize all HashMaps and queues.
+     */
     private SendMessages() {
         setDaemon(true);
         messageHashes = new LinkedBlockingQueue<>();
@@ -111,6 +122,9 @@ public class SendMessages extends Thread {
 
     //TODO user ReplyKeyboardMarkup instead of InlineKeyboardMarkup to add keyboards to be able to specify resize_keyboard and one_time_keyboard options
 
+    /**
+     * Get a new message hash from the queue, determine the message type and send the message according to that.
+     */
     @Override
     public void run() {
         while (true) {
@@ -234,6 +248,16 @@ public class SendMessages extends Thread {
         }
     }
 
+    /**
+     * Add a new {@link org.telegram.telegrambots.api.objects.Message} to the queue of messages that are going to be send.
+     * @param messageHash A unique hash of the message text. Used to identify which parameter belongs to which message.
+     * @param message The message text.
+     * @param chatId The id of the chat the message is send in.
+     * @param absSender The {@link AbsSender} with which the message is send.
+     * @param enableMarkdown (Optional) If the message text should be treated as markdown formatted text.
+     * @param inlineKeyboard (Optional) An {@link InlineKeyboardMarkup} appended to the message.
+     * @see SendMessage
+     */
     public void addMessage(Integer messageHash, String message, String chatId, AbsSender absSender, Optional<Boolean> enableMarkdown, Optional<InlineKeyboardMarkup> inlineKeyboard) {
         this.messages.putIfAbsent(messageHash, message);
         this.chatIds.putIfAbsent(messageHash, chatId);
@@ -246,6 +270,17 @@ public class SendMessages extends Thread {
         this.messageHashes.add(messageHash);
     }
 
+    /**
+     * Adds a new {@link EditMessageText} to the queue of messages that are going to be send.
+     * @param messageHash A unique hash of the message text. Used to identify which parameter belongs to which message.
+     * @param message The new message text of the message.
+     * @param chatId The id of the chat the message is in.
+     * @param absSender The {@link AbsSender} with which the messages is edited.
+     * @param messageID The id of the message that is changed.
+     * @param enableMarkdown (Optional) If the message text should be treated as markdown formatted text.
+     * @param inlineKeyboard (Optional) An {@link InlineKeyboardMarkup} appended to the message.
+     * @see EditMessageText
+     */
     public void addEditMessage(Integer messageHash, String message, String chatId, AbsSender absSender, Integer messageID, Optional<Boolean> enableMarkdown, Optional<InlineKeyboardMarkup> inlineKeyboard) {
         this.messages.putIfAbsent(messageHash, message);
         this.chatIds.putIfAbsent(messageHash, chatId);
@@ -259,6 +294,16 @@ public class SendMessages extends Thread {
         this.messageHashes.add(messageHash);
     }
 
+    /**
+     * Adds a new {@link SendDocument} to the queue of messages that are going to be send.
+     * @param messageHash A unique hash of the message text. Used to identify which parameter belongs to which message.
+     * @param caption The caption shown below the document.
+     * @param chatId The id of the chat the message is send to.
+     * @param absSender The {@link AbsSender} with which the message is send.
+     * @param fileId The Telegram fileID of the document that is send.
+     * @param inlineKeyboard (Optional) An {@link InlineKeyboardMarkup} appended to the message.
+     * @see SendDocument
+     */
     public void addDocumentMessage(Integer messageHash, String caption, String chatId, AbsSender absSender, String fileId, Optional<InlineKeyboardMarkup> inlineKeyboard) {
         this.messages.putIfAbsent(messageHash, caption);
         this.chatIds.putIfAbsent(messageHash, chatId);
@@ -271,6 +316,16 @@ public class SendMessages extends Thread {
         this.messageHashes.add(messageHash);
     }
 
+    /**
+     * Adds a new {@link SendPhoto} to the queue of messages that are going to be send.
+     * @param messsageHash A unique hash of the message caption. Used to identify which parameter belongs to which message.
+     * @param caption The caption shown below the image.
+     * @param chatId The id of the chat the message is send to.
+     * @param absSender The {@link AbsSender} with which the message is send.
+     * @param fileId The Telegram fileID of the image that is send.
+     * @param inlineKeyboard (Optional) An {@link InlineKeyboardMarkup} appended to the message.
+     * @see SendPhoto
+     */
     public void addImageMessage(Integer messsageHash, String caption, String chatId, AbsSender absSender, String fileId, Optional<InlineKeyboardMarkup> inlineKeyboard) {
         this.messages.putIfAbsent(messsageHash, caption);
         this.chatIds.putIfAbsent(messsageHash, chatId);
@@ -283,6 +338,16 @@ public class SendMessages extends Thread {
         this.messageHashes.add(messsageHash);
     }
 
+    /**
+     * Adds a new {@link SendVideo} to the queue of messages that are going to be send.
+     * @param messsageHash A unique hash of the message caption. Used to identify which parameter belong to which message.
+     * @param caption The caption shown below the video.
+     * @param chatId The id of the chat the message is send to.
+     * @param absSender The {@link AbsSender} with which the message is send.
+     * @param fileId The Telegram fileID of the video that is send.
+     * @param inlineKeyboard (Optional) An {@link InlineKeyboardMarkup} appended to the message.
+     * @see SendVideo
+     */
     public void addVideoMessage(Integer messsageHash, String caption, String chatId, AbsSender absSender, String fileId, Optional<InlineKeyboardMarkup> inlineKeyboard) {
         this.messages.putIfAbsent(messsageHash, caption);
         this.chatIds.putIfAbsent(messsageHash, chatId);
@@ -295,6 +360,13 @@ public class SendMessages extends Thread {
         this.messageHashes.add(messsageHash);
     }
 
+    /**
+     * Adds a {@link DeleteMessage} to the queue of messages that are going to be send.
+     * @param chatId The id of the chat the message is in.
+     * @param messageId The id of the message that should be deleted.
+     * @param absSender The {@link AbsSender} with which the message should be deleted.
+     * @see DeleteMessage
+     */
     public void addDeleteMessage(String chatId, Integer messageId, AbsSender absSender) {
         Integer messageHash;
         synchronized (this.synchronizer) {

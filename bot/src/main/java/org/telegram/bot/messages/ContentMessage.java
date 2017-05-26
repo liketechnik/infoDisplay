@@ -37,26 +37,41 @@ import org.apache.commons.configuration2.XMLConfiguration;
 import java.util.*;
 
 /**
- * @author liketechnik
+ * An extended {@link Message} that allows replacing of predefined Strings in the language files with modular content
+ * via {@code HashMap}s.
+ * @author Florian Warzecha
  * @version 1.2.1
- * @date 09 of Februar 2017
+ * @date 09 of February 2017
+ * @see SituationalContentMessage
  */
 public class ContentMessage extends Message {
     private HashMap<String, String> additionalContent;
 
     /**
      * Initialize new Message object.
-     *
      * @param command Command the message gets requested for.
+     * @see org.telegram.bot.messages.Message#Message(String)
+     * @see #setMessageName(String)
+     * @see #setMessageName(String, String)
      */
     public ContentMessage(String command) {
         super(command);
     }
 
+    /**
+     * Set which Strings from the language files should be replaced with which content.
+     * @param addition A {@code HashMap} containing mappings for the strings from the language files to their 'real' content.
+     * @see #getAdditionalContent()
+     */
     public void setAdditionalContent(HashMap<String, String> addition) {
         this.additionalContent = addition;
     }
 
+    /**
+     * Get the {@code HashMap} containing the mappings from predefined strings to their modular content.
+     * @return The {@code HashMap} with specified mappings.
+     * @see #setAdditionalContent(HashMap)
+     */
     public Map<String, String> getAdditionalContent() {
         if (this.additionalContent != null) {
             return this.additionalContent;
@@ -65,6 +80,16 @@ public class ContentMessage extends Message {
         }
     }
 
+    /**
+     * Get the content from the language file and replace the specified strings with their modular content.
+     * @param userId Get the language from a users config file.
+     * @param addHelp If a link to the help command should be provided at the end
+     *                of a message.
+     * @return The text from the language file in a users foreign language. The specially marked strings are replaced
+     * by their modular mapping.
+     * @see #setAdditionalContent(HashMap)
+     * @see org.telegram.bot.messages.Message#getContent(int, boolean)
+     */
     public String getContent(int userId, boolean addHelp) {
         if (super.xmlQuarry == null) {
             throw new IllegalStateException("No xml quarry set yet!");
@@ -72,8 +97,6 @@ public class ContentMessage extends Message {
 
         if (super.message == null) {
             XMLConfiguration config = super.getXmlConfiguration(userId);
-//            super.message = config.getString(super.xmlQuarry).replaceAll("/n>", "\n")
-//                .replaceAll("/additionalContent>", this.additionalContent);
             super.message = config.getString(super.xmlQuarry).replaceAll("/n>", "\n");
 
             if (this.additionalContent != null) {

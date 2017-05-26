@@ -47,11 +47,10 @@ import java.util.Optional;
 
 
 /**
+ * This command lets users ask questions to the administrator of this bot.
  * @author Florian Warzecha
  * @version 1.0.1
  * @date 24 of October of 2016
- *
- * This command lets users ask questions to the administrator of this bot.
  */
 public class AskCommand extends BotCommand {
 

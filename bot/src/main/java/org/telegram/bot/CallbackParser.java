@@ -43,6 +43,7 @@ import org.telegram.telegrambots.logging.BotLogger;
 import java.lang.reflect.Constructor;
 
 /**
+ * A {@link Parser} specialized for callbacks.
  * @author liketechnik
  * @version 1.0
  * @date 14 of April 2017
@@ -51,6 +52,11 @@ public class CallbackParser extends Parser {
 
     public final String LOGTAG = "CALLBACKPARSER";
 
+    /**
+     * Create a new parser that can parse the {@code update} and then run a command from the {@code bot}.
+     * @param update The update to parse.
+     * @param bot The bot whose commands are used.
+     */
     public CallbackParser(Update update, TelegramLongPollingThreadBot bot) {
         super(update, bot);
     }
@@ -62,20 +68,6 @@ public class CallbackParser extends Parser {
         this.chat = callbackQuery.getMessage().getChat();
 
         try {
-
-//            if (userCommandState.equals(Bot.SET_LANGUAGE_COMMAND)) {
-//                if (callbackQuery.getData().equals(CallbackData.SET_LANGUAGE_DEFAULT)
-//                        || callbackQuery.getData().equals(CallbackData.SET_LANGUAGE_GERMAN)
-//                        || callbackQuery.getData().equals(CallbackData.SET_LANGUAGE_ENGLISH)) {
-//                    this.arguments = new String[] {callbackQuery.getData(),
-//                            callbackQuery.getMessage().getMessageId().toString()};
-//                    this.commandConstructor = (Constructor) ChangeLanguage.class.getConstructor();
-//                }
-//                return false;
-//            } else {
-//                return false;
-//            }
-//            return true;
             String text = callbackQuery.getData();
 
             for (CallbackData.SET_LANGUAGE language : CallbackData.SET_LANGUAGE.values()) {

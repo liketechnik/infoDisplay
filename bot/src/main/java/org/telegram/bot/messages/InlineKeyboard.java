@@ -38,20 +38,35 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Wrapper around {@link Message} to get the keyboard text from the language files in a users foreign language.
+ * It works by changing the xmlQuarries from the usual content path to keyboard path.
  * @author liketechnik
- * @version ${VERSION}
- * @date 24 of März 2017
+ * @version 1.0
+ * @date 24 of March 2017
+ * @see org.telegram.bot.messages.Message
  */
 public class  InlineKeyboard extends Message {
 
     List<List<InlineKeyboardButton>> keyboard;
 
+    /**
+     * Initialize a new {@code InlineKeyboard}.
+     * @param command Command the keyboard belongs to.
+     * @see org.telegram.bot.messages.Message#Message(String)
+     * @see #setMessageName(String)
+     * @see #setMessageName(String, String)
+     */
     public InlineKeyboard(String command) {
         super(command);
         super.messageName = command + "_reply_keyboard";
         super.xmlQuarry = "command_message[@command='" + command + "']/reply_keyboard/keyboard_button";
     }
 
+    /**
+     * Handle the xmlQuarry and set the name of the message.
+     * @param command Command the keyboard gets requested for.
+     * @see #setMessageName(String, String)
+     */
     @Override
     public void setMessageName(String command) {
         super.messageName = command + "_reply_keyboard";
@@ -59,6 +74,11 @@ public class  InlineKeyboard extends Message {
         this.keyboard = null; // force reload
     }
 
+    /**
+     * Handle the xmlQuarry and set the name of the message.
+     * @param commandPackage The collection of commands the command belongs to.
+     * @param command Command in the {@code commandPackage} the keyboard gets requested for.
+     */
     @Override
     public void setMessageName(String commandPackage, String command) {
         super.messageName = command + "_reply_keyboard";
@@ -67,12 +87,23 @@ public class  InlineKeyboard extends Message {
         this.keyboard = null; // force reload
     }
 
+    /**
+     * Inherited fro {@link Message} but senseless in this class as it represents a keyboard and not simple text.
+     * @throws UnsupportedOperationException If this method is used. Reason stated above.
+     */
     @Override
     @Deprecated
     public String getContent(int userId, boolean addHelp) {
         throw new UnsupportedOperationException("No content available, user getKeyboard()");
     }
 
+    /**
+     * Create the keyboard from the buttons and their text specified at the {@link #xmlQuarry}. The text of the buttons
+     * is in a users foreign language.
+     * @param userId Get the language from this users config file.
+     * @return The constructed keyboard.
+     * @see org.telegram.bot.messages.Message#getContent(int, boolean) The base method after which this method is created.
+     */
     public List<List<InlineKeyboardButton>> getKeyboard(int userId) {
 
         if (super.xmlQuarry == null) {
@@ -88,8 +119,6 @@ public class  InlineKeyboard extends Message {
             String rowQuarry = super.xmlQuarry + "[@row='" + row + "']";
 
             while (config.containsKey(rowQuarry)) {
-                     //   @columns + columns
-               // language/command_package[5]/command_message/reply_keyboard/keyboard_button[1]/@callback_data
                 int column = 1;
                 List<InlineKeyboardButton> inlineRow = new ArrayList<>();
 
@@ -113,6 +142,11 @@ public class  InlineKeyboard extends Message {
         return this.keyboard;
     }
 
+    /**
+     * Inherited from {@link Message} but senseless in this class because a keyboard is always send together with a message,
+     * so the hash comes from the message. Also it would be very unclear how to calculate the hash of a keyboard.
+     * @throws UnsupportedOperationException When used. Reasons stated above.
+     */
     @Override
     @Deprecated
     public Integer calculateHash() throws InterruptedException {

@@ -32,22 +32,35 @@
 package org.telegram.bot.messages;
 
 /**
- * @author liketechnik
+ * A mixture of {@link ContentMessage} and {@link SituationalMessage}. It combines the features of these to one
+ * message class.
+ * @author Florian Warzecha
  * @version 1.2.1
  * @date 09 of February 2017
+ * @see ContentMessage
+ * @see SituationalMessage
  */
 public class SituationalContentMessage extends ContentMessage {
     private String situation;
 
     /**
-     * Initialize new Message object.
-     *
+     * Initialize a new {@code SituationalContentMessage}.
      * @param command Command the message gets requested for.
+     * @see SituationalMessage#SituationalMessage(String)
+     * @see ContentMessage#ContentMessage(String)
+     * @see #setMessageName(String, String)
+     * @see #setMessageName(String, String, String)
      */
     public SituationalContentMessage(String command) {
         super(command);
     }
 
+    /**
+     * Handle the xmlQuarry and set the name of the message.
+     * @param command Command the message gets requested for.
+     * @param situation Situation the command is in.
+     * @see #setMessageName(String, String, String)
+     */
     public void setMessageName(String command, String situation) {
         super.messageName =  command;
         this.situation = situation;
@@ -57,6 +70,13 @@ public class SituationalContentMessage extends ContentMessage {
         this.message = null; // force reload of the message
     }
 
+    /**
+     * Handle the xmlQuarry and set the name of the message.
+     * @param commandPackage The collection of commands the command belongs to.
+     * @param command The command the message gets requested for.
+     * @param situation The situation the command is in.
+     * @see #setMessageName(String, String)
+     */
     public void setMessageName(String commandPackage, String command, String situation) {
         super.messageName =  command;
         this.situation = situation;
@@ -67,6 +87,10 @@ public class SituationalContentMessage extends ContentMessage {
         this.message = null; // force reload of the message
     }
 
+    /**
+     * Get the situation the command is in.
+     * @return The situation set by {@link #setMessageName(String, String)} or {@link #setMessageName(String, String, String)}
+     */
     public String getSituation() {
         if (this.situation != null) {
             return this.situation;

@@ -47,18 +47,29 @@ import org.telegram.telegrambots.logging.BotLogger;
 import java.util.Optional;
 
 /**
- * @author liketechnik
+ * @author Florian Warzecha
  * @version 1.0
  * @date 25 of March 2017
+ * @see SetLanguageCommand
  */
 public class ChangeLanguage extends BotCommand {
 
     public final String LOGTAG = "CHANGELANGUAGE";
 
+    /**
+     * Set identifier and a short description of this command.
+     */
     public ChangeLanguage() {
         super("change_language", "Change the language of a user corresponding to the callback data.");
     }
 
+    /**
+     * Set the user language according to the data passed by {@link org.telegram.bot.CallbackParser}.
+     * @param absSender
+     * @param user
+     * @param chat
+     * @param arguments
+     */
     @Override
     public void execute(AbsSender absSender, User user, Chat chat, String[] arguments) {
 

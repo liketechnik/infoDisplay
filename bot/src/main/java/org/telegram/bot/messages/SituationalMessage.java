@@ -32,22 +32,31 @@
 package org.telegram.bot.messages;
 
 /**
+ * An extended {@link Message} that allows changing of the text depending on the state of the command
  * @author liketechnik
  * @version 1.2.1
- * @date 09 of Februar 2017
+ * @date 09 of February 2017
+ * @see SituationalContentMessage
  */
 public class SituationalMessage extends Message {
     private String situation;
 
     /**
-     * Initialize new Message object.
-     *
+     * Initialize a new {@code SituationalMessage}.
      * @param command Command the message gets requested for.
+     * @see #setMessageName(String, String)
+     * @see #setMessageName(String, String, String)
      */
     public SituationalMessage(String command) {
         super(command);
     }
 
+    /**
+     * Handle the xmlQuarry and set the name.
+     * @param command Command the message gets requested for.
+     * @param situation The situation the command is in.
+     * @see #setMessageName(String, String, String)
+     */
     public void setMessageName(String command, String situation) {
         super.messageName =  command;
         this.situation = situation;
@@ -57,6 +66,13 @@ public class SituationalMessage extends Message {
         this.message = null; // force reload of the message
     }
 
+    /**
+     * Handle the xmlQuarry and set the name.
+     * @param commandPackage Package the command belongs to.
+     * @param command Command the message gets requested for.
+     * @param situation The situation the command is in.
+     * @see #setMessageName(String, String)
+     */
     public void setMessageName(String commandPackage, String command, String situation) {
         super.messageName =  command;
         this.situation = situation;
@@ -67,6 +83,10 @@ public class SituationalMessage extends Message {
         this.message = null; // force reload of the message
     }
 
+    /**
+     * Get the situation the command is in.
+     * @return The situation set by {@link #setMessageName(String, String)} or {@link #setMessageName(String, String, String)}
+     */
     public String getSituation() {
         if (this.situation != null) {
             return this.situation;

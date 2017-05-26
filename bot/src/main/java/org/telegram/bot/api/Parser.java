@@ -44,9 +44,14 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Optional;
 
 /**
+ * Basic class for parsing updates, parsing is specialised for documents, callbacks and text messages.
+ *
  * @author Florian Warzecha
  * @version 1.0
  * @date 13 of April 2017
+ * @see org.telegram.bot.CallbackParser
+ * @see org.telegram.bot.DocumentParser
+ * @see org.telegram.bot.MessageParser
  */
 public abstract class Parser implements Runnable {
 
@@ -87,6 +92,12 @@ public abstract class Parser implements Runnable {
     protected abstract boolean parse();
 
 
+    /**
+     * Tries to parse a new update.
+     *
+     * If the parse method return false, i. e. parsing failed, the user gets informed about it and receives the help command.
+     * @see #parse() The parse method.
+     */
     public void run() {
         if (!this.parse()) {
             Message message = new Message("unknown");

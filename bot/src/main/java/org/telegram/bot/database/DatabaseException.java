@@ -41,38 +41,85 @@ import java.net.URL;
 import java.nio.file.Path;
 
 /**
- * @author liketechnik
+ * A wrapper for common {@link Exception}s that may occur in the {@link DatabaseManager} to allow easy catching of exceptions.
+ * @author Florian Warzecha
  * @version 1.0
- * @date 15 of Mai 2017
+ * @date 15 of May 2017
  */
 public class DatabaseException extends Exception {
+    /**
+     * Create a new empty {@code DatabaseException}.
+     */
     DatabaseException() {
-
     }
+
+    /**
+     * Create a new {@code DatabaseException} with a message.
+     * @param error A message explaining why this error occured.
+     */
     DatabaseException(String error) {
         super(error);
     }
+
+    /**
+     * Create a new {@code DatabaseException} stating that access to a file failed.
+     * @param file The file that was not accessible. Its name is used in the error message.
+     */
     DatabaseException(java.io.File file) {
         super("Error accessing: " + file.toString());
     }
+
+    /**
+     * Create a new {@code DatabaseException} stating that access to a file failed.
+     * @param path The path of the file that was not accessible. The {@code String} representation of the path is used in the error message.
+     * @param e The original {@link IOException} thrown while trying to access the {@code path}.
+     */
     DatabaseException(Path path, IOException e) {
         super("Error accessing: " + path.toString(), e);
     }
+
+    /**
+     * Create a new {@code DatabaseException} stating that there is a problem getting the content of a file with {@link org.apache.commons.configuration2.Configuration}.
+     * @param e The original {@code ConfigurationException} thrown.
+     * @param path The path of the file that was accessed.
+     */
     DatabaseException(ConfigurationException e, Path path) {
         super("Error getting configuration of file: " + path.toString(), e);
     }
+
+    /**
+     * Create a new {@code DatabaseException} stating that there was a problem accessing multiple files.
+     * @param files The paths of the files, added as String representation to the end of the error message.
+     * @param exception The exception that was originally thrown.
+     */
     DatabaseException(Path[] files, Exception exception) {
         super("Error accessing files " + files, exception);
     }
 
+    /**
+     * Creates a new {@code DatabaseException} stating there was a problem transforming a {@code String} into an {@code URL}.
+     * @param urlParams The {@code String} passed to the {@code new URL(String)} method.
+     * @param e The original {@code MalformedURLException} from the url creation.
+     */
     DatabaseException(String urlParams, MalformedURLException e) {
         super("Error creating url from: " + urlParams, e);
     }
 
+    /**
+     * Create a new {@code DatabaseException} stating there was a problem with a {@link GetFile}.
+     * @param getFileRequest The {@link GetFile} there was a problem with.
+     * @param e The original {@code TelegramApiException} from the url creation.
+     */
     DatabaseException(GetFile getFileRequest, TelegramApiException e) {
         super("Error getting file request: " + getFileRequest.toString(), e);
     }
 
+    /**
+     * Create a new {@code DatabaseException} stating there was a problem saving from an {@code URL} to a file.
+     * @param fileUrl The {@code URL} where the media comes from.
+     * @param displayFile The {@code Path} the media should be saved to.
+     * @param e The original {@code IOException} from the saving try.
+     */
     DatabaseException(URL fileUrl, Path displayFile, IOException e) {
         super("Error saving media from '" + fileUrl.toString() + "' to file " + displayFile.toString(), e);
     }

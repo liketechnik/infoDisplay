@@ -56,6 +56,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 
 /**
+ * A {@link Parser} specialized text for messages.
  * @author Florian Warzecha
  * @version 1.0
  * @date 14 of April 2017
@@ -64,11 +65,20 @@ public class MessageParser extends Parser {
 
     public final String LOGTAG = "MESSAGEPARSER";
 
+    /**
+     * Create a new parser that can parse the {@code update} and then run a command from the {@code bot}.
+     * @param update The update to parse.
+     * @param bot The bot whose commands are used.
+     */
     public MessageParser(Update update, TelegramLongPollingThreadBot bot) {
         super(update, bot);
     }
 
-    /** Parsing taken from {@link org.telegram.telegrambots.bots.commands.CommandRegistry} **/
+
+    /**
+     * Parsing taken from {@link org.telegram.telegrambots.bots.commands.CommandRegistry}
+     * @see Parser#parse()
+     */
     @Override
     protected boolean parse() {
         Message message = this.update.getMessage();
@@ -83,11 +93,6 @@ public class MessageParser extends Parser {
 
             try {
                 // check if either the user sent a new, known command or he sent the cancel command
-//                if ((this.bot.getCommandsMap().containsKey(commandSplit[0]) &&
-//                        DatabaseManager.getInstance().getUserCommandState(this.user.getId()).equals(Bot.NO_COMMAND))
-//                        || commandSplit[0].equals(CancelCommand.class.getConstructor().newInstance().getCommandIdentifier())
-//                        || commandSplit[0].equals(StartCommand.class.getConstructor().newInstance().getCommandIdentifier())
-//                        || commandSplit[0].equals(StopCommand.class.getConstructor().newInstance().getCommandIdentifier())) {
                 String userC = DatabaseManager.getInstance().getUserCommandState(user.getId());
                 if (DatabaseManager.getInstance().getUserCommandState(user.getId()).equals(Bot.NO_COMMAND)
                         || commandSplit[0].equals(CancelCommand.class.getConstructor().newInstance().getCommandIdentifier())

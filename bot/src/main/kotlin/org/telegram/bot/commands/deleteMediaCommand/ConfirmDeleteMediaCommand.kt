@@ -50,14 +50,21 @@ import org.telegram.telegrambots.logging.BotLogger
 import java.util.*
 import kotlin.collections.HashMap
 
-
+/**
+ * The identifier of this command
+ */
 private val commandIdentifier: String = "confirm_delete_media"
+/**
+ * A short description of this command.
+ */
 private val description: String = "Asks the user if he's sure he wants to delete a picture."
 
 /**
- * @author liketechnik
+ * @author Florian Warzecha
  * @version 1.0
- * @date 21 of Mai 2017
+ * @date 21 of May 2017
+ * @since 2.0.0
+ * @see DeleteMediaCommand
  */
 class ConfirmDeleteMediaCommand : BotCommand(commandIdentifier, description) {
 
@@ -65,6 +72,9 @@ class ConfirmDeleteMediaCommand : BotCommand(commandIdentifier, description) {
     private val packageName: String = getPackageName(this)
     private val commandName: String = getCommandName(this)
 
+    /**
+     * Send the user a message with the selected media file and ask for confirmation.
+     */
     override fun execute(absSender: AbsSender, user: User, chat: Chat, arguments: Array<out String>) {
         try {
             val databaseManager = DatabaseManager.getInstance()

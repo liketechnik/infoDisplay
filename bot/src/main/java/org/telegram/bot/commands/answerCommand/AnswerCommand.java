@@ -47,11 +47,10 @@ import java.util.Optional;
 
 
 /**
+ * This command gets executed if  a user sends '/answer' to the bot and lets the administrator answer asked questions.
  * @author Florian Warzecha
  * @version 1.0.1
  * @date 25 of October of 2016
- *
- * This command gets executed if  a user sends '/answer' to the bot and lets the administrator answer asked questions.
  */
 public class AnswerCommand extends BotCommand {
 

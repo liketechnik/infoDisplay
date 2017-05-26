@@ -47,11 +47,10 @@ import java.util.Optional;
 import static org.telegram.bot.Main.getFilteredUsername;
 
 /**
+ * This command gets executed if a user stops the bot.
  * @author Florian Warzecha
  * @version 1.0.1
  * @date 23 of October of 2016
- *
- * this command gets executed if a user stops the bot.
  */
 public class StopCommand extends BotCommand {
 

@@ -52,6 +52,7 @@ import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
 
 /**
+ * The main class that set ups the logger, registers the bot to the Telegram API and waits for the command to shutdown.
  * @author Florian Warzecha
  * @version 1.0.1
  * @date 21 of October of 2016
@@ -60,7 +61,10 @@ public class Main {
     private static final String LOGTAG = "MAIN";
 
 
-    /* Set up the logger and register the bot */
+    /**
+     * Set up a logger and register the commands. Then watch for the appearance of a file 'stop' in the working dir. If it
+     * appears stop the program.
+     */
     public static void main (String args[]) {
         BotLogger.setLevel(Level.ALL);
         BotLogger.registerLogger(new ConsoleHandler());
@@ -83,7 +87,6 @@ public class Main {
                     Thread.sleep(5000);
                 }
                 displayBot.stop();
-                //System.exit(0);
             } catch (TelegramApiException e) {
                 BotLogger.error(LOGTAG, e);
             }

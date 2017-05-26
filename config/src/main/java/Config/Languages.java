@@ -32,9 +32,10 @@
 package Config;
 
 /**
- * @author liketechnik
+ * This class contains constants that define the languages available for the bot.
+ * @author Florian Warzecha
  * @version 1.0
- * @date 11 of Januar 2017
+ * @date 11 of January 2017
  */
 public final class Languages {
     public static final String ENGLISH = "english";

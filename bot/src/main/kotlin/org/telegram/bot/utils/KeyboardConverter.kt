@@ -34,11 +34,15 @@ package org.telegram.bot.utils
 import org.telegram.telegrambots.api.objects.replykeyboard.buttons.InlineKeyboardButton
 
 /**
- * @author liketechnik
+ * A method that simplifies modifying of the callback data of [InlineKeyboardButton]s with non static content via [HashMap]s.
+ *
+ * It works by iterating over all the [InlineKeyboardButton]s of the keyboard and check if one of the keys in the map
+ * match text in the button. This text is then replaced by the corresponding value of the key.
+ * @author Florian Warzecha
+ * @since 2.0.0
  * @version 1.0
  * @date 21 of Mai 2017
  */
-
 internal fun convertDeleteMediaKeyboard(regexReplacementMap: HashMap<String, Int>, keyboard: List<List<InlineKeyboardButton>>):
         List<List<InlineKeyboardButton>> {
     for (inlineKeyboardButtons in keyboard) {

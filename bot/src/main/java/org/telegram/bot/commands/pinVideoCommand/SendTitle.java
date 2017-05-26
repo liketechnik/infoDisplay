@@ -46,18 +46,29 @@ import java.nio.file.FileAlreadyExistsException;
 import java.util.Optional;
 
 /**
- * @author liketechnik
+ * @author Florian Warzecha
  * @version 1.2.1
- * @date 07 of Februar 2017
+ * @date 07 of February 2017
+ * @see PinVideoCommand
  */
 public class SendTitle extends BotCommand {
 
     public static final String LOGTAG = "PINVIDEOCOMMAND_SENDTITLE";
 
+    /**
+     * Set identifier and a short description of this command.
+     */
     public SendTitle() {
         super("send_title", "Save the title of a new video file.");
     }
 
+    /**
+     * Save the title according to the arguments passed by {@link org.telegram.bot.MessageParser} and ask the user for a description of the video.
+     * @param absSender
+     * @param user
+     * @param chat
+     * @param arguments
+     */
     @Override
     public void execute(AbsSender absSender, User user, Chat chat, String[] arguments) {
 

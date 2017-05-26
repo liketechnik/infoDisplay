@@ -32,9 +32,10 @@
 package Config;
 
 /**
- * @author liketechnik
+ * This class defines how the window of the display file viewer will look like.
+ * @author Florian Warzecha
  * @version 1.0
- * @date 11 of Januar 2017
+ * @date 11 of January 2017
  */
 public final class Window {
     public static final String windowTitle = "InfoDisplay";

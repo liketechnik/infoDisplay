@@ -48,6 +48,7 @@ import java.lang.reflect.Constructor;
 
 
 /**
+ * The bot class that registers commands, and defines the username, token and parsers of the bot.
  * @author Florian Warzecha
  * @version 1.0.1
  * @date 22 of October of 2016

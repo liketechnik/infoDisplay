@@ -45,11 +45,10 @@ import org.telegram.telegrambots.logging.BotLogger;
 import java.util.Optional;
 
 /**
+ * This command gets executed if a user sends '/pin_picture' to the bot.
  * @author Florian Warzecha
  * @version 1.0.1
  * @date 27 of October of 2016
- *
- * This command gets executed if a user sends '/pin_picture' to the bot.
  */
 public class PinPictureCommand extends BotCommand {
 

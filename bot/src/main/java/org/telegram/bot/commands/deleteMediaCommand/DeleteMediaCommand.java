@@ -54,29 +54,36 @@ import static org.telegram.bot.commands.deleteMediaCommand.UtilsKt.*;
 import static org.telegram.bot.utils.KeyboardConverterKt.convertDeleteMediaKeyboard;
 
 /**
- * @author liketechnik
+ * This command gives a user the possibility to delete his uploaded media files. The admin can delete other user's files too.
+ * @author Florian Warzecha
  * @version 1.0
- * @date 17 of Mai 2017
+ * @since 2.0.0
+ * @date 17 of May 2017
  */
 public class DeleteMediaCommand extends BotCommand {
 
     public static final String LOGTAG = "DELETEMEDIACOMMAND";
     private final String packageName;
     private final String commandName;
-//    final String currentIndexRegex = "/current_index>";
-//    final String lastIndexRegex = "/last_index>";
-//    final String nextIndexRegex = "/next_index>";
 
     private enum SITUATIONS {
         information, keyboard
     }
 
+    /**
+     * Set identifier and short description. Get package and command name.
+     */
     public DeleteMediaCommand() {
         super("delete_media", "Delete a media file you uploaded to the board.");
         packageName = this.getClass().getPackage().getName().replace("org.telegram.bot.commands.", "");
         commandName = this.getCommandIdentifier() + "_command";
     }
 
+    /**
+     * Send the user a message with a media file and a keyboard with buttons for selecting different media files or deleting
+     * the current one. The media file that is send is determined either by evaluating the callback data passes by {@link org.telegram.bot.CallbackParser} or set
+     * to index 0 when no data is available.
+     */
     public void execute(AbsSender absSender, User user, Chat chat, String[] arguments) {
         try {
             DatabaseManager databaseManager = DatabaseManager.getInstance();

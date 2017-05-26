@@ -40,11 +40,10 @@ import org.telegram.telegrambots.bots.commands.BotCommand;
 import org.telegram.telegrambots.logging.BotLogger;
 
 /**
+ * This command gets executed if a user sends '/cancel' to the bot.
  * @author Florian Warzecha
  * @version 1.0.1
  * @date 25 of October of 2016
- *
- * This command gets executed if a user sends '/cancel' to the bot.
  */
 public class CancelCommand extends BotCommand {
 
@@ -52,7 +51,6 @@ public class CancelCommand extends BotCommand {
 
     /**
      * Set the identifier and a short description for the command.
-     * @param commandRegistry
      */
     public CancelCommand() {
         super("cancel", "Cancel the running command (e.g. uploading of a new picture).");

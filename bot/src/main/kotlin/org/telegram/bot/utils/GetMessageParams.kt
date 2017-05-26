@@ -34,11 +34,20 @@ package org.telegram.bot.utils
 import org.telegram.telegrambots.bots.commands.BotCommand
 
 /**
- * @author liketechnik
+ * A method for getting the package name of a command as it is written in the language file.
+ * @author Florian Warzecha
  * @version 1.0
- * @date 24 of Mai 2017
+ * @since 2.0.0
+ * @date 24 of May 2017
  */
 fun getPackageName(command: BotCommand): String =
         command::class.java.`package`.name.replace("org.telegram.bot.commands.", "")
 
+/**
+ * A method for getting the name of a command as it is written in the language file.
+ * @author Florian Warzecha
+ * @version 1.0
+ * @since 2.0.0
+ * @date 24 of May 2017
+ */
 fun getCommandName(command: BotCommand): String = command.commandIdentifier + "_command"

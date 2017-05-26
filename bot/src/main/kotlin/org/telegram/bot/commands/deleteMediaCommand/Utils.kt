@@ -38,9 +38,11 @@ import org.telegram.telegrambots.bots.AbsSender
 import java.util.*
 
 /**
- * @author liketechnik
+ * Contains some constants and help methods needed by the commands in this package.
+ * @author Florian Warzecha
  * @version 1.0
- * @date 21 of Mai 2017
+ * @since 2.0.0
+ * @date 21 of May 2017
  */
 
 internal val currentIndexRegex: String = "/current_index>"
@@ -57,8 +59,6 @@ internal val timestampRegex: String = "/timestamp>"
  *
  * @param displayFileName The name of the display file the information belongs to.
  * @return A [HashMap] containing the key value pairs for title, description, duration and uploadInfo
- * @author Florian Warzecha
- * @since 2.0.0
  * @see org.telegram.bot.commands.deleteMediaCommand.DeleteMediaCommand
  * @see org.telegram.bot.commands.deleteMediaCommand.ConfirmDeleteMediaCommand
  * @see org.telegram.bot.messages.ContentMessage
@@ -73,6 +73,9 @@ internal fun  getAdditionalContent(displayFileName: String): HashMap<String, Str
     return additionalContent
 }
 
+/**
+ * Get the index of the media file from the callback data.
+ */
 internal fun getIndex(arguments: Array<out String>): Int {
     val index: Int
     val argumentsSplit: List<String> = arguments[0].split("_")
@@ -80,6 +83,14 @@ internal fun getIndex(arguments: Array<out String>): Int {
     return index
 }
 
+/**
+ * Add the message to the queue of messages with the right method depending on the type of media file Telegram saved it.
+ * @param tgType The type of the message Telegram sees it.
+ * @param fileId The Telegram fileID of the media that is send.
+ * @see SendMessages.addDocumentMessage
+ * @see SendMessages.addImageMessage
+ * @see SendMessages.addVideoMessage
+ */
 internal fun sendMediaMessage(tgType: String, messageHash: Int, messageText: String, chatId: String, absSender: AbsSender,
                               fileId: String, keyboardMarkup: Optional<InlineKeyboardMarkup>) {
     if (tgType == Config.Bot.DISPLAY_FILE_TG_TYPE_AS_DOCUMENT) {

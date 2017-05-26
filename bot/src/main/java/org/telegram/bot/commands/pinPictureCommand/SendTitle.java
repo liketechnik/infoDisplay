@@ -47,11 +47,10 @@ import java.nio.file.FileAlreadyExistsException;
 import java.util.Optional;
 
 /**
+ * This class handles an incoming message containing the title for a new picture.
  * @author Florian Warzecha
  * @version 1.0.1
  * @date 01 of November 2016
- *
- * This class handles an incoming message containing the title for a new picture.
  */
 public class SendTitle extends BotCommand {
 

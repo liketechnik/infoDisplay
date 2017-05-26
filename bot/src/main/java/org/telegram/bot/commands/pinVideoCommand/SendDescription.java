@@ -45,19 +45,32 @@ import org.telegram.telegrambots.logging.BotLogger;
 import java.util.Optional;
 
 /**
- * @author liketechnik
+ * @author Florian Warzecha
  * @version 1.2.1
- * @date 07 of Februar 2017
+ * @date 07 of February 2017
+ * @see PinVideoCommand
  */
 public class SendDescription extends BotCommand {
 
     public static final String LOGTAG = "PINVIDEOCOMMAND_SENDDESCRIPTION";
 
+
+    /**
+     * Set the identifier and a short description for this command.
+     */
     public SendDescription() {
         super("send_description",
                 "Set the description of a new video file.");
     }
 
+    /**
+     * Set the description for the new video according to the arguments from {@link org.telegram.bot.MessageParser} and
+     * ask the user for the video.
+     * @param absSender
+     * @param user
+     * @param chat
+     * @param arguments
+     */
     @Override
     public void execute(AbsSender absSender, User user, Chat chat, String[] arguments) {
 

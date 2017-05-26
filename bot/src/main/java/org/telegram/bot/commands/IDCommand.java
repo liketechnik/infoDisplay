@@ -44,11 +44,10 @@ import java.util.Optional;
 
 
 /**
+ * This command gets executed if a user sent '/ids'.
  * @author Florian Warzecha
  * @version 1.0.1
  * @date 24 of October of 2016
- *
- * This command gets executed if a user sent '/ids'.
  */
 public class IDCommand extends BotCommand {
 

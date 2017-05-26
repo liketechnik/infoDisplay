@@ -45,11 +45,10 @@ import java.util.Optional;
 
 
 /**
+ * This command sends a message back to the user, containing the username of me / the administrator.
  * @author Florian Warzecha
  * @version 1.0.1
  * @date 24 of October of 2016
- *
- * This command sends a message back to the user, containing the username of me / the administrator.
  */
 public class AdministratorCommand extends BotCommand {
 

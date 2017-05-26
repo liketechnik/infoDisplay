@@ -46,11 +46,10 @@ import org.telegram.telegrambots.logging.BotLogger;
 import java.util.Optional;
 
 /**
+ * This command gets executed if a user sends '/answer' and sent a title to the bot.
  * @author Florian Warzecha
  * @version 1.0.1
  * @date 01 of November 2016
- *
- * This command gets executed if a user sends '/answer' and sent a title to the bot.
  */
 public class SendDescription extends BotCommand {
 

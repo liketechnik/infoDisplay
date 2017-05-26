@@ -46,11 +46,10 @@ import org.telegram.telegrambots.logging.BotLogger;
 import java.util.Optional;
 
 /**
+ * This command gets executed if a user sent '/pin_picture' and proceeds (sending description and title of the picture).
  * @author Florian Warzecha
  * @version 1.0.1
  * @date 01 of November 2016
- *
- * This command gets executed if a user sent '/pin_picture' and proceeds (sending description and title of the picture).
  */
 public class SendDuration extends BotCommand {
 

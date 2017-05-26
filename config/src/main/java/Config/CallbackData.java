@@ -32,7 +32,8 @@
 package Config;
 
 /**
- * @author liketechnik
+ * A class containing {@code enum}s needed for parsing the callbacks.
+ * @author Florian Warzecha
  * @version 1.0
  * @date 25 of March 2017
  */

@@ -45,18 +45,29 @@ import org.telegram.telegrambots.logging.BotLogger;
 import java.util.Optional;
 
 /**
- * @author liketechnik
+ * Upload a video to the board.
+ * @author Florian Warzecha
  * @version 1.0
- * @date 30 of Januar 2017
+ * @date 30 of January 2017
  */
 public class PinVideoCommand extends BotCommand {
 
     public static final String LOGTAG = "PINVIDEOCOMMAND";
 
+    /**
+     * Initialize the identifier and a short description of this command.
+     */
     public PinVideoCommand() {
         super("pin_video", "Upload a video to the virtual board.");
     }
 
+    /**
+     * Ask the user for a title of the video.
+     * @param absSender
+     * @param user
+     * @param chat
+     * @param arguments
+     */
     @Override
     public void execute(AbsSender absSender, User user, Chat chat, String[] arguments) {
 

@@ -32,9 +32,10 @@
 package Config;
 
 /**
- * @author liketechnik
+ * A class containing constants used by in the database for identifying attributes in files.
+ * @author Florian Warzecha
  * @version 1.0
- * @date 11 of Januar 2017
+ * @date 11 of January 2017
  */
 public final class Keys {
     public static final String DISPLAY_FILES_KEY = "displayFiles";

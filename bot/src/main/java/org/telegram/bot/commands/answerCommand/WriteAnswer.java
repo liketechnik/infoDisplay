@@ -48,11 +48,10 @@ import java.util.HashMap;
 import java.util.Optional;
 
 /**
+ * This command handles the answer of a chosen question.
  * @author Florian Warzecha
  * @version 1.0.1
  * @date 01 of November 2016
- *
- * This command handles the answer of a chosen question.
  */
 public class WriteAnswer extends BotCommand {
 
