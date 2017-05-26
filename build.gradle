@@ -37,6 +37,7 @@ buildscript {
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "org.jetbrains.dokka:dokka-gradle-plugin:0.9.13"
     }
 }
 
@@ -49,8 +50,9 @@ buildscript {
 allprojects {
     group 'liketechnik'
 
-    version '2.0.0-dev'
+    version '2.0.0'
 
+    apply plugin: 'org.jetbrains.dokka'
     apply plugin: 'java'
     apply plugin: 'kotlin'
     apply plugin: 'idea'
@@ -92,6 +94,10 @@ allprojects {
 }
 
 project(':display') {
+    sourceSets {
+        main.kotlin.srcDirs += 'src/main/kotlin'
+        main.java.srcDirs += 'src/main/java'
+    }
     mainClassName = "liketechnik.InfoDisplay.Display"
     dependencies {
         compile project(':config')
@@ -107,9 +113,43 @@ project(':display') {
         include "LICENSE-**"
         into "LICENSES"
     }
+
+    task dokkaJavadocDev(type: org.jetbrains.dokka.gradle.DokkaTask) {
+        outputFormat = 'html'
+        outputDirectory = "$rootProject.projectDir/docs/development/display"
+
+        jdkVersion = 8
+
+        skipEmptyPackages = false
+
+        linkMapping {
+            dir = "src/main/"
+            url = "https://github.com/liketechnik/infoDisplay/blob/development/display/src/main"
+            suffix = "#L"
+        }
+    }
+
+    task dokkaJavadocStable(type: org.jetbrains.dokka.gradle.DokkaTask) {
+        outputFormat = 'html'
+        outputDirectory = "$rootProject.projectDir/docs/stable/display"
+
+        jdkVersion = 8
+
+        skipEmptyPackages = false
+
+        linkMapping {
+            dir = "src/main/"
+            url = "https://github.com/liketechnik/infoDisplay/blob/stable/bot/src/main"
+            suffix = "#L"
+        }
+    }
 }
 
 project(':bot') {
+    sourceSets {
+        main.kotlin.srcDirs += 'src/main/kotlin'
+        main.java.srcDirs += 'src/main/java'
+    }
     mainClassName = "org.telegram.bot.Main"
     dependencies {
         compile group: 'org.telegram', name: 'telegrambots', version: '3.0'
@@ -144,17 +184,115 @@ project(':bot') {
         from(createStopScript)
         fileMode = 0755
     }
+
+    task dokkaJavadocDev(type: org.jetbrains.dokka.gradle.DokkaTask) {
+        outputFormat = 'html'
+        outputDirectory = "$rootProject.projectDir/docs/development/bot"
+
+        jdkVersion = 8
+
+        skipEmptyPackages = false
+
+        linkMapping {
+            dir = "src/main/"
+            url = "https://github.com/liketechnik/infoDisplay/blob/development/bot/src/main"
+            suffix = "#L"
+        }
+    }
+
+    task dokkaJavadocStable(type: org.jetbrains.dokka.gradle.DokkaTask) {
+        outputFormat = 'html'
+        outputDirectory = "$rootProject.projectDir/docs/stable/bot"
+
+        jdkVersion = 8
+
+        skipEmptyPackages = false
+
+        linkMapping {
+            dir = "src/main/"
+            url = "https://github.com/liketechnik/infoDisplay/blob/stable/bot/src/main"
+            suffix = "#L"
+        }
+    }
 }
 
 project(':displayFile') {
+    sourceSets {
+        main.kotlin.srcDirs += 'src/main/kotlin'
+        main.java.srcDirs += 'src/main/java'
+    }
     mainClassName = ""
     dependencies {
         compile project(':config')
     }
+
+    task dokkaJavadocDev(type: org.jetbrains.dokka.gradle.DokkaTask) {
+        outputFormat = 'html'
+        outputDirectory = "$rootProject.projectDir/docs/development/displayFile"
+
+        jdkVersion = 8
+
+        skipEmptyPackages = false
+
+        linkMapping {
+            dir = "src/main/"
+            url = "https://github.com/liketechnik/infoDisplay/blob/development/displayFile/src/main"
+            suffix = "#L"
+        }
+    }
+
+    task dokkaJavadocStable(type: org.jetbrains.dokka.gradle.DokkaTask) {
+        outputFormat = 'html'
+        outputDirectory = "$rootProject.projectDir/docs/stable/displayFile"
+
+        jdkVersion = 8
+
+        skipEmptyPackages = false
+
+        linkMapping {
+            dir = "src/main/"
+            url = "https://github.com/liketechnik/infoDisplay/blob/stable/displayFile/src/main"
+            suffix = "#L"
+        }
+    }
 }
 
 project(':config') {
+    sourceSets {
+        main.kotlin.srcDirs += 'src/main/kotlin'
+        main.java.srcDirs += 'src/main/java'
+    }
     mainClassName = ""
+
+    task dokkaJavadocDev(type: org.jetbrains.dokka.gradle.DokkaTask) {
+        outputFormat = 'html'
+        outputDirectory = "$rootProject.projectDir/docs/development/config"
+
+        jdkVersion = 8
+
+        skipEmptyPackages = false
+
+        linkMapping {
+            dir = "src/main/"
+            url = "https://github.com/liketechnik/infoDisplay/blob/development/config/src/main"
+            suffix = "#L"
+        }
+    }
+
+    task dokkaJavadocStable(type: org.jetbrains.dokka.gradle.DokkaTask) {
+        outputFormat = 'html'
+        outputDirectory = "$rootProject.projectDir/docs/stable/config"
+
+        jdkVersion = 8
+
+        skipEmptyPackages = false
+
+        linkMapping {
+            dir = "src/main/"
+            url = "https://github.com/liketechnik/infoDisplay/blob/stable/config/src/main"
+            suffix = "#L"
+        }
+    }
 }
 
 
