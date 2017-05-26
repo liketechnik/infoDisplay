@@ -34,7 +34,7 @@ package Config;
 /**
  * @author liketechnik
  * @version 1.0
- * @date 11 of Januar 2017
+ * @date 11 of January 2017
  */
 public final class registerCommandIfClauses {
     public static final String alreadyRegisterd = "alreadyRegistered";

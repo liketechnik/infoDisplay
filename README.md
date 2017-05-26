@@ -1,16 +1,21 @@
 [![Stories in Ready](https://badge.waffle.io/liketechnik/infoDisplay.png?label=ready&title=Ready)](http://waffle.io/liketechnik/infoDisplay)
-[![Issue Count](https://codeclimate.com/github/liketechnik/infoDisplay/badges/issue_count.svg)](https://codeclimate.com/github/liketechnik/infoDisplay)
-[![Test Coverage](https://codeclimate.com/github/liketechnik/infoDisplay/badges/coverage.svg)](https://codeclimate.com/github/liketechnik/infoDisplay/coverage)
-[![Code Climate](https://codeclimate.com/github/liketechnik/infoDisplay/badges/gpa.svg)](https://codeclimate.com/github/liketechnik/infoDisplay)
+stable: [![Build Status](https://travis-ci.org/liketechnik/infoDisplay.svg?branch=stable)](https://travis-ci.org/liketechnik/infoDisplay)
+[![CodeFactor](https://www.codefactor.io/repository/github/liketechnik/infodisplay/badge)](https://www.codefactor.io/repository/github/liketechnik/infodisplay)
+development: [![Build Status](https://travis-ci.org/liketechnik/infoDisplay.svg?branch=development)](https://travis-ci.org/liketechnik/infoDisplay)
+[![CodeFactor](https://www.codefactor.io/repository/github/liketechnik/infodisplay/badge/development)](https://www.codefactor.io/repository/github/liketechnik/infodisplay/overview/development)
 
 ## README ##
 
 This is a telegram bot based on Ruben Bermudez Telegram Bots API. 
 The purpose of this program is to have a virtual display which displays
 information (pictures or videos) at, for example, schools.
-The program is needed, because everyone in charge of it, should be able
+I decided to develop it, because everyone in charge of it should be able
 to upload things to it from home too with a nice looking GUI and 
 without the need to set up a server on ones own.
+
+[Changelog (latest release)](https://github.com/liketechk/infoDisplay/blob/stable/CHANGELOG.md)
+
+[Changelog (development)](https://github.com/liketechk/infoDisplay/blob/development/CHANGELOG.md)
 
 ## Use ##
 

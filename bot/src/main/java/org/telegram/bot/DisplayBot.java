@@ -32,19 +32,15 @@
 package org.telegram.bot;
 
 import org.telegram.bot.api.TelegramLongPollingThreadBot;
-import Config.Bot;
-import Config.CallbackData;
 import org.telegram.bot.commands.*;
 import org.telegram.bot.commands.answerCommand.AnswerCommand;
 import org.telegram.bot.commands.askCommand.AskCommand;
 import org.telegram.bot.commands.deleteMediaCommand.DeleteMediaCommand;
 import org.telegram.bot.commands.pinPictureCommand.*;
 import org.telegram.bot.commands.pinVideoCommand.*;
-import org.telegram.bot.commands.setLanguageCommand.ChangeLanguage;
 import org.telegram.bot.commands.setLanguageCommand.SetLanguageCommand;
 import org.telegram.bot.database.DatabaseException;
 import org.telegram.bot.database.DatabaseManager;
-import org.telegram.bot.database.SaveThread;
 import org.telegram.telegrambots.api.objects.*;
 import org.telegram.telegrambots.logging.BotLogger;
 
@@ -52,6 +48,7 @@ import java.lang.reflect.Constructor;
 
 
 /**
+ * The bot class that registers commands, and defines the username, token and parsers of the bot.
  * @author Florian Warzecha
  * @version 1.0.1
  * @date 22 of October of 2016

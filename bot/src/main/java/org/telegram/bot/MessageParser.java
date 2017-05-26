@@ -1,3 +1,34 @@
+/*
+ * Copyright (C) 2016-2017  Florian Warzecha <flowa2000@gmail.com>
+ *
+ * This file is part of infoDisplay.
+ *
+ * infoDisplay is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * infoDisplay is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * infoDisplay uses TelegramBots Java API <https://github.com/rubenlagus/TelegramBots> by Ruben Bermudez.
+ * TelegramBots API is licensed under GNU General Public License version 3 <https://www.gnu.org/licenses/gpl-3.0.de.html>.
+ *
+ * infoDisplay uses parts of the Apache Commons project <https://commons.apache.org/>.
+ * Apache commons is licensed under the Apache License Version 2.0 <http://www.apache.org/licenses/>.
+ *
+ * infoDisplay uses vlcj library <http://capricasoftware.co.uk/#/projects/vlcj>.
+ * vlcj is licensed under GNU General Public License version 3 <https://www.gnu.org/licenses/gpl-3.0.de.html>.
+ *
+ * Thanks to all the people who contributed to the projects that make this
+ * program possible.
+ */
+
 package org.telegram.bot;
 
 import Config.Bot;
@@ -25,6 +56,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 
 /**
+ * A {@link Parser} specialized text for messages.
  * @author Florian Warzecha
  * @version 1.0
  * @date 14 of April 2017
@@ -33,13 +65,22 @@ public class MessageParser extends Parser {
 
     public final String LOGTAG = "MESSAGEPARSER";
 
+    /**
+     * Create a new parser that can parse the {@code update} and then run a command from the {@code bot}.
+     * @param update The update to parse.
+     * @param bot The bot whose commands are used.
+     */
     public MessageParser(Update update, TelegramLongPollingThreadBot bot) {
         super(update, bot);
     }
 
+
+    /**
+     * Parsing taken from {@link org.telegram.telegrambots.bots.commands.CommandRegistry}
+     * @see Parser#parse()
+     */
     @Override
     protected boolean parse() {
-        /** Parsing taken from {@link org.telegram.telegrambots.bots.commands.CommandRegistry.ececuteCommand} **/
         Message message = this.update.getMessage();
         this.user = message.getFrom();
         this.chat = message.getChat();
@@ -52,11 +93,6 @@ public class MessageParser extends Parser {
 
             try {
                 // check if either the user sent a new, known command or he sent the cancel command
-//                if ((this.bot.getCommandsMap().containsKey(commandSplit[0]) &&
-//                        DatabaseManager.getInstance().getUserCommandState(this.user.getId()).equals(Bot.NO_COMMAND))
-//                        || commandSplit[0].equals(CancelCommand.class.getConstructor().newInstance().getCommandIdentifier())
-//                        || commandSplit[0].equals(StartCommand.class.getConstructor().newInstance().getCommandIdentifier())
-//                        || commandSplit[0].equals(StopCommand.class.getConstructor().newInstance().getCommandIdentifier())) {
                 String userC = DatabaseManager.getInstance().getUserCommandState(user.getId());
                 if (DatabaseManager.getInstance().getUserCommandState(user.getId()).equals(Bot.NO_COMMAND)
                         || commandSplit[0].equals(CancelCommand.class.getConstructor().newInstance().getCommandIdentifier())
@@ -82,30 +118,41 @@ public class MessageParser extends Parser {
 
                 this.arguments = new String[]{text};
 
-                if (userCommandState.equals(Bot.ASK_COMMAND_WRITE_QUESTION)) {
-                    this.commandConstructor = (Constructor) WriteQuestion.class.getConstructor();
-                } else if (userCommandState.equals(Bot.ANSWER_COMMAND_CHOOSE_NUMBER)) {
-                    this.commandConstructor = (Constructor) ChooseNumber.class.getConstructor();
-                } else if (userCommandState.equals(Bot.ANSWER_COMMAND_WRITE_ANSWER)) {
-                    this.commandConstructor = (Constructor) WriteAnswer.class.getConstructor();
-                } else if (userCommandState.equals(Bot.PIN_PICTURE_COMMAND_SEND_TITLE)) {
-                    this.commandConstructor = (Constructor) SendTitle.class.getConstructor();
-                } else if (userCommandState.equals(Bot.PIN_PICTURE_COMMAND_SEND_DESCRIPTION)) {
-                    this.commandConstructor = (Constructor) SendDescription.class.getConstructor();
-                } else if (userCommandState.equals(Bot.PIN_PICTURE_COMMAND_SEND_DURATION)) {
-                    this.commandConstructor = (Constructor) SendDuration.class.getConstructor();
-                } else if (userCommandState.equals(Bot.PIN_PICTURE_COMMAND_SEND_PICTURE)) {
-                    this.arguments = new String[]{Bot.HAS_NO_PHOTO};
-                    this.commandConstructor = (Constructor) SendPicture.class.getConstructor();
-                } else if (userCommandState.equals(Bot.PIN_VIDEO_COMMAND_SEND_VIDEO)) {
-                    this.arguments = new String[]{Bot.HAS_NO_VIDEO};
-                    this.commandConstructor = (Constructor) SendVideo.class.getConstructor();
-                } else if (userCommandState.equals(Bot.PIN_VIDEO_COMMAND_SEND_DESCRIPTION)) {
-                    this.commandConstructor = (Constructor) org.telegram.bot.commands.pinVideoCommand.
-                            SendDescription.class.getConstructor();
-                } else if (userCommandState.equals(Bot.PIN_VIDEO_COMMAND_SEND_TITLE)) {
-                    this.commandConstructor = (Constructor) org.telegram.bot.commands.pinVideoCommand.
-                            SendTitle.class.getConstructor();
+                switch (userCommandState) {
+                    case Bot.ASK_COMMAND_WRITE_QUESTION:
+                        this.commandConstructor = (Constructor) WriteQuestion.class.getConstructor();
+                        break;
+                    case Bot.ANSWER_COMMAND_CHOOSE_NUMBER:
+                        this.commandConstructor = (Constructor) ChooseNumber.class.getConstructor();
+                        break;
+                    case Bot.ANSWER_COMMAND_WRITE_ANSWER:
+                        this.commandConstructor = (Constructor) WriteAnswer.class.getConstructor();
+                        break;
+                    case Bot.PIN_PICTURE_COMMAND_SEND_TITLE:
+                        this.commandConstructor = (Constructor) SendTitle.class.getConstructor();
+                        break;
+                    case Bot.PIN_PICTURE_COMMAND_SEND_DESCRIPTION:
+                        this.commandConstructor = (Constructor) SendDescription.class.getConstructor();
+                        break;
+                    case Bot.PIN_PICTURE_COMMAND_SEND_DURATION:
+                        this.commandConstructor = (Constructor) SendDuration.class.getConstructor();
+                        break;
+                    case Bot.PIN_PICTURE_COMMAND_SEND_PICTURE:
+                        this.arguments = new String[]{Bot.HAS_NO_PHOTO};
+                        this.commandConstructor = (Constructor) SendPicture.class.getConstructor();
+                        break;
+                    case Bot.PIN_VIDEO_COMMAND_SEND_VIDEO:
+                        this.arguments = new String[]{Bot.HAS_NO_VIDEO};
+                        this.commandConstructor = (Constructor) SendVideo.class.getConstructor();
+                        break;
+                    case Bot.PIN_VIDEO_COMMAND_SEND_DESCRIPTION:
+                        this.commandConstructor = (Constructor) org.telegram.bot.commands.pinVideoCommand.
+                                SendDescription.class.getConstructor();
+                        break;
+                    case Bot.PIN_VIDEO_COMMAND_SEND_TITLE:
+                        this.commandConstructor = (Constructor) org.telegram.bot.commands.pinVideoCommand.
+                                SendTitle.class.getConstructor();
+                        break;
                 }
 
                 return true;

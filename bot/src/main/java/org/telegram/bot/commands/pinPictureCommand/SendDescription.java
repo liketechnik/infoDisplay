@@ -37,22 +37,19 @@ import org.telegram.bot.commands.SendOnErrorOccurred;
 import org.telegram.bot.database.DatabaseException;
 import org.telegram.bot.database.DatabaseManager;
 import org.telegram.bot.messages.Message;
-import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Chat;
 import org.telegram.telegrambots.api.objects.User;
 import org.telegram.telegrambots.bots.AbsSender;
 import org.telegram.telegrambots.bots.commands.BotCommand;
-import org.telegram.telegrambots.exceptions.TelegramApiException;
 import org.telegram.telegrambots.logging.BotLogger;
 
 import java.util.Optional;
 
 /**
+ * This command gets executed if a user sends '/answer' and sent a title to the bot.
  * @author Florian Warzecha
  * @version 1.0.1
  * @date 01 of November 2016
- *
- * This command gets executed if a user sends '/answer' and sent a title to the bot.
  */
 public class SendDescription extends BotCommand {
 

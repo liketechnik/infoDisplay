@@ -32,32 +32,25 @@
 package org.telegram.bot.messages;
 
 
-import Config.Bot;
 import org.apache.commons.configuration2.XMLConfiguration;
 import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
 import org.apache.commons.configuration2.builder.fluent.Parameters;
 import org.apache.commons.configuration2.builder.fluent.XMLBuilderParameters;
 import org.apache.commons.configuration2.ex.ConfigurationException;
-import org.apache.commons.configuration2.io.ClasspathLocationStrategy;
-import org.apache.commons.configuration2.io.FileLocationStrategy;
 import org.apache.commons.configuration2.tree.xpath.XPathExpressionEngine;
 import org.telegram.bot.database.DatabaseException;
 import org.telegram.bot.database.DatabaseManager;
-import org.telegram.telegrambots.api.objects.User;
 import org.telegram.telegrambots.logging.BotLogger;
 
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 
-import static org.telegram.bot.Main.getFilteredUsername;
-import static org.telegram.bot.Main.getSpecialFilteredUsername;
-
 /**
+ * Get messages in a users foreign language.
+ *
  * @author Florian Warzecha
  * @version 1.0
  * @date 09 of November of 2016
- *
- * Get messages in a users foreign language.
  */
 public class Message {
 
@@ -109,13 +102,9 @@ public class Message {
      * @return The text of the message.
      */
     public String getContent(int userId, boolean addHelp) {
-//        BotLogger.info(LOGTAG, this.xmlQuarry);
-
         if (this.xmlQuarry == null) {
             throw new IllegalStateException("No xml quarry set yet!");
         }
-
-//        BotLogger.info(LOGTAG, this.xmlQuarry);
 
         if (this.message == null) {
             XMLConfiguration config = this.getXmlConfiguration(userId);
@@ -155,6 +144,13 @@ public class Message {
         }
     }
 
+    /**
+     * Calculate a unique hash from the text of the message.
+     * Uniqueness is guaranteed by synchronizing this method to {@code Message.class}, adding the {@link System#currentTimeMillis()}
+     * to the message text before calculating the hash and waiting one millisecond before the hash is returned.
+     * @return The unique hash of the message text.
+     * @throws InterruptedException If sleeping before returning the message is interrupted.
+     */
     public Integer calculateHash() throws InterruptedException {
         synchronized (Message.class) {
             String hash = this.message + System.currentTimeMillis();
@@ -191,10 +187,6 @@ public class Message {
 
         params.setFileName(resources.toString() + "/" + language + ".xml");
         params.setFile(FileSystems.getDefault().getPath(resources.toString() + "/" + language + ".xml").toFile());
-//        BotLogger.info(LOGTAG, resources.toString());
-//        BotLogger.info(LOGTAG, language);
-//        BotLogger.info(LOGTAG, resources.toString() + "/" + language + ".xml");
-
 
         builder = new FileBasedConfigurationBuilder<XMLConfiguration>(XMLConfiguration.class)
                 .configure(params);
@@ -205,8 +197,6 @@ public class Message {
             BotLogger.error(LOGTAG, e);
             System.exit(2);
         }
-
-//        BotLogger.info(LOGTAG, config.toString());
 
         return config;
     }

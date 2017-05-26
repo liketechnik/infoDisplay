@@ -1,3 +1,34 @@
+/*
+ * Copyright (C) 2016-2017  Florian Warzecha <flowa2000@gmail.com>
+ *
+ * This file is part of infoDisplay.
+ *
+ * infoDisplay is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * infoDisplay is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * infoDisplay uses TelegramBots Java API <https://github.com/rubenlagus/TelegramBots> by Ruben Bermudez.
+ * TelegramBots API is licensed under GNU General Public License version 3 <https://www.gnu.org/licenses/gpl-3.0.de.html>.
+ *
+ * infoDisplay uses parts of the Apache Commons project <https://commons.apache.org/>.
+ * Apache commons is licensed under the Apache License Version 2.0 <http://www.apache.org/licenses/>.
+ *
+ * infoDisplay uses vlcj library <http://capricasoftware.co.uk/#/projects/vlcj>.
+ * vlcj is licensed under GNU General Public License version 3 <https://www.gnu.org/licenses/gpl-3.0.de.html>.
+ *
+ * Thanks to all the people who contributed to the projects that make this
+ * program possible.
+ */
+
 package org.telegram.bot.commands.deleteMediaCommand
 
 import org.telegram.bot.api.SendMessages
@@ -9,22 +40,33 @@ import org.telegram.bot.utils.getCommandName
 import org.telegram.bot.utils.getPackageName
 import org.telegram.telegrambots.api.objects.Chat
 import org.telegram.telegrambots.api.objects.User
-import org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup
 import org.telegram.telegrambots.bots.AbsSender
 import org.telegram.telegrambots.bots.commands.BotCommand
 import org.telegram.telegrambots.logging.BotLogger
 import java.util.*
 
+/**
+ * The identifier of this command.
+ */
 private val commandIdentifier: String = "deleted_media"
+/**
+ *  A short description of this command.
+ */
 private val description: String = "Send confirmation on taken actions of a user while deleting a media file."
+
+/**
+ * Describes which actions this command can do. It allows easy distinguishing between those for the [org.telegram.bot.CallbackParser].
+ */
 internal enum class FUNCTIONS {
     delete, cancel
 }
 
 /**
- * @author liketechnik
+ * @author Florian Warzecha
  * @version 1.0
- * @date 24 of Mai 2017
+ * @since 2.0.0
+ * @date 24 of May 2017
+ * @see DeleteMediaCommand
  */
 class DeletedMediaCommand : BotCommand(commandIdentifier, description) {
 
@@ -32,13 +74,23 @@ class DeletedMediaCommand : BotCommand(commandIdentifier, description) {
     private val packageName: String = getPackageName(this)
     private val commandName: String = getCommandName(this)
 
+    /**
+     * Contains the situations defined in the language files.
+     */
     private enum class SITUATIONS {
         yes, cancel
     }
 
+    /**
+     * Send the user either a message with the deleted media file and a confirmation of the deletion or a message
+     * stating that nothing has been deleted. These two cases have their own methods, here is only checked which is executed
+     * with which parameters.
+     * @see cancel
+     * @see delete
+     */
     override fun execute(absSender: AbsSender, user: User, chat: Chat, arguments: Array<out String>) {
         try {
-            if (arguments[0].equals(FUNCTIONS.delete.name)) {
+            if (arguments[0] == FUNCTIONS.delete.name) {
                 val argumentsSplit: List<String> = arguments[1].split("_")
 
                 val sendTime: Int = argumentsSplit[argumentsSplit.size - 2].toInt() // access the second last element containing the timestamp
@@ -67,6 +119,9 @@ class DeletedMediaCommand : BotCommand(commandIdentifier, description) {
         }
     }
 
+    /**
+     * Inform the user that nothing was deleted.
+     */
     private fun cancel(absSender: AbsSender, user: User, chat: Chat, arguments: Array<out String>) {
         val message: SituationalMessage = SituationalMessage(commandName)
         message.setMessageName(packageName, commandName, SITUATIONS.cancel.name)
@@ -77,6 +132,9 @@ class DeletedMediaCommand : BotCommand(commandIdentifier, description) {
         SendMessages.getInstance().addMessage(message.calculateHash(), messageText, chat.id.toString(), absSender, Optional.empty(), Optional.empty())
     }
 
+    /**
+     * Tell the user that the media file was deleted. The file is send together with this statement.
+     */
     private fun delete(absSender: AbsSender, user: User, chat: Chat, arguments: Array<out String>) {
         val databaseManager = DatabaseManager.getInstance()
 

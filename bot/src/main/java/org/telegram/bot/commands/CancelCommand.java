@@ -31,28 +31,19 @@
 
 package org.telegram.bot.commands;
 
-import org.apache.commons.configuration2.ex.ConfigurationException;
-import org.apache.commons.lang3.ArrayUtils;
-
-import org.telegram.bot.DisplayBot;
 import org.telegram.bot.database.DatabaseException;
 import org.telegram.bot.database.DatabaseManager;
-import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Chat;
 import org.telegram.telegrambots.api.objects.User;
 import org.telegram.telegrambots.bots.AbsSender;
-import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.bots.commands.BotCommand;
-import org.telegram.telegrambots.bots.commands.ICommandRegistry;
-import org.telegram.telegrambots.exceptions.TelegramApiException;
 import org.telegram.telegrambots.logging.BotLogger;
 
 /**
+ * This command gets executed if a user sends '/cancel' to the bot.
  * @author Florian Warzecha
  * @version 1.0.1
  * @date 25 of October of 2016
- *
- * This command gets executed if a user sends '/cancel' to the bot.
  */
 public class CancelCommand extends BotCommand {
 
@@ -60,7 +51,6 @@ public class CancelCommand extends BotCommand {
 
     /**
      * Set the identifier and a short description for the command.
-     * @param commandRegistry
      */
     public CancelCommand() {
         super("cancel", "Cancel the running command (e.g. uploading of a new picture).");

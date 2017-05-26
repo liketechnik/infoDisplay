@@ -35,25 +35,21 @@ import org.telegram.bot.api.SendMessages;
 import org.telegram.bot.commands.SendOnErrorOccurred;
 import org.telegram.bot.database.DatabaseException;
 import org.telegram.bot.database.DatabaseManager;
-import org.telegram.bot.messages.Message;
 import org.telegram.bot.messages.SituationalContentMessage;
-import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Chat;
 import org.telegram.telegrambots.api.objects.User;
 import org.telegram.telegrambots.bots.AbsSender;
 import org.telegram.telegrambots.bots.commands.BotCommand;
-import org.telegram.telegrambots.exceptions.TelegramApiException;
 import org.telegram.telegrambots.logging.BotLogger;
 
 import java.util.HashMap;
 import java.util.Optional;
 
 /**
+ * This command gets executed if a user executed the {@link AnswerCommand}. It sends the user the requested question.
  * @author Florian Warzecha
  * @version 1.0.1
  * @date 01 of November of 2016
- *
- * This command gets executed if a user executed the {@link AnswerCommand}. It sends the user the requested question.
  */
 public class ChooseNumber extends BotCommand {
 
