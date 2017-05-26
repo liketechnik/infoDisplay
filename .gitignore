@@ -1,0 +1,9 @@
+*.log
+.*
+!.travis.yml
+*build*
+!build.gradle
+infoDisplay.i[a-z][a-z]
+!.gitignore
+.idea/*
+/docs

@@ -32,6 +32,8 @@
 package liketechnik.InfoDisplay;
 
 
+import Config.Bot;
+import Config.Keys;
 import ch.qos.logback.classic.Level;
 import org.apache.commons.configuration2.Configuration;
 import org.apache.commons.configuration2.FileBasedConfiguration;
@@ -55,6 +57,7 @@ import java.nio.file.Files;
 import DisplayFile.DisplayFile;
 
 /**
+ * This class represents the display file viewer.
  * @author Florian Warzecha
  * @version 1.0.1
  * @date 24 of September of 2016
@@ -221,17 +224,28 @@ public class Display {
             }
 
             // check if all necessary information is present in the configuration for the display file
-            if (!displayFileConfig.containsKey(Config.Keys.DISPLAY_FILE_DURATION_KEY) ||
-                    !displayFileConfig.containsKey(Config.Keys.DISPLAY_FILE_TYPE_KEY)) {
+//            if (!displayFileConfig.containsKey(Config.Keys.DISPLAY_FILE_DURATION_KEY) ||
+//                    !displayFileConfig.containsKey(Config.Keys.DISPLAY_FILE_TYPE_KEY)) {
+//                logger.error("Config file for displayFile {} seems corrupted.", displayFile);
+//                continue;
+//            }
+
+            if (!displayFileConfig.containsKey(Config.Keys.DISPLAY_FILE_TYPE_KEY)) {
                 logger.error("Config file for displayFile {} seems corrupted.", displayFile);
                 continue;
             }
 
             // create a new displayFile and add it to the array containing all display files
-            displayFiles[processedFiles] = new DisplayFile(
-                    displayFileConfig.getInt(Config.Keys.DISPLAY_FILE_DURATION_KEY),
+            if (displayFileConfig.getString(Keys.DISPLAY_FILE_TYPE_KEY).equals(Bot.DISPLAY_FILE_TYPE_IMAGE)) {
+                displayFiles[processedFiles] = new DisplayFile(
+                        displayFileConfig.getInt(Config.Keys.DISPLAY_FILE_DURATION_KEY),
                         displayFileConfig.getString(Config.Keys.DISPLAY_FILE_TYPE_KEY),
-                    Config.Paths.DISPLAY_FILES.toString() + "/" + displayFile);
+                        Config.Paths.DISPLAY_FILES.toString() + "/" + displayFile);
+            } else if (displayFileConfig.getString(Keys.DISPLAY_FILE_TYPE_KEY).equals(Bot.DISPLAY_FILE_TYPE_VIDEO)) {
+                displayFiles[processedFiles] = new DisplayFile(
+                        displayFileConfig.getString(Config.Keys.DISPLAY_FILE_TYPE_KEY),
+                        Config.Paths.DISPLAY_FILES.toString() + "/" + displayFile);
+            }
 
             processedFiles++;
         }
@@ -240,6 +254,9 @@ public class Display {
     }
 }
 
+/**
+ * This {@code Thread} iterates over the display files and shows them in the window.
+ */
 class showFiles extends Thread {
 
     EmbeddedMediaPlayerComponent mediaPlayerComponent;
@@ -267,13 +284,28 @@ class showFiles extends Thread {
 
                 String location = displayFile.getFileName();
 
-                this.mediaPlayerComponent.getMediaPlayer().playMedia(location, ":image-duration=-1");
-                while (this.mediaPlayerComponent.getMediaPlayer().getTime() < displayFile.getDisplayDuration() * 1000) {
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        this.logger.error("Encountered interruption during sleep time of the thread. " +
-                                "Exception was: {}", e);
+                if (displayFile.getType().equals(Bot.DISPLAY_FILE_TYPE_IMAGE)) {
+                    this.mediaPlayerComponent.getMediaPlayer().playMedia(location, ":image-duration=-1");
+
+                    while (this.mediaPlayerComponent.getMediaPlayer().getTime() < displayFile.getDisplayDuration() * 1000) {
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            this.logger.error("Encountered interruption during sleep time of the thread. " +
+                                    "Exception was: {}", e);
+                        }
+                    }
+                } else if (displayFile.getType().equals(Bot.DISPLAY_FILE_TYPE_VIDEO)) {
+                    this.mediaPlayerComponent.getMediaPlayer().playMedia(location);
+
+                    while (this.mediaPlayerComponent.getMediaPlayer().getPosition() >= 0) {
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            this.logger.error("Encountered interruption during sleep time of the thread. " +
+                                    "Exception was: {}", e);
+                        }
+                        logger.debug(String.valueOf(this.mediaPlayerComponent.getMediaPlayer().getPosition()));
                     }
                 }
             }

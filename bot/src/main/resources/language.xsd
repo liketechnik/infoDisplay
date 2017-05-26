@@ -30,46 +30,76 @@
   ~ program possible.
   -->
 
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" >
 
-    <xs:element name="name"  type="xs:language"/>
+    <xs:element name="name"  type="xs:language">
 
-    <xs:attribute name="command" type="xs:ID"/>
-    <xs:attribute name="position" type="xs:nonNegativeInteger"/>
-    <xs:attribute name="case" type="xs:ID"/>
+    </xs:element>
+
+    <xs:attribute name="command" type="xs:token"/>
+    <!--<xs:attribute name="position" type="xs:nonNegativeInteger"/>-->
+    <xs:attribute name="case" type="xs:token"/>
 
 
-    <xs:element name="part">
+    <xs:element name="keyboard_button">
         <xs:complexType mixed="true">
-            <xs:simpleContent>
-                <xs:extension base="xs:token">
-                    <xs:attribute ref="position" use="required"/>
-                </xs:extension>
-            </xs:simpleContent>
+            <xs:attribute name="row" type="xs:nonNegativeInteger"></xs:attribute>
+            <xs:attribute name="column" type="xs:nonNegativeInteger"></xs:attribute>
+            <xs:attribute name="callback_data" type="xs:token"/>
         </xs:complexType>
     </xs:element>
 
-    <xs:element name="case">
+    <xs:element name="reply_keyboard">
         <xs:complexType>
             <xs:sequence>
-                <xs:element ref="part" minOccurs="1" maxOccurs="unbounded"/>
+                <xs:element ref="keyboard_button" minOccurs="1" maxOccurs="unbounded"></xs:element>
             </xs:sequence>
-            <xs:attribute ref="case" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="command_description" type="xs:token"/>
+    <xs:element name="command_content" type="xs:token">
+    </xs:element>
+
+    <!--<xs:element name="part">-->
+        <!--<xs:complexType mixed="true">-->
+            <!--<xs:simpleContent>-->
+                <!--<xs:extension base="xs:token">-->
+                    <!--<xs:attribute ref="position" use="required"/>-->
+                <!--</xs:extension>-->
+            <!--</xs:simpleContent>-->
+        <!--</xs:complexType>-->
+    <!--</xs:element>-->
+
+    <xs:element name="case">
+        <xs:complexType mixed="true">
+            <!--<xs:simpleContent>-->
+                <!--<xs:extension base="xs:token">-->
+                    <!--<xs:attribute ref="case" use="required"/>-->
+                <!--</xs:extension>-->
+            <!--</xs:simpleContent>-->
+            <xs:sequence>
+                <xs:element ref="command_content" minOccurs="1" maxOccurs="1"/>
+                <xs:element ref="reply_keyboard" minOccurs="0" maxOccurs="1"/>
+            </xs:sequence>
+            <xs:attribute ref="case"/>
         </xs:complexType>
     </xs:element>
 
     <xs:element name="command_message">
-        <xs:complexType>
+        <xs:complexType mixed="true">
             <xs:sequence>
-                <xs:element ref="part" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="command_description" minOccurs="1" maxOccurs="1"></xs:element>
                 <xs:element ref="case" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="command_content" minOccurs="0" maxOccurs="1"/>
+                <xs:element ref="reply_keyboard" minOccurs="0" maxOccurs="1"/>
             </xs:sequence>
             <xs:attribute ref="command" use="required"/>
         </xs:complexType>
     </xs:element>
 
     <xs:element name="command_package">
-        <xs:complexType mixed="true">
+        <xs:complexType mixed="false">
             <xs:sequence>
                 <xs:element ref="command_message" minOccurs="1" maxOccurs="unbounded"/>
             </xs:sequence>

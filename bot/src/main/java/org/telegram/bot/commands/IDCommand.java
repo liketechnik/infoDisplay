@@ -31,23 +31,23 @@
 
 package org.telegram.bot.commands;
 
-import org.telegram.telegrambots.api.methods.send.SendMessage;
+import org.telegram.bot.api.SendMessages;
+import org.telegram.bot.messages.ContentMessage;
 import org.telegram.telegrambots.api.objects.Chat;
 import org.telegram.telegrambots.api.objects.User;
 import org.telegram.telegrambots.bots.AbsSender;
 import org.telegram.telegrambots.bots.commands.BotCommand;
-import org.telegram.telegrambots.exceptions.TelegramApiException;
 import org.telegram.telegrambots.logging.BotLogger;
 
-import static org.telegram.bot.messages.Message.getIdMessage;
+import java.util.HashMap;
+import java.util.Optional;
 
 
 /**
+ * This command gets executed if a user sent '/ids'.
  * @author Florian Warzecha
  * @version 1.0.1
  * @date 24 of October of 2016
- *
- * This command gets executed if a user sent '/ids'.
  */
 public class IDCommand extends BotCommand {
 
@@ -70,25 +70,23 @@ public class IDCommand extends BotCommand {
     @Override
     public void execute(AbsSender absSender, User user, Chat chat, String[] arguments) {
 
-        SendMessage answer = new SendMessage();
-
         try {
-            String message = getIdMessage(user, chat.getId());
+            HashMap<String, String> additionalContent  = new HashMap<>();
+            additionalContent.put("userId", user.getId().toString());
+            additionalContent.put("chatId", chat.getId().toString());
 
-            answer.setChatId(chat.getId().toString());
-            answer.setText(message);
-        } catch (Exception e) {
+            ContentMessage contentMessage = new ContentMessage(this.getCommandIdentifier() + "_command");
+            contentMessage.setAdditionalContent(additionalContent);
+
+            String messageText = contentMessage.getContent(user.getId(), true);
+            SendMessages.getInstance().addMessage(contentMessage.calculateHash(), messageText, chat.getId().toString(), absSender, Optional.empty(), Optional.empty());
+
+        } catch (InterruptedException e) {
             BotLogger.error(LOGTAG, e);
 
             new SendOnErrorOccurred().execute(absSender, user, chat, new String[]{LOGTAG});
 
             return;
-        }
-
-        try {
-            absSender.sendMessage(answer);
-        } catch (TelegramApiException e) {
-            BotLogger.error(LOGTAG, e);
         }
     }
 }

@@ -32,23 +32,24 @@
 package org.telegram.bot.commands.pinPictureCommand;
 
 
+import org.telegram.bot.api.SendMessages;
 import org.telegram.bot.commands.SendOnErrorOccurred;
+import org.telegram.bot.database.DatabaseException;
 import org.telegram.bot.database.DatabaseManager;
-import org.telegram.bot.messages.Message;
-import org.telegram.telegrambots.api.methods.send.SendMessage;
+import org.telegram.bot.messages.SituationalMessage;
 import org.telegram.telegrambots.api.objects.Chat;
 import org.telegram.telegrambots.api.objects.User;
 import org.telegram.telegrambots.bots.AbsSender;
 import org.telegram.telegrambots.bots.commands.BotCommand;
-import org.telegram.telegrambots.exceptions.TelegramApiException;
 import org.telegram.telegrambots.logging.BotLogger;
 
+import java.util.Optional;
+
 /**
+ * This command gets executed if a user sent '/pin_picture' and proceeds (sending description and title of the picture).
  * @author Florian Warzecha
  * @version 1.0.1
  * @date 01 of November 2016
- *
- * This command gets executed if a user sent '/pin_picture' and proceeds (sending description and title of the picture).
  */
 public class SendDuration extends BotCommand {
 
@@ -73,57 +74,41 @@ public class SendDuration extends BotCommand {
     @Override
     public void execute(AbsSender absSender, User user, Chat chat, String[] arguments) {
 
-        SendMessage answer = new SendMessage();
-
         try {
 
             DatabaseManager databaseManager = DatabaseManager.getInstance();
-
-            StringBuilder messageBuilder = new StringBuilder();
-            String message = arguments[0];
-
             String displayFileName = databaseManager.getCurrentPictureTitle(user.getId());
 
-            int duration = 15;
+            SituationalMessage situationalMessage = new SituationalMessage(this.getCommandIdentifier() + "_command");
 
-            answer.setChatId(user.getId().toString());
-
+            String message = arguments[0];
+            int duration;
             try {
                 duration = Integer.parseInt(message);
                 if (duration < 1) {
                     throw new NumberFormatException("Duration is too low.");
                 }
+
+                situationalMessage.setMessageName(this.getClass().getPackage().getName()
+                                .replaceAll("org.telegram.bot.commands.", ""), this.getCommandIdentifier() + "_command",
+                        "valid_duration");
+
+                databaseManager.setCurrentPictureDuration(user.getId(), duration);
+                databaseManager.setUserCommandState(user.getId(), Config.Bot.PIN_PICTURE_COMMAND_SEND_PICTURE);
             } catch (NumberFormatException e) {
-                messageBuilder.append(Message.pinPictureCommand.getSendDurationMessage(user, false));
-                answer.setText(messageBuilder.toString());
-
-                try {
-                    absSender.sendMessage(answer);
-                } catch (TelegramApiException e1) {
-                    BotLogger.error(LOGTAG, e1);
-                }
-
-                return;
+                situationalMessage.setMessageName(this.getClass().getPackage().getName()
+                                .replaceAll("org.telegram.bot.commands.", ""), this.getCommandIdentifier() + "_command",
+                        "invalid_duration");
             }
 
-            messageBuilder.append(Message.pinPictureCommand.getSendDurationMessage(user, true));
-
-            databaseManager.setCurrentPictureDuration(user.getId(), duration);
-            databaseManager.setUserCommandState(user.getId(), Config.Bot.PIN_PICTURE_COMMAND_SEND_PICTURE);
-
-            answer.setText(messageBuilder.toString());
-        } catch (Exception e) {
+            String messageText = situationalMessage.getContent(user.getId(), false);
+            SendMessages.getInstance().addMessage(situationalMessage.calculateHash(), messageText, chat.getId().toString(), absSender, Optional.empty(), Optional.empty());
+        } catch (DatabaseException | InterruptedException e) {
             BotLogger.error(LOGTAG, e);
 
             new SendOnErrorOccurred().execute(absSender, user, chat, new String[]{LOGTAG});
 
             return;
-        }
-
-        try {
-            absSender.sendMessage(answer);
-        } catch (TelegramApiException e) {
-            BotLogger.error(LOGTAG, e);
         }
     }
 }

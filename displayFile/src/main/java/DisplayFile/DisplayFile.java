@@ -29,9 +29,12 @@
  * program possible.
  */
 
-package DisplayFile;//packageStatement*
+package DisplayFile;
+
+import Config.Bot;
 
 /**
+ * This class represents a display file displayed by the display file viewer.
  * @author Florian Warzecha
  * @version 1.0.1
  * @date 24 of September of 2016
@@ -47,10 +50,19 @@ public class DisplayFile {
 
     public DisplayFile(int displayDuration, String type, String fileName) throws IllegalArgumentException {
         if (!type.equals(Config.Bot.DISPLAY_FILE_TYPE_IMAGE)) {
-            throw new IllegalArgumentException("No known type: " + type);
+            throw new IllegalArgumentException("No valid type: " + type);
         }
 
         this.displayDuration = displayDuration;
+        this.type = type;
+        this.fileName = fileName;
+    }
+
+    public DisplayFile(String type, String fileName) throws IllegalArgumentException {
+        if (!type.equals(Bot.DISPLAY_FILE_TYPE_VIDEO)) {
+            throw new IllegalArgumentException("No valid type: " + type);
+        }
+
         this.type = type;
         this.fileName = fileName;
     }

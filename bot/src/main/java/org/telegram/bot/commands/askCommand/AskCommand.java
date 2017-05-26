@@ -32,24 +32,25 @@
 package org.telegram.bot.commands.askCommand;
 
 
+import org.telegram.bot.api.SendMessages;
 import org.telegram.bot.commands.SendOnErrorOccurred;
+import org.telegram.bot.database.DatabaseException;
 import org.telegram.bot.database.DatabaseManager;
 import org.telegram.bot.messages.Message;
-import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Chat;
 import org.telegram.telegrambots.api.objects.User;
 import org.telegram.telegrambots.bots.AbsSender;
 import org.telegram.telegrambots.bots.commands.BotCommand;
-import org.telegram.telegrambots.exceptions.TelegramApiException;
 import org.telegram.telegrambots.logging.BotLogger;
+
+import java.util.Optional;
 
 
 /**
+ * This command lets users ask questions to the administrator of this bot.
  * @author Florian Warzecha
  * @version 1.0.1
  * @date 24 of October of 2016
- *
- * This command lets users ask questions to the administrator of this bot.
  */
 public class AskCommand extends BotCommand {
 
@@ -74,32 +75,24 @@ public class AskCommand extends BotCommand {
     @Override
     public void execute(AbsSender absSender, User user, Chat chat, String[] arguments) {
 
-        SendMessage answer = new SendMessage();
-
         try {
             DatabaseManager databaseManager = DatabaseManager.getInstance();
 
             databaseManager.setUserState(user.getId(), true);
-
-            StringBuilder messageBuilder = new StringBuilder();
-            messageBuilder.append(Message.askCommand.getAskMessage(user));
-
             databaseManager.setUserCommandState(user.getId(), Config.Bot.ASK_COMMAND_WRITE_QUESTION);
 
-            answer.setChatId(chat.getId().toString());
-            answer.setText(messageBuilder.toString());
-        } catch (Exception e) {
+            Message message = new Message(this.getCommandIdentifier() + "_command");
+            message.setMessageName(this.getClass().getPackage().getName().replaceAll("org.telegram.bot.commands.", ""),
+                    this.getCommandIdentifier() + "_command");
+
+            String messageText = message.getContent(user.getId(), false);
+            SendMessages.getInstance().addMessage(message.calculateHash(), messageText, chat.getId().toString(), absSender, Optional.empty(), Optional.empty());
+        } catch (DatabaseException | InterruptedException e) {
             BotLogger.error(LOGTAG, e);
 
             new SendOnErrorOccurred().execute(absSender, user, chat, new String[]{LOGTAG});
 
             return;
-        }
-
-        try {
-            absSender.sendMessage(answer);
-        } catch (TelegramApiException e) {
-            BotLogger.error(LOGTAG, e);
         }
     }
 

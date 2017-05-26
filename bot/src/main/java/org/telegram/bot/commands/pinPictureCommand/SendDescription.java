@@ -32,23 +32,24 @@
 package org.telegram.bot.commands.pinPictureCommand;
 
 
+import org.telegram.bot.api.SendMessages;
 import org.telegram.bot.commands.SendOnErrorOccurred;
+import org.telegram.bot.database.DatabaseException;
 import org.telegram.bot.database.DatabaseManager;
 import org.telegram.bot.messages.Message;
-import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Chat;
 import org.telegram.telegrambots.api.objects.User;
 import org.telegram.telegrambots.bots.AbsSender;
 import org.telegram.telegrambots.bots.commands.BotCommand;
-import org.telegram.telegrambots.exceptions.TelegramApiException;
 import org.telegram.telegrambots.logging.BotLogger;
 
+import java.util.Optional;
+
 /**
+ * This command gets executed if a user sends '/answer' and sent a title to the bot.
  * @author Florian Warzecha
  * @version 1.0.1
  * @date 01 of November 2016
- *
- * This command gets executed if a user sends '/answer' and sent a title to the bot.
  */
 public class SendDescription extends BotCommand {
 
@@ -74,36 +75,26 @@ public class SendDescription extends BotCommand {
     @Override
     public void execute(AbsSender absSender, User user, Chat chat, String[] arguments) {
 
-        SendMessage answer = new SendMessage();
-
         try {
 
             DatabaseManager databaseManager = DatabaseManager.getInstance();
 
-            StringBuilder messageBuilder = new StringBuilder();
-
-            String message = arguments[0];
-
-            databaseManager.setCurrentPictureDescription(user.getId(), message);
-
-            messageBuilder.append(Message.pinPictureCommand.getSendDescriptionMessage(user));
-
+            String description = arguments[0];
+            databaseManager.setCurrentPictureDescription(user.getId(), description);
             databaseManager.setUserCommandState(user.getId(), Config.Bot.PIN_PICTURE_COMMAND_SEND_DURATION);
 
-            answer.setChatId(chat.getId().toString());
-            answer.setText(messageBuilder.toString());
-        } catch (Exception e) {
+            Message message = new Message(this.getCommandIdentifier() + "_command");
+            message.setMessageName(this.getClass().getPackage().getName().replaceAll("org.telegram.bot.commands.", ""),
+                    this.getCommandIdentifier() + "_command");
+
+            String messageText = message.getContent(user.getId(), false);
+            SendMessages.getInstance().addMessage(message.calculateHash(), messageText, chat.getId().toString(), absSender, Optional.empty(), Optional.empty());
+        } catch (DatabaseException | InterruptedException e) {
             BotLogger.error(LOGTAG, e);
 
             new SendOnErrorOccurred().execute(absSender, user, chat, new String[]{LOGTAG});
 
             return;
-        }
-
-        try {
-            absSender.sendMessage(answer);
-        } catch (TelegramApiException e) {
-            BotLogger.error(LOGTAG, e);
         }
     }
 }

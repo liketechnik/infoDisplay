@@ -31,28 +31,26 @@
 
 package org.telegram.bot.commands.answerCommand;
 
-import org.apache.commons.configuration2.ex.ConfigurationException;
-
+import org.telegram.bot.api.SendMessages;
 import org.telegram.bot.commands.SendOnErrorOccurred;
+import org.telegram.bot.database.DatabaseException;
 import org.telegram.bot.database.DatabaseManager;
-import org.telegram.bot.messages.Message;
-import org.telegram.telegrambots.api.methods.send.SendMessage;
+import org.telegram.bot.messages.ContentMessage;
 import org.telegram.telegrambots.api.objects.Chat;
 import org.telegram.telegrambots.api.objects.User;
 import org.telegram.telegrambots.bots.AbsSender;
 import org.telegram.telegrambots.bots.commands.BotCommand;
-import org.telegram.telegrambots.exceptions.TelegramApiException;
 import org.telegram.telegrambots.logging.BotLogger;
 
-import javax.xml.crypto.Data;
+import java.util.HashMap;
+import java.util.Optional;
 
 
 /**
+ * This command gets executed if  a user sends '/answer' to the bot and lets the administrator answer asked questions.
  * @author Florian Warzecha
  * @version 1.0.1
  * @date 25 of October of 2016
- *
- * This command gets executed if  a user sends '/answer' to the bot and lets the administrator answer asked questions.
  */
 public class AnswerCommand extends BotCommand {
 
@@ -76,9 +74,7 @@ public class AnswerCommand extends BotCommand {
     @Override
     public void execute(AbsSender absSender, User user, Chat chat, String[] arguments) {
 
-        String message;
         StringBuilder questionsBuilder = new StringBuilder();
-        SendMessage answer = new SendMessage();
 
         try {
             DatabaseManager databaseManager = DatabaseManager.getInstance();
@@ -95,24 +91,25 @@ public class AnswerCommand extends BotCommand {
                 questions++;
             }
 
-            message = Message.answerCommand.getAnswerMessage(user, questionsBuilder.toString());
+            HashMap<String, String> additionalContent = new HashMap<>();
+            additionalContent.put("questions", questionsBuilder.toString());
 
-            answer.setChatId(chat.getId().toString());
-            answer.setText(message);
+            ContentMessage contentMessage = new ContentMessage(this.getCommandIdentifier() + "_command");
+            contentMessage.setMessageName(this.getClass().getPackage().getName().replaceAll("org.telegram.bot.commands.",
+                    ""), this.getCommandIdentifier() + "_command");
+            contentMessage.setAdditionalContent(additionalContent);
+
+
+            String messageText = contentMessage.getContent(user.getId(), false);
+            SendMessages.getInstance().addMessage(contentMessage.calculateHash(), messageText, chat.getId().toString(), absSender, Optional.empty(), Optional.empty());
 
             databaseManager.setUserCommandState(user.getId(), Config.Bot.ANSWER_COMMAND_CHOOSE_NUMBER);
-        } catch (Exception e) {
+        } catch (DatabaseException | InterruptedException e) {
             BotLogger.error(LOGTAG, e);
 
             new SendOnErrorOccurred().execute(absSender, user, chat, new String[]{LOGTAG});
 
             return;
-        }
-
-        try {
-            absSender.sendMessage(answer);
-        } catch (TelegramApiException e) {
-            BotLogger.error(LOGTAG, e);
         }
     }
 }

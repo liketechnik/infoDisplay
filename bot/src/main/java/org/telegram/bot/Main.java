@@ -31,9 +31,9 @@
 
 package org.telegram.bot;
 
+import org.telegram.bot.api.SendMessages;
 import org.telegram.bot.commands.CancelCommand;
-import org.telegram.bot.commands.HelpCommand;
-import org.telegram.telegrambots.ApiContext;
+import org.telegram.bot.database.SaveThread;
 import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.TelegramBotsApi;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
@@ -41,14 +41,18 @@ import org.telegram.telegrambots.api.objects.Chat;
 import org.telegram.telegrambots.api.objects.User;
 import org.telegram.telegrambots.bots.AbsSender;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
+import org.telegram.telegrambots.generics.BotSession;
 import org.telegram.telegrambots.logging.BotLogger;
 import org.telegram.telegrambots.logging.BotsFileHandler;
 
 import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
 
 /**
+ * The main class that set ups the logger, registers the bot to the Telegram API and waits for the command to shutdown.
  * @author Florian Warzecha
  * @version 1.0.1
  * @date 21 of October of 2016
@@ -57,7 +61,10 @@ public class Main {
     private static final String LOGTAG = "MAIN";
 
 
-    /* Set up the logger and register the bot */
+    /**
+     * Set up a logger and register the commands. Then watch for the appearance of a file 'stop' in the working dir. If it
+     * appears stop the program.
+     */
     public static void main (String args[]) {
         BotLogger.setLevel(Level.ALL);
         BotLogger.registerLogger(new ConsoleHandler());
@@ -72,11 +79,18 @@ public class Main {
         try {
             TelegramBotsApi telegramBotsApi = createTelegramBotsApi();
             try {
-                telegramBotsApi.registerBot(new DisplayBot());
+                BotSession displayBot = telegramBotsApi.registerBot(new DisplayBot());
+                SaveThread.getInstance(new DisplayBot()).start();
+                BotLogger.info(LOGTAG, "Starting bot now!");
+                SendMessages.getInstance().start();
+                while (Files.notExists(FileSystems.getDefault().getPath("./stop"))) {
+                    Thread.sleep(5000);
+                }
+                displayBot.stop();
             } catch (TelegramApiException e) {
                 BotLogger.error(LOGTAG, e);
             }
-        } catch (Exception e) {
+        } catch (InterruptedException | TelegramApiException e) {
             BotLogger.error(LOGTAG, e);
         }
     }
@@ -170,7 +184,15 @@ public class Main {
             BotLogger.error(LOGTAG, e);
         }
 
-        new CancelCommand(new DisplayBot().getICommandRegistry()).execute(absSender, user, chat, new String[]{});
+        new CancelCommand().execute(absSender, user, chat, new String[]{});
+    }
+
+    public static Exception mergeExceptions(Exception[] exceptions) {
+        Exception exception = exceptions[0];
+        for (int x = 1; x < exceptions.length; x++) {
+            exception.addSuppressed(exceptions[x]);
+        }
+        return exception;
     }
 }
 

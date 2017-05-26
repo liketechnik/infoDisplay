@@ -31,46 +31,40 @@
 
 package org.telegram.bot.commands;
 
-import org.apache.commons.collections.KeyValue;
-import org.apache.commons.configuration2.ex.ConfigurationException;
-import org.apache.commons.lang3.ArrayUtils;
-
+import org.telegram.bot.DisplayBot;
+import org.telegram.bot.api.SendMessages;
+import org.telegram.bot.database.DatabaseException;
 import org.telegram.bot.database.DatabaseManager;
-import org.telegram.bot.messages.Message;
-import org.telegram.telegrambots.api.methods.send.SendMessage;
+import org.telegram.bot.messages.CommandDescription;
+import org.telegram.bot.messages.ContentMessage;
 import org.telegram.telegrambots.api.objects.Chat;
 import org.telegram.telegrambots.api.objects.User;
 import org.telegram.telegrambots.bots.AbsSender;
 import org.telegram.telegrambots.bots.commands.BotCommand;
-import org.telegram.telegrambots.bots.commands.ICommandRegistry;
-import org.telegram.telegrambots.exceptions.TelegramApiException;
 import org.telegram.telegrambots.logging.BotLogger;
 
-import java.awt.event.KeyEvent;
-import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.*;
+import java.util.regex.Matcher;
 
 
 /**
+ * This commands gets executed if a user sends '/help' to the bot or if the information about the bot and its
+ * commands is needed.
  * @author Florian Warzecha
  * @version 1.0.1
  * @date 23 of October of 2016
- *
- * This commands gets executed if a user sends '/help' to the bot or if the information about the bot and its
- * commands is needed.
  */
 public class HelpCommand extends BotCommand {
 
     private static final String LOGTAG = "HELPCOMMAND";
 
-    private final ICommandRegistry commandRegistry;
-
     /**
      * Set the identifier and a short description of this bot.
-     * @param commandRegistry
      */
-    public HelpCommand(ICommandRegistry commandRegistry) {
+    public HelpCommand() {
         super("help", "Send description of the bot together with a usage guide.");
-        this.commandRegistry = commandRegistry;
     }
 
     /**
@@ -83,47 +77,67 @@ public class HelpCommand extends BotCommand {
     @Override
     public void execute(AbsSender absSender, User user, Chat chat, String[] arguments) {
 
-        SendMessage answer = new SendMessage();
-
         try {
             DatabaseManager.getInstance().setUserState(user.getId(), true);
 
-            StringBuilder messageBuilder = new StringBuilder();
+            StringBuilder additionalContentBuilder = new StringBuilder();
 
-            messageBuilder.append(Message.getHelpMessage(user));
+            List<BotCommand> botCommands = new ArrayList<BotCommand>();
+            DisplayBot bot = new DisplayBot();
+            for (Constructor<BotCommand> commandConstructor : bot.getRegisteredCommands()) {
+                botCommands.add(commandConstructor.newInstance());
+            }
 
-            for (BotCommand botCommand : commandRegistry.getRegisteredCommands()) {
+            for (BotCommand botCommand : botCommands) {
                 if (!botCommand.getCommandIdentifier().equals("help") &&
                         !botCommand.getCommandIdentifier().equals("start") &&
                         !botCommand.getCommandIdentifier().equals("stop") &&
                         !botCommand.getCommandIdentifier().equals("ids") &&
                         !botCommand.getCommandIdentifier().equals("answer")) {
 
-                    messageBuilder.append("/").append(botCommand.getCommandIdentifier().replace("_", "\\_"));
-                    messageBuilder.append(":\n    ").append(botCommand.getDescription()).append("\n");
+                    additionalContentBuilder.append("/").append(botCommand.getCommandIdentifier().replace("_",
+                            Matcher.quoteReplacement("\\_")));
+                    additionalContentBuilder.append(":\n    ");
+
+                    CommandDescription commandDescription =
+                            new CommandDescription(botCommand.getCommandIdentifier() + "_command");
+
+                    // check if the command is inside a package or not
+                    if (botCommand.getClass().getPackage() != StartCommand.class.getPackage()) {
+                        //                        additionalContentBuilder.append(commandDescription.getContent(user.getId(), false));
+                        // find out the package name and with its identifier parse it from xml file via CommandDescription class
+                        commandDescription.setMessageName(
+                                botCommand.getClass().getPackage().getName().replaceAll(
+                                        "org.telegram.bot.commands.", ""), botCommand.getCommandIdentifier() +
+                                            "_command");
+                    }
+
+                    additionalContentBuilder.append(commandDescription.getContent(user.getId(), false));
+                    additionalContentBuilder.append("\n");
                 }
             }
 
             if (user.getId().equals(DatabaseManager.getInstance().getAdminUserId())) {
-                messageBuilder.append("/").append(commandRegistry.getRegisteredCommand("answer")
-                        .getCommandIdentifier()).append(":\n    ").append(commandRegistry.getRegisteredCommand("answer")
-                        .getDescription()).append("\n");
+                additionalContentBuilder.append("/").append(bot.getRegisteredCommand("answer")
+                        .newInstance().getCommandIdentifier()).append(":\n    ").append(bot.getRegisteredCommand("answer")
+                        .newInstance().getDescription()).append("\n");
             }
 
-            answer.setChatId(chat.getId().toString());
-            answer.enableMarkdown(true);
-            answer.setText(messageBuilder.toString());
+            HashMap<String, String> additionalContent = new HashMap<>();
+            additionalContent.put("commandDescriptions", additionalContentBuilder.toString());
 
-        } catch (Exception e) {
+            ContentMessage contentMessage = new ContentMessage(this.getCommandIdentifier() + "_command");
+            contentMessage.setAdditionalContent(additionalContent);
+
+//            BotLogger.info(LOGTAG, contentMessage.getContent(user.getId(), false));
+
+            String messageText = contentMessage.getContent(user.getId(), false);
+            SendMessages.getInstance().addMessage(contentMessage.calculateHash(), messageText, chat.getId().toString(), absSender, Optional.of(true), Optional.empty());
+
+        } catch (DatabaseException | IllegalAccessException | InterruptedException | InstantiationException | InvocationTargetException e) {
             BotLogger.error(LOGTAG, e);
 
             new SendOnErrorOccurred().execute(absSender, user, chat, new String[]{LOGTAG});
-        }
-
-        try {
-            absSender.sendMessage(answer);
-        } catch (TelegramApiException e) {
-            BotLogger.error(LOGTAG, e);
         }
     }
 }

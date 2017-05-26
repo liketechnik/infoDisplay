@@ -32,23 +32,26 @@
 package org.telegram.bot.commands.answerCommand;
 
 
+import org.telegram.bot.api.SendMessages;
 import org.telegram.bot.commands.SendOnErrorOccurred;
+import org.telegram.bot.database.DatabaseException;
 import org.telegram.bot.database.DatabaseManager;
-import org.telegram.bot.messages.Message;
-import org.telegram.telegrambots.api.methods.send.SendMessage;
+import org.telegram.bot.messages.SituationalContentMessage;
+import org.telegram.bot.messages.SituationalMessage;
 import org.telegram.telegrambots.api.objects.Chat;
 import org.telegram.telegrambots.api.objects.User;
 import org.telegram.telegrambots.bots.AbsSender;
 import org.telegram.telegrambots.bots.commands.BotCommand;
-import org.telegram.telegrambots.exceptions.TelegramApiException;
 import org.telegram.telegrambots.logging.BotLogger;
 
+import java.util.HashMap;
+import java.util.Optional;
+
 /**
+ * This command handles the answer of a chosen question.
  * @author Florian Warzecha
  * @version 1.0.1
  * @date 01 of November 2016
- *
- * This command handles the answer of a chosen question.
  */
 public class WriteAnswer extends BotCommand {
 
@@ -73,47 +76,44 @@ public class WriteAnswer extends BotCommand {
     @Override
     public void execute(AbsSender absSender, User user, Chat chat, String[] arguments) {
 
-        SendMessage answer = new SendMessage();
-        SendMessage confirmation = new SendMessage();
-
-        String message = arguments[0];
-
         try {
 
             DatabaseManager databaseManager = DatabaseManager.getInstance();
 
-            StringBuilder messageBuilder = new StringBuilder();
-
             int selectedQuestion = databaseManager.getSelectedQuestion(user.getId());
 
-            messageBuilder.append(Message.answerCommand.getWriteAnswerMessage(user, selectedQuestion,message));
+            HashMap<String, String> additionalContent = new HashMap<>();
+            additionalContent.put("question", databaseManager.getQuestion(selectedQuestion - 1));
+            additionalContent.put("answer", arguments[0]);
 
-            StringBuilder confirmationBuilder = new StringBuilder();
-            confirmationBuilder.append(Message.answerCommand.getWriteAnswerMessage(user));
+            SituationalContentMessage explanationMessage = new SituationalContentMessage(this.getCommandIdentifier() +
+                "_command");
+            explanationMessage.setMessageName(this.getClass().getPackage().getName().replaceAll("org.telegram.bot.commands.", ""),
+                    this.getCommandIdentifier() + "_command", "explanation");
+            explanationMessage.setAdditionalContent(additionalContent);
 
-            answer.setChatId(databaseManager.getQuestionChatID(selectedQuestion - 1).toString());
-            answer.setText(messageBuilder.toString());
+            SituationalMessage confirmationMessage = new SituationalMessage(this.getCommandIdentifier() + "_command");
+            confirmationMessage.setMessageName(this.getClass().getPackage().getName().replaceAll("org.telegram.bot.commands.", ""),
+                    this.getCommandIdentifier() + "_command", "answer");
 
-            confirmation.setChatId(databaseManager.getAdminChatId().toString());
-            confirmation.setText(confirmationBuilder.toString());
+
+            SendMessages sendMessages = SendMessages.getInstance();
+
+            String messageText = explanationMessage.getContent(user.getId(), false);
+            sendMessages.addMessage(explanationMessage.calculateHash(), messageText,
+                    databaseManager.getQuestionChatID(selectedQuestion -1).toString(), absSender, Optional.empty(), Optional.empty());
+
+            messageText = confirmationMessage.getContent(databaseManager.getAdminUserId(), true);
+            sendMessages.addMessage(confirmationMessage.calculateHash(), messageText, databaseManager.getAdminChatId().toString(), absSender, Optional.empty(), Optional.empty());
 
             databaseManager.deleteQuestion(selectedQuestion - 1);
             databaseManager.setSelectedQuestion(user.getId(), -1);
-
-
-        } catch (Exception e) {
+        } catch (DatabaseException | InterruptedException e) {
             BotLogger.error(LOGTAG, e);
 
             new SendOnErrorOccurred().execute(absSender, user, chat, new String[]{LOGTAG});
 
             return;
-        }
-
-        try {
-            absSender.sendMessage(confirmation);
-            absSender.sendMessage(answer);
-        } catch (TelegramApiException e) {
-            BotLogger.error(LOGTAG, e);
         }
     }
 }

@@ -32,15 +32,20 @@
 package Config;
 
 /**
- * @author liketechnik
+ * A class containing constants used by in the database for identifying attributes in files.
+ * @author Florian Warzecha
  * @version 1.0
- * @date 11 of Januar 2017
+ * @date 11 of January 2017
  */
 public final class Keys {
     public static final String DISPLAY_FILES_KEY = "displayFiles";
     public static final String DISPLAY_FILE_DURATION_KEY = "displayDuration";
     public static final String DISPLAY_FILE_TYPE_KEY = "type";
+    public static final String DISPLAY_FILE_TG_TYPE_KEY = "tgType";
     public static final String DISPLAY_FILE_DESCRIPTION = "description";
+    public static final String DISPLAY_FILE_UPLOAD_INFO_ID = "uploadedById";
+    public static final String DISPLAY_FILE_UPLOAD_INFO_NAME = "uploadedByName";
+    public static final String DISPLAY_FILE_ID = "fileId";
 
     public static final String USER_ACTIVE = "userActive";
     public static final String USER_REGISTERED = "userRegistered";
@@ -48,14 +53,20 @@ public final class Keys {
     public static final String USER_COMMAND_STATE = "userState";
     public static final String USER_LANGUAGE = "userLanguage";
 
+    public static final String DEFAULT_LANGUAGE = "defaultLanguage";
+
     public final static String QUESTION = "question";
 
     public static final String CHAT_ID = "chatID";
 
     public static final String SELECTED_QUESTION = "selectedQuestion";
+
     public static final String CURRENT_PICTURE_TITLE = "currentPictureTitle";
     public static final String CURRENT_PICTURE_DESCRIPTION = "currentPictureDescription";
     public static final String CURRENT_PICTURE_DURATION = "currentPictureDuration";
+
+    public static final String CURRENT_VIDEO_TITLE = "currentVideoTitle";
+    public static final String CURRENT_VIDEO_DESCRIPTION = "currentVideoDescription";
 
     public static final String BOT_USERNAME_KEY = "botUsername";
     public static final String BOT_TOKEN_KEY = "botToken";

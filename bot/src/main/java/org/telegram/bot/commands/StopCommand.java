@@ -31,27 +31,26 @@
 
 package org.telegram.bot.commands;
 
-import org.apache.commons.configuration2.ex.ConfigurationException;
-
+import org.telegram.bot.api.SendMessages;
+import org.telegram.bot.database.DatabaseException;
 import org.telegram.bot.database.DatabaseManager;
-import org.telegram.bot.messages.Message;
-import org.telegram.telegrambots.api.methods.send.SendMessage;
+import org.telegram.bot.messages.ContentMessage;
 import org.telegram.telegrambots.api.objects.Chat;
 import org.telegram.telegrambots.api.objects.User;
 import org.telegram.telegrambots.bots.AbsSender;
 import org.telegram.telegrambots.bots.commands.BotCommand;
-import org.telegram.telegrambots.exceptions.TelegramApiException;
 import org.telegram.telegrambots.logging.BotLogger;
 
-import java.io.IOException;
+import java.util.HashMap;
+import java.util.Optional;
 
 import static org.telegram.bot.Main.getFilteredUsername;
+
 /**
+ * This command gets executed if a user stops the bot.
  * @author Florian Warzecha
  * @version 1.0.1
  * @date 23 of October of 2016
- *
- * this command gets executed if a user stops the bot.
  */
 public class StopCommand extends BotCommand {
 
@@ -74,41 +73,39 @@ public class StopCommand extends BotCommand {
     @Override
     public void execute(AbsSender absSender, User user, Chat chat, String[] arguments) {
 
-        SendMessage answer = new SendMessage();
-
         try {
             DatabaseManager databaseManager = DatabaseManager.getInstance();
-            String message;
 
 
             try {
                 databaseManager.setUserState(user.getId(), false);
-            } catch (ConfigurationException | IOException e) {
+            } catch (DatabaseException e) {
                 BotLogger.error(LOGTAG, "Error saving new user state for user: " + user.getId(), e);
             }
+            // Attention: This needs to be changed if we're going to work with the user active/inactive state
 
             try {
                 databaseManager.setUserCommandState(user.getId(), Config.Bot.NO_COMMAND);
-            } catch (ConfigurationException e) {
+            } catch (DatabaseException e) {
                 BotLogger.error(LOGTAG, e);
             }
 
-            message = Message.getStopMessage(user);
+            HashMap<String, String> additionalContent  = new HashMap<String, String>();
+            additionalContent.put("userName", getFilteredUsername(user));
 
-            answer.setChatId(chat.getId().toString());
-            answer.setText(message);
-        } catch (Exception e) {
+            ContentMessage contentMessage = new ContentMessage(this.getCommandIdentifier() + "_command");
+            contentMessage.setAdditionalContent(additionalContent);
+
+
+            String messageText = contentMessage.getContent(user.getId(), false);
+            SendMessages.getInstance().addMessage(contentMessage.calculateHash(), messageText, chat.getId().toString(), absSender, Optional.empty(), Optional.empty());
+
+        } catch (InterruptedException e) {
             BotLogger.error(LOGTAG, e);
 
             new SendOnErrorOccurred().execute(absSender, user, chat, new String[]{LOGTAG});
 
             return;
-        }
-
-        try {
-            absSender.sendMessage(answer);
-        } catch (TelegramApiException e) {
-            BotLogger.error(LOGTAG, e);
         }
     }
 }

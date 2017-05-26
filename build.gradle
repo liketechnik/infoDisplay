@@ -29,28 +29,34 @@
  * program possible.
  */
 
-//buildscript {
-//    repositories {
-//        maven {
-//            url "https://plugins.gradle.org/m2/"
-//        }
-//    }
-//}
+buildscript {
+    // version of kotlin to user
+    ext.kotlin_version = '1.1.2-2'
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "org.jetbrains.dokka:dokka-gradle-plugin:0.9.13"
+    }
+}
 
+    // source clear gradle plugin
     plugins {
         id "com.srcclr.gradle" version "2.2.0"
     }
 
+
 allprojects {
     group 'liketechnik'
 
-    version '1.2'
+    version '2.0.0'
 
-    apply plugin: 'distribution'
+    apply plugin: 'org.jetbrains.dokka'
     apply plugin: 'java'
+    apply plugin: 'kotlin'
     apply plugin: 'idea'
     apply plugin: 'application'
-//    apply plugin: "com.srcclr.gradle"
 
     sourceCompatibility = 1.8
 
@@ -71,110 +77,33 @@ allprojects {
     dependencies {
         testCompile group: 'junit', name: 'junit', version: '4.11'
 
-        compile 'org.telegram:telegrambots:2.4.4.4'
+        compile 'org.apache.commons:commons-configuration2:2.1.1'
 
-        compile 'org.apache.commons:commons-configuration2:2.1'
-        // runtime dependencies of commons-configuration
         compile 'org.apache.commons:commons-lang3:3.5'
         compile 'commons-logging:commons-logging:1..1.1'
         compile 'commons-beanutils:commons-beanutils:1.9.3'
         compile 'commons-codec:commons-codec:1.10'
         compile 'commons-jxpath:commons-jxpath:1.3'
-        // compile dependencies
+
         compile 'org.apache.commons:commons-jexl:2.1.1'
         compile 'org.apache.commons:commons-vfs2-project:2.1'
         compile 'xml-resolver:xml-resolver:1.2'
-    }
 
- //   ant.importBuild 'build.xml'
-
-   // compileJava.mustRunAfter(updateDisplayFileClass)
-    //compileJava.mustRunAfter(updateConfigClass)
-
-    task getHomeDir {
-        doLast {
-            println gradle.gradleHomeDir
-        }
-    }
-
-//    task copyReadme {
-//        outputs.file new File(file(project(':bot').buildDir.parent).parent + "/README.md")
-//        doLast {
-//            copy {
-//                from "README.md"
-//                into file(project(':bot').buildDir.parent).parent
-//            }
-//        }
-//    }
-
-    task createDocs {
-        def docs = file("$buildDir/docs")
-        outputs.dir docs
-        doLast {
-            docs.mkdirs()
-            new File(docs, "readme.txt").write("Read me!")
-        }
-    }
-
-    distributions {
-        infoDisplay {
-            baseName = 'display'
-            contents {
-//                from jar
-//                into('libs') {
-//                    from {
-//                        project(':config').getBuildDir().toString() + '/libs/config-' + project.getVersion().toString() + '.jar'
-//                    }
-//                }
-//                into('README') {
-//                    from file('README.md')
-//                }
-//                from 'README.md' {
-//                    into ('')
-//                }
-            }
-        }
-        bot {
-            baseName = 'bot'
-            contents {
-//                from { project(':config').getBuildDir().toString() + '/libs/config-' + project.getVersion().toString() + '.jar' }
-//                from jar
-//                into('README') {
-//                    from file('README.md')
-//                }
-//                from(jar) {
-//                    into "README"
-//                }
-//                from (copyReadme) {
-//                    into ""
-//                }
-                from(createDocs) {
-                    into "docs"
-                }
-            }
-        }
-        config {
-            baseName = 'config'
-            contents {
-//                from jar
-            }
-        }
-        displayFile {
-            baseName = 'displayFile'
-            contents {
-//                from jar
-            }
-        }
+        compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
     }
 }
 
 project(':display') {
+    sourceSets {
+        main.kotlin.srcDirs += 'src/main/kotlin'
+        main.java.srcDirs += 'src/main/java'
+    }
     mainClassName = "liketechnik.InfoDisplay.Display"
     dependencies {
         compile project(':config')
         compile project(':displayFile')
         compile 'com.github.caprica:vlcj:vlcj-3.10.+'
-        compile 'ch.qos.logback:logback-classic:1.1.11'
+        compile 'ch.qos.logback:logback-classic:1.2.3'
     }
     applicationDistribution.from("${rootProject.projectDir}/") {
         include "README.md"
@@ -183,27 +112,188 @@ project(':display') {
     applicationDistribution.from("${rootProject.projectDir}/") {
         include "LICENSE-**"
         into "LICENSES"
+    }
+
+    task dokkaJavadocDev(type: org.jetbrains.dokka.gradle.DokkaTask) {
+        outputFormat = 'html'
+        outputDirectory = "$rootProject.projectDir/docs/development/display"
+
+        jdkVersion = 8
+
+        skipEmptyPackages = false
+
+        linkMapping {
+            dir = "src/main/"
+            url = "https://github.com/liketechnik/infoDisplay/blob/development/display/src/main"
+            suffix = "#L"
+        }
+    }
+
+    task dokkaJavadocStable(type: org.jetbrains.dokka.gradle.DokkaTask) {
+        outputFormat = 'html'
+        outputDirectory = "$rootProject.projectDir/docs/stable/display"
+
+        jdkVersion = 8
+
+        skipEmptyPackages = false
+
+        linkMapping {
+            dir = "src/main/"
+            url = "https://github.com/liketechnik/infoDisplay/blob/stable/bot/src/main"
+            suffix = "#L"
+        }
     }
 }
 
 project(':bot') {
+    sourceSets {
+        main.kotlin.srcDirs += 'src/main/kotlin'
+        main.java.srcDirs += 'src/main/java'
+    }
     mainClassName = "org.telegram.bot.Main"
     dependencies {
+        compile group: 'org.telegram', name: 'telegrambots', version: '3.0'
         compile project(':config')
     }
+    // include readme
     applicationDistribution.from("${rootProject.projectDir}/") {
         include "README.md"
         into ""
     }
+    // include licenses
     applicationDistribution.from("${rootProject.projectDir}/") {
         include "LICENSE-**"
         into "LICENSES"
     }
-}
+    // include changelog
+    applicationDistribution.from("${rootProject.projectDir}/") {
+        include "CHANGELOG.md"
+        into ""
+    }
 
-project(':displayFile') {
-    dependencies {
-        compile project(':config')
+    task createStopScript(type: CreateStartScripts) {
+        mainClassName = "stopBot"
+        applicationName = "stopBot"
+        outputDir = new File(project.buildDir, 'scripts')
+        classpath = jar.outputs.files + project.configurations.runtime
+        unixStartScriptGenerator.template = resources.text.fromFile('stopBotUnixStartScript.txt')
+        windowsStartScriptGenerator.template = resources.text.fromFile('stopBotWindowsStartScript.txt')
+    }
+
+    applicationDistribution.into("bin") {
+        from(createStopScript)
+        fileMode = 0755
+    }
+
+    task dokkaJavadocDev(type: org.jetbrains.dokka.gradle.DokkaTask) {
+        outputFormat = 'html'
+        outputDirectory = "$rootProject.projectDir/docs/development/bot"
+
+        jdkVersion = 8
+
+        skipEmptyPackages = false
+
+        linkMapping {
+            dir = "src/main/"
+            url = "https://github.com/liketechnik/infoDisplay/blob/development/bot/src/main"
+            suffix = "#L"
+        }
+    }
+
+    task dokkaJavadocStable(type: org.jetbrains.dokka.gradle.DokkaTask) {
+        outputFormat = 'html'
+        outputDirectory = "$rootProject.projectDir/docs/stable/bot"
+
+        jdkVersion = 8
+
+        skipEmptyPackages = false
+
+        linkMapping {
+            dir = "src/main/"
+            url = "https://github.com/liketechnik/infoDisplay/blob/stable/bot/src/main"
+            suffix = "#L"
+        }
     }
 }
 
+project(':displayFile') {
+    sourceSets {
+        main.kotlin.srcDirs += 'src/main/kotlin'
+        main.java.srcDirs += 'src/main/java'
+    }
+    mainClassName = ""
+    dependencies {
+        compile project(':config')
+    }
+
+    task dokkaJavadocDev(type: org.jetbrains.dokka.gradle.DokkaTask) {
+        outputFormat = 'html'
+        outputDirectory = "$rootProject.projectDir/docs/development/displayFile"
+
+        jdkVersion = 8
+
+        skipEmptyPackages = false
+
+        linkMapping {
+            dir = "src/main/"
+            url = "https://github.com/liketechnik/infoDisplay/blob/development/displayFile/src/main"
+            suffix = "#L"
+        }
+    }
+
+    task dokkaJavadocStable(type: org.jetbrains.dokka.gradle.DokkaTask) {
+        outputFormat = 'html'
+        outputDirectory = "$rootProject.projectDir/docs/stable/displayFile"
+
+        jdkVersion = 8
+
+        skipEmptyPackages = false
+
+        linkMapping {
+            dir = "src/main/"
+            url = "https://github.com/liketechnik/infoDisplay/blob/stable/displayFile/src/main"
+            suffix = "#L"
+        }
+    }
+}
+
+project(':config') {
+    sourceSets {
+        main.kotlin.srcDirs += 'src/main/kotlin'
+        main.java.srcDirs += 'src/main/java'
+    }
+    mainClassName = ""
+
+    task dokkaJavadocDev(type: org.jetbrains.dokka.gradle.DokkaTask) {
+        outputFormat = 'html'
+        outputDirectory = "$rootProject.projectDir/docs/development/config"
+
+        jdkVersion = 8
+
+        skipEmptyPackages = false
+
+        linkMapping {
+            dir = "src/main/"
+            url = "https://github.com/liketechnik/infoDisplay/blob/development/config/src/main"
+            suffix = "#L"
+        }
+    }
+
+    task dokkaJavadocStable(type: org.jetbrains.dokka.gradle.DokkaTask) {
+        outputFormat = 'html'
+        outputDirectory = "$rootProject.projectDir/docs/stable/config"
+
+        jdkVersion = 8
+
+        skipEmptyPackages = false
+
+        linkMapping {
+            dir = "src/main/"
+            url = "https://github.com/liketechnik/infoDisplay/blob/stable/config/src/main"
+            suffix = "#L"
+        }
+    }
+}
+
+
+mainClassName = ""

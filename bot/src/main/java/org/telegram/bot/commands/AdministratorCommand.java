@@ -31,26 +31,24 @@
 
 package org.telegram.bot.commands;
 
-import org.apache.commons.configuration2.ex.ConfigurationException;
+import org.telegram.bot.api.SendMessages;
+import org.telegram.bot.database.DatabaseException;
 import org.telegram.bot.database.DatabaseManager;
 import org.telegram.bot.messages.Message;
-import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Chat;
 import org.telegram.telegrambots.api.objects.User;
 import org.telegram.telegrambots.bots.AbsSender;
 import org.telegram.telegrambots.bots.commands.BotCommand;
-import org.telegram.telegrambots.exceptions.TelegramApiException;
 import org.telegram.telegrambots.logging.BotLogger;
 
-import java.io.IOException;
+import java.util.Optional;
 
 
 /**
+ * This command sends a message back to the user, containing the username of me / the administrator.
  * @author Florian Warzecha
  * @version 1.0.1
  * @date 24 of October of 2016
- *
- * This command sends a message back to the user, containing the username of me / the administrator.
  */
 public class AdministratorCommand extends BotCommand {
 
@@ -73,28 +71,21 @@ public class AdministratorCommand extends BotCommand {
      */
     public void execute(AbsSender absSender, User user, Chat chat, String[] arguments) {
 
-        SendMessage answer = new SendMessage();
-
         try {
             DatabaseManager.getInstance().setUserState(user.getId(), true);
 
-            StringBuilder messageBuilder = new StringBuilder();
-            messageBuilder.append(Message.getAdministratorMessage(user));
-            answer.setChatId(chat.getId().toString());
-            answer.setText(messageBuilder.toString());
+            Message message = new Message(this.getCommandIdentifier() + "_command");
+
+            String messageText = message.getContent(user.getId(), true);
+            SendMessages.getInstance().addMessage(message.calculateHash(), messageText, chat.getId().toString(), absSender, Optional.empty(), Optional.empty());
+
         // catch every error that could occur, log it and inform the user about the occurrence of an error.
-        } catch (Exception e) {
+        } catch (DatabaseException | InterruptedException e) {
             BotLogger.error(LOGTAG, e);
 
             new SendOnErrorOccurred().execute(absSender, user, chat, new String[]{LOGTAG});
 
             return;
-        }
-        // Send the message
-        try {
-            absSender.sendMessage(answer);
-        } catch (TelegramApiException e) {
-            BotLogger.error(LOGTAG, e);
         }
     }
 }

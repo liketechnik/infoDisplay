@@ -32,24 +32,22 @@
 package org.telegram.bot.commands;
 
 
-import org.telegram.bot.DisplayBot;
-import org.telegram.bot.Main;
 import org.telegram.bot.ResetRecentlyError;
-import org.telegram.bot.messages.Message;
-import org.telegram.telegrambots.api.methods.send.SendMessage;
+import org.telegram.bot.api.SendMessages;
+import org.telegram.bot.messages.SituationalMessage;
 import org.telegram.telegrambots.api.objects.Chat;
 import org.telegram.telegrambots.api.objects.User;
 import org.telegram.telegrambots.bots.AbsSender;
 import org.telegram.telegrambots.bots.commands.BotCommand;
-import org.telegram.telegrambots.exceptions.TelegramApiException;
 import org.telegram.telegrambots.logging.BotLogger;
 
+import java.util.Optional;
+
 /**
+ * This command gets executed if an error occurs in one of the other commands.
  * @author Florian Warzecha
  * @version 1.0.1
  * @date 01 of November of 2016
- *
- * This command gets executed if an error occurs in one of the other commands.
  */
 public class SendOnErrorOccurred extends BotCommand {
 
@@ -59,7 +57,7 @@ public class SendOnErrorOccurred extends BotCommand {
      * Send the identifier and a short description.
      */
     public SendOnErrorOccurred() {
-        super("send_error_occurred", "Inform the user of the appearance of an error.");
+        super("send_on_error_occurred", "Inform the user of the appearance of an error.");
     }
 
     /**
@@ -72,23 +70,28 @@ public class SendOnErrorOccurred extends BotCommand {
     @Override
     public void execute(AbsSender absSender, User user, Chat chat, String[] LOGTAG) {
 
-        StringBuilder messageBuilder = new StringBuilder();
-        SendMessage answer = new SendMessage();
-
-        answer.setChatId(chat.getId().toString());
+        SituationalMessage situationalMessage = new SituationalMessage(
+                this.getCommandIdentifier() + "_command");
 
         if (ResetRecentlyError.getRecentlyError()) {
             ResetRecentlyError.setAppIsTerminating(true);
-            messageBuilder.append(Message.getSendOnErrorOccurredMessage(user, true));
+            situationalMessage.setMessageName(this.getCommandIdentifier() + "_command", "terminating");
         } else {
-            messageBuilder.append(Message.getSendOnErrorOccurredMessage(user, false));
+            situationalMessage.setMessageName(this.getCommandIdentifier() + "_command", "not_terminating");
         }
 
-        answer.setText(messageBuilder.toString());
+        String messageText = situationalMessage.getContent(user.getId(), false);
+
+        String chatId;
+        if (chat == null) {
+            chatId = LOGTAG[1];
+        } else {
+            chatId = chat.getId().toString();
+        }
 
         try {
-            absSender.sendMessage(answer);
-        } catch (TelegramApiException e) {
+            SendMessages.getInstance().addMessage(situationalMessage.calculateHash(), messageText, chatId, absSender, Optional.empty(), Optional.empty());
+        } catch (InterruptedException e) {
             BotLogger.error(LOGTAG[0], e);
         }
 
@@ -98,7 +101,7 @@ public class SendOnErrorOccurred extends BotCommand {
             ResetRecentlyError.setRecentlyError(true);
             new ResetRecentlyError().start();
 
-            new CancelCommand(new DisplayBot().getICommandRegistry()).execute(absSender, user, chat, new String[]{});
+            new CancelCommand().execute(absSender, user, chat, new String[]{});
         }
     }
 }
