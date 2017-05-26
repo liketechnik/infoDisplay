@@ -13,9 +13,9 @@ I decided to develop it, because everyone in charge of it should be able
 to upload things to it from home too with a nice looking GUI and 
 without the need to set up a server on ones own.
 
-[Changelog (latest release)](https://github.com/liketechk/infoDisplay/blob/stable/CHANGELOG.md)
+[Changelog (latest release)](https://github.com/liketechnik/infoDisplay/blob/stable/CHANGELOG.md)
 
-[Changelog (development)](https://github.com/liketechk/infoDisplay/blob/development/CHANGELOG.md)
+[Changelog (development)](https://github.com/liketechnik/infoDisplay/blob/development/CHANGELOG.md)
 
 ## Use ##
 
