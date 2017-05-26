@@ -33,6 +33,10 @@ package org.telegram.bot;
 
 import org.telegram.telegrambots.logging.BotLogger;
 
+/**
+ * A class that signal the {@link org.telegram.bot.commands.SendOnErrorOccurred} command when to many errors happened and it should terminate the bot.
+ * TODO: Rewrite this as I suppose it will not work as intended.
+ */
 public class ResetRecentlyError extends Thread {
 
     public static final String LOGTAG = "RESETRECENTLYERROR";

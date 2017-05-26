@@ -32,33 +32,40 @@
 package org.telegram.bot.commands;
 
 import org.telegram.bot.api.SendMessages;
-import org.telegram.bot.commands.SendOnErrorOccurred;
-import org.telegram.bot.database.DatabaseException;
 import org.telegram.bot.database.DatabaseManager;
 import org.telegram.bot.messages.Message;
-import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Chat;
 import org.telegram.telegrambots.api.objects.User;
 import org.telegram.telegrambots.bots.AbsSender;
 import org.telegram.telegrambots.bots.commands.BotCommand;
-import org.telegram.telegrambots.exceptions.TelegramApiException;
 import org.telegram.telegrambots.logging.BotLogger;
 
 import java.util.Optional;
 
 /**
- * @author liketechnik
+ * Send a short text about this bot.
+ * @author Florian Warzecha
  * @version 1.0
- * @date 19 of Dezember 2016
+ * @date 19 of December 2016
  */
 public class  AboutCommand extends BotCommand {
 
     public static final String LOGTAG = "ABOUTCOMMAND";
 
+    /**
+     * Set identifier and a short description of this command.
+     */
     public AboutCommand() {
         super("about", "Send information about this bot.");
     }
 
+    /**
+     * Send the user the about information from the language files.
+     * @param absSender
+     * @param user
+     * @param chat
+     * @param arguments
+     */
     @Override
     public void execute(AbsSender absSender, User user, Chat chat, String[] arguments) {
         try {

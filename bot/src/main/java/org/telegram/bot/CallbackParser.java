@@ -1,3 +1,34 @@
+/*
+ * Copyright (C) 2016-2017  Florian Warzecha <flowa2000@gmail.com>
+ *
+ * This file is part of infoDisplay.
+ *
+ * infoDisplay is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * infoDisplay is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * infoDisplay uses TelegramBots Java API <https://github.com/rubenlagus/TelegramBots> by Ruben Bermudez.
+ * TelegramBots API is licensed under GNU General Public License version 3 <https://www.gnu.org/licenses/gpl-3.0.de.html>.
+ *
+ * infoDisplay uses parts of the Apache Commons project <https://commons.apache.org/>.
+ * Apache commons is licensed under the Apache License Version 2.0 <http://www.apache.org/licenses/>.
+ *
+ * infoDisplay uses vlcj library <http://capricasoftware.co.uk/#/projects/vlcj>.
+ * vlcj is licensed under GNU General Public License version 3 <https://www.gnu.org/licenses/gpl-3.0.de.html>.
+ *
+ * Thanks to all the people who contributed to the projects that make this
+ * program possible.
+ */
+
 package org.telegram.bot;
 
 import Config.CallbackData;
@@ -12,6 +43,7 @@ import org.telegram.telegrambots.logging.BotLogger;
 import java.lang.reflect.Constructor;
 
 /**
+ * A {@link Parser} specialized for callbacks.
  * @author liketechnik
  * @version 1.0
  * @date 14 of April 2017
@@ -20,6 +52,11 @@ public class CallbackParser extends Parser {
 
     public final String LOGTAG = "CALLBACKPARSER";
 
+    /**
+     * Create a new parser that can parse the {@code update} and then run a command from the {@code bot}.
+     * @param update The update to parse.
+     * @param bot The bot whose commands are used.
+     */
     public CallbackParser(Update update, TelegramLongPollingThreadBot bot) {
         super(update, bot);
     }
@@ -31,20 +68,6 @@ public class CallbackParser extends Parser {
         this.chat = callbackQuery.getMessage().getChat();
 
         try {
-
-//            if (userCommandState.equals(Bot.SET_LANGUAGE_COMMAND)) {
-//                if (callbackQuery.getData().equals(CallbackData.SET_LANGUAGE_DEFAULT)
-//                        || callbackQuery.getData().equals(CallbackData.SET_LANGUAGE_GERMAN)
-//                        || callbackQuery.getData().equals(CallbackData.SET_LANGUAGE_ENGLISH)) {
-//                    this.arguments = new String[] {callbackQuery.getData(),
-//                            callbackQuery.getMessage().getMessageId().toString()};
-//                    this.commandConstructor = (Constructor) ChangeLanguage.class.getConstructor();
-//                }
-//                return false;
-//            } else {
-//                return false;
-//            }
-//            return true;
             String text = callbackQuery.getData();
 
             for (CallbackData.SET_LANGUAGE language : CallbackData.SET_LANGUAGE.values()) {

@@ -31,44 +31,30 @@
 
 package org.telegram.bot.commands;
 
-import Config.Bot;
-import org.apache.commons.collections.KeyValue;
-import org.apache.commons.configuration2.ex.ConfigurationException;
-import org.apache.commons.lang3.ArrayUtils;
-
 import org.telegram.bot.DisplayBot;
 import org.telegram.bot.api.SendMessages;
 import org.telegram.bot.database.DatabaseException;
 import org.telegram.bot.database.DatabaseManager;
 import org.telegram.bot.messages.CommandDescription;
 import org.telegram.bot.messages.ContentMessage;
-import org.telegram.bot.messages.Message;
-import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Chat;
 import org.telegram.telegrambots.api.objects.User;
 import org.telegram.telegrambots.bots.AbsSender;
 import org.telegram.telegrambots.bots.commands.BotCommand;
-import org.telegram.telegrambots.bots.commands.ICommandRegistry;
-import org.telegram.telegrambots.exceptions.TelegramApiException;
 import org.telegram.telegrambots.logging.BotLogger;
 
-import java.awt.event.KeyEvent;
-import java.io.IOException;
-import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 
 /**
+ * This commands gets executed if a user sends '/help' to the bot or if the information about the bot and its
+ * commands is needed.
  * @author Florian Warzecha
  * @version 1.0.1
  * @date 23 of October of 2016
- *
- * This commands gets executed if a user sends '/help' to the bot or if the information about the bot and its
- * commands is needed.
  */
 public class HelpCommand extends BotCommand {
 

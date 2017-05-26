@@ -1,3 +1,34 @@
+/*
+ * Copyright (C) 2016-2017  Florian Warzecha <flowa2000@gmail.com>
+ *
+ * This file is part of infoDisplay.
+ *
+ * infoDisplay is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * infoDisplay is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * infoDisplay uses TelegramBots Java API <https://github.com/rubenlagus/TelegramBots> by Ruben Bermudez.
+ * TelegramBots API is licensed under GNU General Public License version 3 <https://www.gnu.org/licenses/gpl-3.0.de.html>.
+ *
+ * infoDisplay uses parts of the Apache Commons project <https://commons.apache.org/>.
+ * Apache commons is licensed under the Apache License Version 2.0 <http://www.apache.org/licenses/>.
+ *
+ * infoDisplay uses vlcj library <http://capricasoftware.co.uk/#/projects/vlcj>.
+ * vlcj is licensed under GNU General Public License version 3 <https://www.gnu.org/licenses/gpl-3.0.de.html>.
+ *
+ * Thanks to all the people who contributed to the projects that make this
+ * program possible.
+ */
+
 package org.telegram.bot.commands.deleteMediaCommand
 
 import org.telegram.bot.api.SendMessages
@@ -7,14 +38,16 @@ import org.telegram.telegrambots.bots.AbsSender
 import java.util.*
 
 /**
- * @author liketechnik
+ * Contains some constants and help methods needed by the commands in this package.
+ * @author Florian Warzecha
  * @version 1.0
- * @date 21 of Mai 2017
+ * @since 2.0.0
+ * @date 21 of May 2017
  */
 
-internal val currentIndexRegex: String = "/current_index>";
-internal val lastIndexRegex: String = "/last_index>";
-internal val nextIndexRegex: String = "/next_index>";
+internal val currentIndexRegex: String = "/current_index>"
+internal val lastIndexRegex: String = "/last_index>"
+internal val nextIndexRegex: String = "/next_index>"
 
 internal val indexRegex: String = "/index>"
 internal val timestampRegex: String = "/timestamp>"
@@ -26,8 +59,6 @@ internal val timestampRegex: String = "/timestamp>"
  *
  * @param displayFileName The name of the display file the information belongs to.
  * @return A [HashMap] containing the key value pairs for title, description, duration and uploadInfo
- * @author Florian Warzecha
- * @since 2.0.0
  * @see org.telegram.bot.commands.deleteMediaCommand.DeleteMediaCommand
  * @see org.telegram.bot.commands.deleteMediaCommand.ConfirmDeleteMediaCommand
  * @see org.telegram.bot.messages.ContentMessage
@@ -42,20 +73,31 @@ internal fun  getAdditionalContent(displayFileName: String): HashMap<String, Str
     return additionalContent
 }
 
+/**
+ * Get the index of the media file from the callback data.
+ */
 internal fun getIndex(arguments: Array<out String>): Int {
-    var index: Int
+    val index: Int
     val argumentsSplit: List<String> = arguments[0].split("_")
     index = argumentsSplit.last().toInt()
     return index
 }
 
+/**
+ * Add the message to the queue of messages with the right method depending on the type of media file Telegram saved it.
+ * @param tgType The type of the message Telegram sees it.
+ * @param fileId The Telegram fileID of the media that is send.
+ * @see SendMessages.addDocumentMessage
+ * @see SendMessages.addImageMessage
+ * @see SendMessages.addVideoMessage
+ */
 internal fun sendMediaMessage(tgType: String, messageHash: Int, messageText: String, chatId: String, absSender: AbsSender,
                               fileId: String, keyboardMarkup: Optional<InlineKeyboardMarkup>) {
-    if (tgType.equals(Config.Bot.DISPLAY_FILE_TG_TYPE_AS_DOCUMENT)) {
-        SendMessages.getInstance().addDocumentMessage(messageHash, messageText, chatId, absSender, fileId, keyboardMarkup);
-    } else if (tgType.equals(Config.Bot.DISPLAY_FILE_TG_TYPE_IMAGE)) {
-        SendMessages.getInstance().addImageMessage(messageHash, messageText, chatId, absSender, fileId, keyboardMarkup);
-    } else if (tgType.equals(Config.Bot.DISPLAY_FILE_TG_TYPE_VIDEO)) {
-        SendMessages.getInstance().addVideoMessage(messageHash, messageText, chatId, absSender, fileId, keyboardMarkup);
+    if (tgType == Config.Bot.DISPLAY_FILE_TG_TYPE_AS_DOCUMENT) {
+        SendMessages.getInstance().addDocumentMessage(messageHash, messageText, chatId, absSender, fileId, keyboardMarkup)
+    } else if (tgType == Config.Bot.DISPLAY_FILE_TG_TYPE_IMAGE) {
+        SendMessages.getInstance().addImageMessage(messageHash, messageText, chatId, absSender, fileId, keyboardMarkup)
+    } else if (tgType == Config.Bot.DISPLAY_FILE_TG_TYPE_VIDEO) {
+        SendMessages.getInstance().addVideoMessage(messageHash, messageText, chatId, absSender, fileId, keyboardMarkup)
     }
 }

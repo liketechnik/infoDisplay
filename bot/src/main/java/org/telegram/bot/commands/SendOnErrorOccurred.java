@@ -32,27 +32,22 @@
 package org.telegram.bot.commands;
 
 
-import org.telegram.bot.DisplayBot;
 import org.telegram.bot.ResetRecentlyError;
 import org.telegram.bot.api.SendMessages;
-import org.telegram.bot.messages.Message;
 import org.telegram.bot.messages.SituationalMessage;
-import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Chat;
 import org.telegram.telegrambots.api.objects.User;
 import org.telegram.telegrambots.bots.AbsSender;
 import org.telegram.telegrambots.bots.commands.BotCommand;
-import org.telegram.telegrambots.exceptions.TelegramApiException;
 import org.telegram.telegrambots.logging.BotLogger;
 
 import java.util.Optional;
 
 /**
+ * This command gets executed if an error occurs in one of the other commands.
  * @author Florian Warzecha
  * @version 1.0.1
  * @date 01 of November of 2016
- *
- * This command gets executed if an error occurs in one of the other commands.
  */
 public class SendOnErrorOccurred extends BotCommand {
 

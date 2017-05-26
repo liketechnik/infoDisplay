@@ -29,11 +29,12 @@
  * program possible.
  */
 
-package DisplayFile;//packageStatement*
+package DisplayFile;
 
 import Config.Bot;
 
 /**
+ * This class represents a display file displayed by the display file viewer.
  * @author Florian Warzecha
  * @version 1.0.1
  * @date 24 of September of 2016

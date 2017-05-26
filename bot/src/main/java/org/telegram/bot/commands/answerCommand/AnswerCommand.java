@@ -31,33 +31,26 @@
 
 package org.telegram.bot.commands.answerCommand;
 
-import org.apache.commons.configuration2.ex.ConfigurationException;
-
 import org.telegram.bot.api.SendMessages;
 import org.telegram.bot.commands.SendOnErrorOccurred;
 import org.telegram.bot.database.DatabaseException;
 import org.telegram.bot.database.DatabaseManager;
 import org.telegram.bot.messages.ContentMessage;
-import org.telegram.bot.messages.Message;
-import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Chat;
 import org.telegram.telegrambots.api.objects.User;
 import org.telegram.telegrambots.bots.AbsSender;
 import org.telegram.telegrambots.bots.commands.BotCommand;
-import org.telegram.telegrambots.exceptions.TelegramApiException;
 import org.telegram.telegrambots.logging.BotLogger;
 
-import javax.xml.crypto.Data;
 import java.util.HashMap;
 import java.util.Optional;
 
 
 /**
+ * This command gets executed if  a user sends '/answer' to the bot and lets the administrator answer asked questions.
  * @author Florian Warzecha
  * @version 1.0.1
  * @date 25 of October of 2016
- *
- * This command gets executed if  a user sends '/answer' to the bot and lets the administrator answer asked questions.
  */
 public class AnswerCommand extends BotCommand {
 

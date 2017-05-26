@@ -35,9 +35,10 @@ import java.nio.file.FileSystems;
 import java.nio.file.Path;
 
 /**
- * @author liketechnik
+ * This class contains {@code Path}s that are constant and needed in many places of the program.
+ * @author Florian Warzecha
  * @version 1.0
- * @date 11 of Januar 2017
+ * @date 11 of January 2017
  */
 public final class Paths {
     public static final String USER_HOME = System.getProperty("user.home");

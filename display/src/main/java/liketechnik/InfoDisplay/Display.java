@@ -57,6 +57,7 @@ import java.nio.file.Files;
 import DisplayFile.DisplayFile;
 
 /**
+ * This class represents the display file viewer.
  * @author Florian Warzecha
  * @version 1.0.1
  * @date 24 of September of 2016
@@ -253,6 +254,9 @@ public class Display {
     }
 }
 
+/**
+ * This {@code Thread} iterates over the display files and shows them in the window.
+ */
 class showFiles extends Thread {
 
     EmbeddedMediaPlayerComponent mediaPlayerComponent;
