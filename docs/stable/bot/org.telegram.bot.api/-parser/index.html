@@ -1,0 +1,86 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>Parser - </title>
+<link rel="stylesheet" href="../../style.css">
+</HEAD>
+<BODY>
+<a href="../index.html">org.telegram.bot.api</a>&nbsp;/&nbsp;<a href=".">Parser</a><br/>
+<br/>
+<h1>Parser</h1>
+<code><span class="keyword">abstract</span> <span class="keyword">class </span><span class="identifier">Parser</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="http://docs.oracle.com/javase/6/docs/api/java/lang/Runnable.html"><span class="identifier">Runnable</span></a></code> <a href="https://github.com/liketechnik/infoDisplay/blob/stable/bot/src/main/java/org/telegram/bot/api/Parser.java#L56">(source)</a>
+<p>Basic class for parsing updates, parsing is specialised for documents, callbacks and text messages.</p>
+<p><strong>Author</strong><br/>
+Florian Warzecha</p>
+<p><strong>Version</strong><br/>
+1.0</p>
+<p><strong>Date</strong><br/>
+13 of April 2017</p>
+<p><strong>See Also</strong><br/>
+org.telegram.bot.CallbackParserorg.telegram.bot.DocumentParserorg.telegram.bot.MessageParser</p>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<a href="-init-.html">&lt;init&gt;</a></td>
+<td>
+<code><span class="identifier">Parser</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.api.Parser$<init>(org.telegram.telegrambots.api.objects.Update, org.telegram.bot.api.TelegramLongPollingThreadBot)/update">update</span><span class="symbol">:</span>&nbsp;<span class="identifier">Update</span><span class="symbol">, </span><span class="identifier" id="org.telegram.bot.api.Parser$<init>(org.telegram.telegrambots.api.objects.Update, org.telegram.bot.api.TelegramLongPollingThreadBot)/bot">bot</span><span class="symbol">:</span>&nbsp;<a href="../-telegram-long-polling-thread-bot/index.html"><span class="identifier">TelegramLongPollingThreadBot</span></a><span class="symbol">)</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<a href="-l-o-g-t-a-g.html">LOGTAG</a></td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">LOGTAG</span><span class="symbol">: </span><span class="identifier">String</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<a href="run.html">run</a></td>
+<td>
+<code><span class="keyword">open</span> <span class="keyword">fun </span><span class="identifier">run</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Unit</span></code>
+<p>Tries to parse a new update. If the parse method return false, i. e. parsing failed, the user gets informed about it and receives the help command.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3>Inheritors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<a href="../../org.telegram.bot/-callback-parser/index.html">CallbackParser</a></td>
+<td>
+<code><span class="keyword">open</span> <span class="keyword">class </span><span class="identifier">CallbackParser</span>&nbsp;<span class="symbol">:</span>&nbsp;<span class="identifier">Parser</span></code>
+<p>A Parser specialized for callbacks.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="../../org.telegram.bot/-document-parser/index.html">DocumentParser</a></td>
+<td>
+<code><span class="keyword">open</span> <span class="keyword">class </span><span class="identifier">DocumentParser</span>&nbsp;<span class="symbol">:</span>&nbsp;<span class="identifier">Parser</span></code>
+<p>A Parser specialized for documents.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="../../org.telegram.bot/-message-parser/index.html">MessageParser</a></td>
+<td>
+<code><span class="keyword">open</span> <span class="keyword">class </span><span class="identifier">MessageParser</span>&nbsp;<span class="symbol">:</span>&nbsp;<span class="identifier">Parser</span></code>
+<p>A Parser specialized text for messages.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

@@ -1,0 +1,33 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>SendMessages.addEditMessage - </title>
+<link rel="stylesheet" href="../../style.css">
+</HEAD>
+<BODY>
+<a href="../index.html">org.telegram.bot.api</a>&nbsp;/&nbsp;<a href="index.html">SendMessages</a>&nbsp;/&nbsp;<a href=".">addEditMessage</a><br/>
+<br/>
+<h1>addEditMessage</h1>
+<a name="org.telegram.bot.api.SendMessages$addEditMessage(kotlin.Int, kotlin.String, kotlin.String, org.telegram.telegrambots.bots.AbsSender, kotlin.Int, java.util.Optional((kotlin.Boolean)), java.util.Optional((org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup)))"></a>
+<code><span class="keyword">open</span> <span class="keyword">fun </span><span class="identifier">addEditMessage</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.api.SendMessages$addEditMessage(kotlin.Int, kotlin.String, kotlin.String, org.telegram.telegrambots.bots.AbsSender, kotlin.Int, java.util.Optional((kotlin.Boolean)), java.util.Optional((org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup)))/messageHash">messageHash</span><span class="symbol">:</span>&nbsp;<span class="identifier">Int</span><span class="symbol">, </span><span class="identifier" id="org.telegram.bot.api.SendMessages$addEditMessage(kotlin.Int, kotlin.String, kotlin.String, org.telegram.telegrambots.bots.AbsSender, kotlin.Int, java.util.Optional((kotlin.Boolean)), java.util.Optional((org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup)))/message">message</span><span class="symbol">:</span>&nbsp;<span class="identifier">String</span><span class="symbol">, </span><span class="identifier" id="org.telegram.bot.api.SendMessages$addEditMessage(kotlin.Int, kotlin.String, kotlin.String, org.telegram.telegrambots.bots.AbsSender, kotlin.Int, java.util.Optional((kotlin.Boolean)), java.util.Optional((org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup)))/chatId">chatId</span><span class="symbol">:</span>&nbsp;<span class="identifier">String</span><span class="symbol">, </span><span class="identifier" id="org.telegram.bot.api.SendMessages$addEditMessage(kotlin.Int, kotlin.String, kotlin.String, org.telegram.telegrambots.bots.AbsSender, kotlin.Int, java.util.Optional((kotlin.Boolean)), java.util.Optional((org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup)))/absSender">absSender</span><span class="symbol">:</span>&nbsp;<span class="identifier">AbsSender</span><span class="symbol">, </span><span class="identifier" id="org.telegram.bot.api.SendMessages$addEditMessage(kotlin.Int, kotlin.String, kotlin.String, org.telegram.telegrambots.bots.AbsSender, kotlin.Int, java.util.Optional((kotlin.Boolean)), java.util.Optional((org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup)))/messageID">messageID</span><span class="symbol">:</span>&nbsp;<span class="identifier">Int</span><span class="symbol">, </span><span class="identifier" id="org.telegram.bot.api.SendMessages$addEditMessage(kotlin.Int, kotlin.String, kotlin.String, org.telegram.telegrambots.bots.AbsSender, kotlin.Int, java.util.Optional((kotlin.Boolean)), java.util.Optional((org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup)))/enableMarkdown">enableMarkdown</span><span class="symbol">:</span>&nbsp;<a href="http://docs.oracle.com/javase/6/docs/api/java/util/Optional.html"><span class="identifier">Optional</span></a><span class="symbol">&lt;</span><span class="identifier">Boolean</span><span class="symbol">&gt;</span><span class="symbol">, </span><span class="identifier" id="org.telegram.bot.api.SendMessages$addEditMessage(kotlin.Int, kotlin.String, kotlin.String, org.telegram.telegrambots.bots.AbsSender, kotlin.Int, java.util.Optional((kotlin.Boolean)), java.util.Optional((org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup)))/inlineKeyboard">inlineKeyboard</span><span class="symbol">:</span>&nbsp;<a href="http://docs.oracle.com/javase/6/docs/api/java/util/Optional.html"><span class="identifier">Optional</span></a><span class="symbol">&lt;</span><span class="identifier">InlineKeyboardMarkup</span><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Unit</span></code> <a href="https://github.com/liketechnik/infoDisplay/blob/development/bot/src/main/java/org/telegram/bot/api/SendMessages.java#L284">(source)</a>
+<p>Adds a new EditMessageText to the queue of messages that are going to be send.</p>
+<h3>Parameters</h3>
+
+<p><a name="messageHash"></a>
+<code>messageHash</code> - A unique hash of the message text. Used to identify which parameter belongs to which message.
+<p><a name="message"></a>
+<code>message</code> - The new message text of the message.
+<p><a name="chatId"></a>
+<code>chatId</code> - The id of the chat the message is in.
+<p><a name="absSender"></a>
+<code>absSender</code> - The AbsSender with which the messages is edited.
+<p><a name="messageID"></a>
+<code>messageID</code> - The id of the message that is changed.
+<p><a name="enableMarkdown"></a>
+<code>enableMarkdown</code> - (Optional) If the message text should be treated as markdown formatted text.
+<p><a name="inlineKeyboard"></a>
+<code>inlineKeyboard</code> - (Optional) An InlineKeyboardMarkup appended to the message.
+<p><strong>See Also</strong><br/>
+EditMessageText</p>
+</BODY>
+</HTML>

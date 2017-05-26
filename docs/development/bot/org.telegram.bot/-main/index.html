@@ -1,0 +1,76 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>Main - </title>
+<link rel="stylesheet" href="../../style.css">
+</HEAD>
+<BODY>
+<a href="../index.html">org.telegram.bot</a>&nbsp;/&nbsp;<a href=".">Main</a><br/>
+<br/>
+<h1>Main</h1>
+<code><span class="keyword">open</span> <span class="keyword">class </span><span class="identifier">Main</span></code> <a href="https://github.com/liketechnik/infoDisplay/blob/development/bot/src/main/java/org/telegram/bot/Main.java#L60">(source)</a>
+<p>The main class that set ups the logger, registers the bot to the Telegram API and waits for the command to shutdown.</p>
+<p><strong>Author</strong><br/>
+Florian Warzecha</p>
+<p><strong>Version</strong><br/>
+1.0.1</p>
+<p><strong>Date</strong><br/>
+21 of October of 2016</p>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<a href="-init-.html">&lt;init&gt;</a></td>
+<td>
+<code><span class="identifier">Main</span><span class="symbol">(</span><span class="symbol">)</span></code>
+<p>The main class that set ups the logger, registers the bot to the Telegram API and waits for the command to shutdown.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<a href="get-filtered-username.html">getFilteredUsername</a></td>
+<td>
+<code><span class="keyword">open</span> <span class="keyword">static</span> <span class="keyword">fun </span><span class="identifier">getFilteredUsername</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.Main$getFilteredUsername(org.telegram.telegrambots.api.objects.User)/user">user</span><span class="symbol">:</span>&nbsp;<span class="identifier">User</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">String</span></code>
+<p>Checks the different possibilities for a username and returns the preferred one. If a user has his last and his first name defined, both are returned. If the last name is missing, only the first name is returned. If no user name is defined, the userID is used as Name.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="get-special-filtered-username.html">getSpecialFilteredUsername</a></td>
+<td>
+<code><span class="keyword">open</span> <span class="keyword">static</span> <span class="keyword">fun </span><span class="identifier">getSpecialFilteredUsername</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.Main$getSpecialFilteredUsername(org.telegram.telegrambots.api.objects.User)/user">user</span><span class="symbol">:</span>&nbsp;<span class="identifier">User</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">String</span></code>
+<p>Checks the different possibilities for a username and returns the preferred one. If a user has defined a telegram username, this username is returned. Otherwise the first name is returned, if possible in addition of the last name. If nothing is found, the UserID is used.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="main.html">main</a></td>
+<td>
+<code><span class="keyword">open</span> <span class="keyword">static</span> <span class="keyword">fun </span><span class="identifier">main</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.Main$main(kotlin.Array((kotlin.String)))/args">args</span><span class="symbol">:</span>&nbsp;<span class="identifier">Array</span><span class="symbol">&lt;</span><span class="identifier">String</span><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Unit</span></code>
+<p>Set up a logger and register the commands. Then watch for the appearance of a file 'stop' in the working dir. If it appears stop the program.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="merge-exceptions.html">mergeExceptions</a></td>
+<td>
+<code><span class="keyword">open</span> <span class="keyword">static</span> <span class="keyword">fun </span><span class="identifier">mergeExceptions</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.Main$mergeExceptions(kotlin.Array((java.lang.Exception)))/exceptions">exceptions</span><span class="symbol">:</span>&nbsp;<span class="identifier">Array</span><span class="symbol">&lt;</span><a href="http://docs.oracle.com/javase/6/docs/api/java/lang/Exception.html"><span class="identifier">Exception</span></a><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><a href="http://docs.oracle.com/javase/6/docs/api/java/lang/Exception.html"><span class="identifier">Exception</span></a></code></td>
+</tr>
+<tr>
+<td>
+<a href="send-on-error-occurred.html">sendOnErrorOccurred</a></td>
+<td>
+<code><span class="keyword">open</span> <span class="keyword">static</span> <span class="keyword">fun </span><span class="identifier">sendOnErrorOccurred</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.Main$sendOnErrorOccurred(org.telegram.telegrambots.bots.AbsSender, org.telegram.telegrambots.api.objects.User, org.telegram.telegrambots.api.objects.Chat, kotlin.String)/absSender">absSender</span><span class="symbol">:</span>&nbsp;<span class="identifier">AbsSender</span><span class="symbol">, </span><span class="identifier" id="org.telegram.bot.Main$sendOnErrorOccurred(org.telegram.telegrambots.bots.AbsSender, org.telegram.telegrambots.api.objects.User, org.telegram.telegrambots.api.objects.Chat, kotlin.String)/user">user</span><span class="symbol">:</span>&nbsp;<span class="identifier">User</span><span class="symbol">, </span><span class="identifier" id="org.telegram.bot.Main$sendOnErrorOccurred(org.telegram.telegrambots.bots.AbsSender, org.telegram.telegrambots.api.objects.User, org.telegram.telegrambots.api.objects.Chat, kotlin.String)/chat">chat</span><span class="symbol">:</span>&nbsp;<span class="identifier">Chat</span><span class="symbol">, </span><span class="identifier" id="org.telegram.bot.Main$sendOnErrorOccurred(org.telegram.telegrambots.bots.AbsSender, org.telegram.telegrambots.api.objects.User, org.telegram.telegrambots.api.objects.Chat, kotlin.String)/LOGTAG">LOGTAG</span><span class="symbol">:</span>&nbsp;<span class="identifier">String</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Unit</span></code>
+<p>This method is called when an error occurs in one of the bot commands. It tells the user about the occurrence of an error and prints out the help message.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

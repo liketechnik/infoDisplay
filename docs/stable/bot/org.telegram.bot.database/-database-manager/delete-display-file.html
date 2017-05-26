@@ -1,0 +1,34 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>DatabaseManager.deleteDisplayFile - </title>
+<link rel="stylesheet" href="../../style.css">
+</HEAD>
+<BODY>
+<a href="../index.html">org.telegram.bot.database</a>&nbsp;/&nbsp;<a href="index.html">DatabaseManager</a>&nbsp;/&nbsp;<a href=".">deleteDisplayFile</a><br/>
+<br/>
+<h1>deleteDisplayFile</h1>
+
+<p><a name="org.telegram.bot.database.DatabaseManager$deleteDisplayFile(kotlin.String)"></a>
+<code><span class="keyword">fun </span><span class="identifier">deleteDisplayFile</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.database.DatabaseManager$deleteDisplayFile(kotlin.String)/name">name</span><span class="symbol">:</span>&nbsp;<span class="identifier">String</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Unit</span></code> <a href="https://github.com/liketechnik/infoDisplay/blob/stable/bot/src/main/java/org/telegram/bot/database/DatabaseManager.java#L1290">(source)</a>
+<p>Wrapper for deleting display files that have not been uploaded by the admin so the userId is unknown for the command.</p>
+<h3>Parameters</h3>
+
+<p><a name="name"></a>
+<code>name</code> - The name of the file that should be deleted.
+<p><strong>See Also</strong><br/>
+<a href="#">#deleteDisplayFile(Integer, String)</a></p>
+
+<p><a name="org.telegram.bot.database.DatabaseManager$deleteDisplayFile(kotlin.Int, kotlin.String)"></a>
+<code><span class="keyword">fun </span><span class="identifier">deleteDisplayFile</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.database.DatabaseManager$deleteDisplayFile(kotlin.Int, kotlin.String)/userId">userId</span><span class="symbol">:</span>&nbsp;<span class="identifier">Int</span><span class="symbol">, </span><span class="identifier" id="org.telegram.bot.database.DatabaseManager$deleteDisplayFile(kotlin.Int, kotlin.String)/name">name</span><span class="symbol">:</span>&nbsp;<span class="identifier">String</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Unit</span></code> <a href="https://github.com/liketechnik/infoDisplay/blob/stable/bot/src/main/java/org/telegram/bot/database/DatabaseManager.java#L1301">(source)</a>
+<p>Delete a display file by removing it from the databases for display files and deleting the files.</p>
+<h3>Parameters</h3>
+
+<p><a name="userId"></a>
+<code>userId</code> - The user id of the user who uploaded the file.
+<p><a name="name"></a>
+<code>name</code> - The name of the file that is going to be deleted.
+<p><strong>See Also</strong><br/>
+<a href="#">#deleteDisplayFile(String)</a><a href="#">#removeDisplayFile(String, Integer)</a></p>
+</BODY>
+</HTML>

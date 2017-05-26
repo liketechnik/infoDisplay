@@ -1,0 +1,21 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>Message.calculateHash - </title>
+<link rel="stylesheet" href="../../style.css">
+</HEAD>
+<BODY>
+<a href="../index.html">org.telegram.bot.messages</a>&nbsp;/&nbsp;<a href="index.html">Message</a>&nbsp;/&nbsp;<a href=".">calculateHash</a><br/>
+<br/>
+<h1>calculateHash</h1>
+<a name="org.telegram.bot.messages.Message$calculateHash()"></a>
+<code><span class="keyword">open</span> <span class="keyword">fun </span><span class="identifier">calculateHash</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Int</span></code> <a href="https://github.com/liketechnik/infoDisplay/blob/stable/bot/src/main/java/org/telegram/bot/messages/Message.java#L154">(source)</a>
+<p>Calculate a unique hash from the text of the message. Uniqueness is guaranteed by synchronizing this method to <code>Message.class</code>, adding the <code><a href="#">System#currentTimeMillis()</a></code> to the message text before calculating the hash and waiting one millisecond before the hash is returned.</p>
+<h3>Exceptions</h3>
+
+<p><a name="InterruptedException"></a>
+<code>InterruptedException</code> - If sleeping before returning the message is interrupted.
+<p><strong>Return</strong><br/>
+The unique hash of the message text.</p>
+</BODY>
+</HTML>

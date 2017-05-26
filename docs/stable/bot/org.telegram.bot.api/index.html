@@ -1,0 +1,41 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>org.telegram.bot.api - </title>
+<link rel="stylesheet" href="../style.css">
+</HEAD>
+<BODY>
+<a href=".">org.telegram.bot.api</a><br/>
+<br/>
+<h2>Package org.telegram.bot.api</h2>
+<h3>Types</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<a href="-parser/index.html">Parser</a></td>
+<td>
+<code><span class="keyword">abstract</span> <span class="keyword">class </span><span class="identifier">Parser</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="http://docs.oracle.com/javase/6/docs/api/java/lang/Runnable.html"><span class="identifier">Runnable</span></a></code>
+<p>Basic class for parsing updates, parsing is specialised for documents, callbacks and text messages.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="-send-messages/index.html">SendMessages</a></td>
+<td>
+<code><span class="keyword">open</span> <span class="keyword">class </span><span class="identifier">SendMessages</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="http://docs.oracle.com/javase/6/docs/api/java/lang/Thread.html"><span class="identifier">Thread</span></a></code>
+<p>Accepts new messages and adds them to its internal send-queue. This class sends only one message per second so Telegram API limits are not exceeded. It also automates the process of setting up a new message object.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="-telegram-long-polling-thread-bot/index.html">TelegramLongPollingThreadBot</a></td>
+<td>
+<code><span class="keyword">abstract</span> <span class="keyword">class </span><span class="identifier">TelegramLongPollingThreadBot</span>&nbsp;<span class="symbol">:</span>&nbsp;<span class="identifier">TelegramLongPollingBot</span></code>
+<p>This class implements a long polling bot that works on a command base. The difference to the standard org.telegram.telegrambots.bots.TelegramLongPollingCommandBot is that for every update a new thread is started that parses the message text, callback data or document. Command registration is made after org.telegram.telegrambots.bots.commands.CommandRegistry of TelegramBots API by Ruben Bermudez (see README).</p>
+</td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

@@ -1,0 +1,86 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>SituationalContentMessage - </title>
+<link rel="stylesheet" href="../../style.css">
+</HEAD>
+<BODY>
+<a href="../index.html">org.telegram.bot.messages</a>&nbsp;/&nbsp;<a href=".">SituationalContentMessage</a><br/>
+<br/>
+<h1>SituationalContentMessage</h1>
+<code><span class="keyword">open</span> <span class="keyword">class </span><span class="identifier">SituationalContentMessage</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../-content-message/index.html"><span class="identifier">ContentMessage</span></a></code> <a href="https://github.com/liketechnik/infoDisplay/blob/stable/bot/src/main/java/org/telegram/bot/messages/SituationalContentMessage.java#L43">(source)</a>
+<p>A mixture of ContentMessage and SituationalMessage. It combines the features of these to one message class.</p>
+<p><strong>Author</strong><br/>
+Florian Warzecha</p>
+<p><strong>Version</strong><br/>
+1.2.1</p>
+<p><strong>Date</strong><br/>
+09 of February 2017</p>
+<p><strong>See Also</strong><br/>
+ContentMessageSituationalMessage</p>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<a href="-init-.html">&lt;init&gt;</a></td>
+<td>
+<code><span class="identifier">SituationalContentMessage</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.messages.SituationalContentMessage$<init>(kotlin.String)/command">command</span><span class="symbol">:</span>&nbsp;<span class="identifier">String</span><span class="symbol">)</span></code>
+<p>Initialize a new <code>SituationalContentMessage</code>.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<a href="get-situation.html">getSituation</a></td>
+<td>
+<code><span class="keyword">open</span> <span class="keyword">fun </span><span class="identifier">getSituation</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">String</span></code>
+<p>Get the situation the command is in.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="set-message-name.html">setMessageName</a></td>
+<td>
+<code><span class="keyword">open</span> <span class="keyword">fun </span><span class="identifier">setMessageName</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.messages.SituationalContentMessage$setMessageName(kotlin.String, kotlin.String)/command">command</span><span class="symbol">:</span>&nbsp;<span class="identifier">String</span><span class="symbol">, </span><span class="identifier" id="org.telegram.bot.messages.SituationalContentMessage$setMessageName(kotlin.String, kotlin.String)/situation">situation</span><span class="symbol">:</span>&nbsp;<span class="identifier">String</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Unit</span></code><br/>
+<code><span class="keyword">open</span> <span class="keyword">fun </span><span class="identifier">setMessageName</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.messages.SituationalContentMessage$setMessageName(kotlin.String, kotlin.String, kotlin.String)/commandPackage">commandPackage</span><span class="symbol">:</span>&nbsp;<span class="identifier">String</span><span class="symbol">, </span><span class="identifier" id="org.telegram.bot.messages.SituationalContentMessage$setMessageName(kotlin.String, kotlin.String, kotlin.String)/command">command</span><span class="symbol">:</span>&nbsp;<span class="identifier">String</span><span class="symbol">, </span><span class="identifier" id="org.telegram.bot.messages.SituationalContentMessage$setMessageName(kotlin.String, kotlin.String, kotlin.String)/situation">situation</span><span class="symbol">:</span>&nbsp;<span class="identifier">String</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Unit</span></code>
+<p>Handle the xmlQuarry and set the name of the message.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3>Inherited Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<a href="../-content-message/get-additional-content.html">getAdditionalContent</a></td>
+<td>
+<code><span class="keyword">open</span> <span class="keyword">fun </span><span class="identifier">getAdditionalContent</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">MutableMap</span><span class="symbol">&lt;</span><span class="identifier">String</span><span class="symbol">,</span>&nbsp;<span class="identifier">String</span><span class="symbol">&gt;</span></code>
+<p>Get the <code>HashMap</code> containing the mappings from predefined strings to their modular content.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="../-content-message/get-content.html">getContent</a></td>
+<td>
+<code><span class="keyword">open</span> <span class="keyword">fun </span><span class="identifier">getContent</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.messages.ContentMessage$getContent(kotlin.Int, kotlin.Boolean)/userId">userId</span><span class="symbol">:</span>&nbsp;<span class="identifier">Int</span><span class="symbol">, </span><span class="identifier" id="org.telegram.bot.messages.ContentMessage$getContent(kotlin.Int, kotlin.Boolean)/addHelp">addHelp</span><span class="symbol">:</span>&nbsp;<span class="identifier">Boolean</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">String</span></code>
+<p>Get the content from the language file and replace the specified strings with their modular content.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="../-content-message/set-additional-content.html">setAdditionalContent</a></td>
+<td>
+<code><span class="keyword">open</span> <span class="keyword">fun </span><span class="identifier">setAdditionalContent</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.messages.ContentMessage$setAdditionalContent(java.util.HashMap((kotlin.String, )))/addition">addition</span><span class="symbol">:</span>&nbsp;<a href="http://docs.oracle.com/javase/6/docs/api/java/util/HashMap.html"><span class="identifier">HashMap</span></a><span class="symbol">&lt;</span><span class="identifier">String</span><span class="symbol">,</span>&nbsp;<span class="identifier">String</span><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Unit</span></code>
+<p>Set which Strings from the language files should be replaced with which content.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

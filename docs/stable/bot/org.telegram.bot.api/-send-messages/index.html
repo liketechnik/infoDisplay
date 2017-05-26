@@ -1,0 +1,106 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>SendMessages - </title>
+<link rel="stylesheet" href="../../style.css">
+</HEAD>
+<BODY>
+<a href="../index.html">org.telegram.bot.api</a>&nbsp;/&nbsp;<a href=".">SendMessages</a><br/>
+<br/>
+<h1>SendMessages</h1>
+<code><span class="keyword">open</span> <span class="keyword">class </span><span class="identifier">SendMessages</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="http://docs.oracle.com/javase/6/docs/api/java/lang/Thread.html"><span class="identifier">Thread</span></a></code> <a href="https://github.com/liketechnik/infoDisplay/blob/stable/bot/src/main/java/org/telegram/bot/api/SendMessages.java#L60">(source)</a>
+<p>Accepts new messages and adds them to its internal send-queue. This class sends only one message per second so Telegram API limits are not exceeded. It also automates the process of setting up a new message object.</p>
+<p><strong>Author</strong><br/>
+Florian Warzecha</p>
+<p><strong>Version</strong><br/>
+1.0</p>
+<p><strong>Date</strong><br/>
+17 of April 2017</p>
+<h3>Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<a href="-l-o-g-t-a-g.html">LOGTAG</a></td>
+<td>
+<code><span class="keyword">static</span> <span class="keyword">val </span><span class="identifier">LOGTAG</span><span class="symbol">: </span><span class="identifier">String</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<a href="add-delete-message.html">addDeleteMessage</a></td>
+<td>
+<code><span class="keyword">open</span> <span class="keyword">fun </span><span class="identifier">addDeleteMessage</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.api.SendMessages$addDeleteMessage(kotlin.String, kotlin.Int, org.telegram.telegrambots.bots.AbsSender)/chatId">chatId</span><span class="symbol">:</span>&nbsp;<span class="identifier">String</span><span class="symbol">, </span><span class="identifier" id="org.telegram.bot.api.SendMessages$addDeleteMessage(kotlin.String, kotlin.Int, org.telegram.telegrambots.bots.AbsSender)/messageId">messageId</span><span class="symbol">:</span>&nbsp;<span class="identifier">Int</span><span class="symbol">, </span><span class="identifier" id="org.telegram.bot.api.SendMessages$addDeleteMessage(kotlin.String, kotlin.Int, org.telegram.telegrambots.bots.AbsSender)/absSender">absSender</span><span class="symbol">:</span>&nbsp;<span class="identifier">AbsSender</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Unit</span></code>
+<p>Adds a DeleteMessage to the queue of messages that are going to be send.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="add-document-message.html">addDocumentMessage</a></td>
+<td>
+<code><span class="keyword">open</span> <span class="keyword">fun </span><span class="identifier">addDocumentMessage</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.api.SendMessages$addDocumentMessage(kotlin.Int, kotlin.String, kotlin.String, org.telegram.telegrambots.bots.AbsSender, kotlin.String, java.util.Optional((org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup)))/messageHash">messageHash</span><span class="symbol">:</span>&nbsp;<span class="identifier">Int</span><span class="symbol">, </span><span class="identifier" id="org.telegram.bot.api.SendMessages$addDocumentMessage(kotlin.Int, kotlin.String, kotlin.String, org.telegram.telegrambots.bots.AbsSender, kotlin.String, java.util.Optional((org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup)))/caption">caption</span><span class="symbol">:</span>&nbsp;<span class="identifier">String</span><span class="symbol">, </span><span class="identifier" id="org.telegram.bot.api.SendMessages$addDocumentMessage(kotlin.Int, kotlin.String, kotlin.String, org.telegram.telegrambots.bots.AbsSender, kotlin.String, java.util.Optional((org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup)))/chatId">chatId</span><span class="symbol">:</span>&nbsp;<span class="identifier">String</span><span class="symbol">, </span><span class="identifier" id="org.telegram.bot.api.SendMessages$addDocumentMessage(kotlin.Int, kotlin.String, kotlin.String, org.telegram.telegrambots.bots.AbsSender, kotlin.String, java.util.Optional((org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup)))/absSender">absSender</span><span class="symbol">:</span>&nbsp;<span class="identifier">AbsSender</span><span class="symbol">, </span><span class="identifier" id="org.telegram.bot.api.SendMessages$addDocumentMessage(kotlin.Int, kotlin.String, kotlin.String, org.telegram.telegrambots.bots.AbsSender, kotlin.String, java.util.Optional((org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup)))/fileId">fileId</span><span class="symbol">:</span>&nbsp;<span class="identifier">String</span><span class="symbol">, </span><span class="identifier" id="org.telegram.bot.api.SendMessages$addDocumentMessage(kotlin.Int, kotlin.String, kotlin.String, org.telegram.telegrambots.bots.AbsSender, kotlin.String, java.util.Optional((org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup)))/inlineKeyboard">inlineKeyboard</span><span class="symbol">:</span>&nbsp;<a href="http://docs.oracle.com/javase/6/docs/api/java/util/Optional.html"><span class="identifier">Optional</span></a><span class="symbol">&lt;</span><span class="identifier">InlineKeyboardMarkup</span><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Unit</span></code>
+<p>Adds a new SendDocument to the queue of messages that are going to be send.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="add-edit-message.html">addEditMessage</a></td>
+<td>
+<code><span class="keyword">open</span> <span class="keyword">fun </span><span class="identifier">addEditMessage</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.api.SendMessages$addEditMessage(kotlin.Int, kotlin.String, kotlin.String, org.telegram.telegrambots.bots.AbsSender, kotlin.Int, java.util.Optional((kotlin.Boolean)), java.util.Optional((org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup)))/messageHash">messageHash</span><span class="symbol">:</span>&nbsp;<span class="identifier">Int</span><span class="symbol">, </span><span class="identifier" id="org.telegram.bot.api.SendMessages$addEditMessage(kotlin.Int, kotlin.String, kotlin.String, org.telegram.telegrambots.bots.AbsSender, kotlin.Int, java.util.Optional((kotlin.Boolean)), java.util.Optional((org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup)))/message">message</span><span class="symbol">:</span>&nbsp;<span class="identifier">String</span><span class="symbol">, </span><span class="identifier" id="org.telegram.bot.api.SendMessages$addEditMessage(kotlin.Int, kotlin.String, kotlin.String, org.telegram.telegrambots.bots.AbsSender, kotlin.Int, java.util.Optional((kotlin.Boolean)), java.util.Optional((org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup)))/chatId">chatId</span><span class="symbol">:</span>&nbsp;<span class="identifier">String</span><span class="symbol">, </span><span class="identifier" id="org.telegram.bot.api.SendMessages$addEditMessage(kotlin.Int, kotlin.String, kotlin.String, org.telegram.telegrambots.bots.AbsSender, kotlin.Int, java.util.Optional((kotlin.Boolean)), java.util.Optional((org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup)))/absSender">absSender</span><span class="symbol">:</span>&nbsp;<span class="identifier">AbsSender</span><span class="symbol">, </span><span class="identifier" id="org.telegram.bot.api.SendMessages$addEditMessage(kotlin.Int, kotlin.String, kotlin.String, org.telegram.telegrambots.bots.AbsSender, kotlin.Int, java.util.Optional((kotlin.Boolean)), java.util.Optional((org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup)))/messageID">messageID</span><span class="symbol">:</span>&nbsp;<span class="identifier">Int</span><span class="symbol">, </span><span class="identifier" id="org.telegram.bot.api.SendMessages$addEditMessage(kotlin.Int, kotlin.String, kotlin.String, org.telegram.telegrambots.bots.AbsSender, kotlin.Int, java.util.Optional((kotlin.Boolean)), java.util.Optional((org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup)))/enableMarkdown">enableMarkdown</span><span class="symbol">:</span>&nbsp;<a href="http://docs.oracle.com/javase/6/docs/api/java/util/Optional.html"><span class="identifier">Optional</span></a><span class="symbol">&lt;</span><span class="identifier">Boolean</span><span class="symbol">&gt;</span><span class="symbol">, </span><span class="identifier" id="org.telegram.bot.api.SendMessages$addEditMessage(kotlin.Int, kotlin.String, kotlin.String, org.telegram.telegrambots.bots.AbsSender, kotlin.Int, java.util.Optional((kotlin.Boolean)), java.util.Optional((org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup)))/inlineKeyboard">inlineKeyboard</span><span class="symbol">:</span>&nbsp;<a href="http://docs.oracle.com/javase/6/docs/api/java/util/Optional.html"><span class="identifier">Optional</span></a><span class="symbol">&lt;</span><span class="identifier">InlineKeyboardMarkup</span><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Unit</span></code>
+<p>Adds a new EditMessageText to the queue of messages that are going to be send.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="add-image-message.html">addImageMessage</a></td>
+<td>
+<code><span class="keyword">open</span> <span class="keyword">fun </span><span class="identifier">addImageMessage</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.api.SendMessages$addImageMessage(kotlin.Int, kotlin.String, kotlin.String, org.telegram.telegrambots.bots.AbsSender, kotlin.String, java.util.Optional((org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup)))/messsageHash">messsageHash</span><span class="symbol">:</span>&nbsp;<span class="identifier">Int</span><span class="symbol">, </span><span class="identifier" id="org.telegram.bot.api.SendMessages$addImageMessage(kotlin.Int, kotlin.String, kotlin.String, org.telegram.telegrambots.bots.AbsSender, kotlin.String, java.util.Optional((org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup)))/caption">caption</span><span class="symbol">:</span>&nbsp;<span class="identifier">String</span><span class="symbol">, </span><span class="identifier" id="org.telegram.bot.api.SendMessages$addImageMessage(kotlin.Int, kotlin.String, kotlin.String, org.telegram.telegrambots.bots.AbsSender, kotlin.String, java.util.Optional((org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup)))/chatId">chatId</span><span class="symbol">:</span>&nbsp;<span class="identifier">String</span><span class="symbol">, </span><span class="identifier" id="org.telegram.bot.api.SendMessages$addImageMessage(kotlin.Int, kotlin.String, kotlin.String, org.telegram.telegrambots.bots.AbsSender, kotlin.String, java.util.Optional((org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup)))/absSender">absSender</span><span class="symbol">:</span>&nbsp;<span class="identifier">AbsSender</span><span class="symbol">, </span><span class="identifier" id="org.telegram.bot.api.SendMessages$addImageMessage(kotlin.Int, kotlin.String, kotlin.String, org.telegram.telegrambots.bots.AbsSender, kotlin.String, java.util.Optional((org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup)))/fileId">fileId</span><span class="symbol">:</span>&nbsp;<span class="identifier">String</span><span class="symbol">, </span><span class="identifier" id="org.telegram.bot.api.SendMessages$addImageMessage(kotlin.Int, kotlin.String, kotlin.String, org.telegram.telegrambots.bots.AbsSender, kotlin.String, java.util.Optional((org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup)))/inlineKeyboard">inlineKeyboard</span><span class="symbol">:</span>&nbsp;<a href="http://docs.oracle.com/javase/6/docs/api/java/util/Optional.html"><span class="identifier">Optional</span></a><span class="symbol">&lt;</span><span class="identifier">InlineKeyboardMarkup</span><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Unit</span></code>
+<p>Adds a new SendPhoto to the queue of messages that are going to be send.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="add-message.html">addMessage</a></td>
+<td>
+<code><span class="keyword">open</span> <span class="keyword">fun </span><span class="identifier">addMessage</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.api.SendMessages$addMessage(kotlin.Int, kotlin.String, kotlin.String, org.telegram.telegrambots.bots.AbsSender, java.util.Optional((kotlin.Boolean)), java.util.Optional((org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup)))/messageHash">messageHash</span><span class="symbol">:</span>&nbsp;<span class="identifier">Int</span><span class="symbol">, </span><span class="identifier" id="org.telegram.bot.api.SendMessages$addMessage(kotlin.Int, kotlin.String, kotlin.String, org.telegram.telegrambots.bots.AbsSender, java.util.Optional((kotlin.Boolean)), java.util.Optional((org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup)))/message">message</span><span class="symbol">:</span>&nbsp;<span class="identifier">String</span><span class="symbol">, </span><span class="identifier" id="org.telegram.bot.api.SendMessages$addMessage(kotlin.Int, kotlin.String, kotlin.String, org.telegram.telegrambots.bots.AbsSender, java.util.Optional((kotlin.Boolean)), java.util.Optional((org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup)))/chatId">chatId</span><span class="symbol">:</span>&nbsp;<span class="identifier">String</span><span class="symbol">, </span><span class="identifier" id="org.telegram.bot.api.SendMessages$addMessage(kotlin.Int, kotlin.String, kotlin.String, org.telegram.telegrambots.bots.AbsSender, java.util.Optional((kotlin.Boolean)), java.util.Optional((org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup)))/absSender">absSender</span><span class="symbol">:</span>&nbsp;<span class="identifier">AbsSender</span><span class="symbol">, </span><span class="identifier" id="org.telegram.bot.api.SendMessages$addMessage(kotlin.Int, kotlin.String, kotlin.String, org.telegram.telegrambots.bots.AbsSender, java.util.Optional((kotlin.Boolean)), java.util.Optional((org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup)))/enableMarkdown">enableMarkdown</span><span class="symbol">:</span>&nbsp;<a href="http://docs.oracle.com/javase/6/docs/api/java/util/Optional.html"><span class="identifier">Optional</span></a><span class="symbol">&lt;</span><span class="identifier">Boolean</span><span class="symbol">&gt;</span><span class="symbol">, </span><span class="identifier" id="org.telegram.bot.api.SendMessages$addMessage(kotlin.Int, kotlin.String, kotlin.String, org.telegram.telegrambots.bots.AbsSender, java.util.Optional((kotlin.Boolean)), java.util.Optional((org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup)))/inlineKeyboard">inlineKeyboard</span><span class="symbol">:</span>&nbsp;<a href="http://docs.oracle.com/javase/6/docs/api/java/util/Optional.html"><span class="identifier">Optional</span></a><span class="symbol">&lt;</span><span class="identifier">InlineKeyboardMarkup</span><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Unit</span></code>
+<p>Add a new org.telegram.telegrambots.api.objects.Message to the queue of messages that are going to be send.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="add-video-message.html">addVideoMessage</a></td>
+<td>
+<code><span class="keyword">open</span> <span class="keyword">fun </span><span class="identifier">addVideoMessage</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.api.SendMessages$addVideoMessage(kotlin.Int, kotlin.String, kotlin.String, org.telegram.telegrambots.bots.AbsSender, kotlin.String, java.util.Optional((org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup)))/messsageHash">messsageHash</span><span class="symbol">:</span>&nbsp;<span class="identifier">Int</span><span class="symbol">, </span><span class="identifier" id="org.telegram.bot.api.SendMessages$addVideoMessage(kotlin.Int, kotlin.String, kotlin.String, org.telegram.telegrambots.bots.AbsSender, kotlin.String, java.util.Optional((org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup)))/caption">caption</span><span class="symbol">:</span>&nbsp;<span class="identifier">String</span><span class="symbol">, </span><span class="identifier" id="org.telegram.bot.api.SendMessages$addVideoMessage(kotlin.Int, kotlin.String, kotlin.String, org.telegram.telegrambots.bots.AbsSender, kotlin.String, java.util.Optional((org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup)))/chatId">chatId</span><span class="symbol">:</span>&nbsp;<span class="identifier">String</span><span class="symbol">, </span><span class="identifier" id="org.telegram.bot.api.SendMessages$addVideoMessage(kotlin.Int, kotlin.String, kotlin.String, org.telegram.telegrambots.bots.AbsSender, kotlin.String, java.util.Optional((org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup)))/absSender">absSender</span><span class="symbol">:</span>&nbsp;<span class="identifier">AbsSender</span><span class="symbol">, </span><span class="identifier" id="org.telegram.bot.api.SendMessages$addVideoMessage(kotlin.Int, kotlin.String, kotlin.String, org.telegram.telegrambots.bots.AbsSender, kotlin.String, java.util.Optional((org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup)))/fileId">fileId</span><span class="symbol">:</span>&nbsp;<span class="identifier">String</span><span class="symbol">, </span><span class="identifier" id="org.telegram.bot.api.SendMessages$addVideoMessage(kotlin.Int, kotlin.String, kotlin.String, org.telegram.telegrambots.bots.AbsSender, kotlin.String, java.util.Optional((org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup)))/inlineKeyboard">inlineKeyboard</span><span class="symbol">:</span>&nbsp;<a href="http://docs.oracle.com/javase/6/docs/api/java/util/Optional.html"><span class="identifier">Optional</span></a><span class="symbol">&lt;</span><span class="identifier">InlineKeyboardMarkup</span><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Unit</span></code>
+<p>Adds a new SendVideo to the queue of messages that are going to be send.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="get-instance.html">getInstance</a></td>
+<td>
+<code><span class="keyword">open</span> <span class="keyword">static</span> <span class="keyword">fun </span><span class="identifier">getInstance</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">SendMessages</span></code></td>
+</tr>
+<tr>
+<td>
+<a href="get-messages.html">getMessages</a></td>
+<td>
+<code><span class="keyword">open</span> <span class="keyword">fun </span><span class="identifier">getMessages</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Int</span></code>
+<p>Get the number of messages that need to be send.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="run.html">run</a></td>
+<td>
+<code><span class="keyword">open</span> <span class="keyword">fun </span><span class="identifier">run</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Unit</span></code>
+<p>Get a new message hash from the queue, determine the message type and send the message according to that.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

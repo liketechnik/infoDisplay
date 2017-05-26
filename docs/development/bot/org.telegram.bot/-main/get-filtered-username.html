@@ -1,0 +1,21 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>Main.getFilteredUsername - </title>
+<link rel="stylesheet" href="../../style.css">
+</HEAD>
+<BODY>
+<a href="../index.html">org.telegram.bot</a>&nbsp;/&nbsp;<a href="index.html">Main</a>&nbsp;/&nbsp;<a href=".">getFilteredUsername</a><br/>
+<br/>
+<h1>getFilteredUsername</h1>
+<a name="org.telegram.bot.Main$getFilteredUsername(org.telegram.telegrambots.api.objects.User)"></a>
+<code><span class="keyword">open</span> <span class="keyword">static</span> <span class="keyword">fun </span><span class="identifier">getFilteredUsername</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.Main$getFilteredUsername(org.telegram.telegrambots.api.objects.User)/user">user</span><span class="symbol">:</span>&nbsp;<span class="identifier">User</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">String</span></code> <a href="https://github.com/liketechnik/infoDisplay/blob/development/bot/src/main/java/org/telegram/bot/Main.java#L125">(source)</a>
+<p>Checks the different possibilities for a username and returns the preferred one. If a user has his last and his first name defined, both are returned. If the last name is missing, only the first name is returned. If no user name is defined, the userID is used as Name.</p>
+<h3>Parameters</h3>
+
+<p><a name="user"></a>
+<code>user</code> - The user from who we want to know the username.
+<p><strong>Return</strong><br/>
+The username, preferred as combination of his first and last name.</p>
+</BODY>
+</HTML>

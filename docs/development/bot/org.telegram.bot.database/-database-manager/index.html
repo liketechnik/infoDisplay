@@ -1,0 +1,490 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>DatabaseManager - </title>
+<link rel="stylesheet" href="../../style.css">
+</HEAD>
+<BODY>
+<a href="../index.html">org.telegram.bot.database</a>&nbsp;/&nbsp;<a href=".">DatabaseManager</a><br/>
+<br/>
+<h1>DatabaseManager</h1>
+<code><span class="keyword">class </span><span class="identifier">DatabaseManager</span></code> <a href="https://github.com/liketechnik/infoDisplay/blob/development/bot/src/main/java/org/telegram/bot/database/DatabaseManager.java#L72">(source)</a>
+<p>This class accesses the database. It makes sure there is only one <code><a href="#">#instance</a></code> of it at once to pretend IO errors from happening.</p>
+<p><strong>Author</strong><br/>
+Florian Warzecha</p>
+<p><strong>Version</strong><br/>
+1.0.1</p>
+<p><strong>Date</strong><br/>
+22 of October of 2016</p>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<a href="add-display-file.html">addDisplayFile</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">addDisplayFile</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.database.DatabaseManager$addDisplayFile(kotlin.String, org.telegram.telegrambots.api.objects.User)/displayFileName">displayFileName</span><span class="symbol">:</span>&nbsp;<span class="identifier">String</span><span class="symbol">, </span><span class="identifier" id="org.telegram.bot.database.DatabaseManager$addDisplayFile(kotlin.String, org.telegram.telegrambots.api.objects.User)/user">user</span><span class="symbol">:</span>&nbsp;<span class="identifier">User</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Unit</span></code>
+<p>Adds a new displayFile to the configuration file.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="create-configuration-file.html">createConfigurationFile</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">createConfigurationFile</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.database.DatabaseManager$createConfigurationFile(java.nio.file.Path)/file">file</span><span class="symbol">:</span>&nbsp;<a href="http://docs.oracle.com/javase/6/docs/api/java/nio/file/Path.html"><span class="identifier">Path</span></a><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Unit</span></code>
+<p>Creates a configuration file.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="create-new-display-file.html">createNewDisplayFile</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">createNewDisplayFile</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.database.DatabaseManager$createNewDisplayFile(org.telegram.telegrambots.bots.AbsSender, org.telegram.telegrambots.api.objects.User, kotlin.String, kotlin.String, kotlin.String)/absSender">absSender</span><span class="symbol">:</span>&nbsp;<span class="identifier">AbsSender</span><span class="symbol">, </span><span class="identifier" id="org.telegram.bot.database.DatabaseManager$createNewDisplayFile(org.telegram.telegrambots.bots.AbsSender, org.telegram.telegrambots.api.objects.User, kotlin.String, kotlin.String, kotlin.String)/user">user</span><span class="symbol">:</span>&nbsp;<span class="identifier">User</span><span class="symbol">, </span><span class="identifier" id="org.telegram.bot.database.DatabaseManager$createNewDisplayFile(org.telegram.telegrambots.bots.AbsSender, org.telegram.telegrambots.api.objects.User, kotlin.String, kotlin.String, kotlin.String)/fileId">fileId</span><span class="symbol">:</span>&nbsp;<span class="identifier">String</span><span class="symbol">, </span><span class="identifier" id="org.telegram.bot.database.DatabaseManager$createNewDisplayFile(org.telegram.telegrambots.bots.AbsSender, org.telegram.telegrambots.api.objects.User, kotlin.String, kotlin.String, kotlin.String)/type">type</span><span class="symbol">:</span>&nbsp;<span class="identifier">String</span><span class="symbol">, </span><span class="identifier" id="org.telegram.bot.database.DatabaseManager$createNewDisplayFile(org.telegram.telegrambots.bots.AbsSender, org.telegram.telegrambots.api.objects.User, kotlin.String, kotlin.String, kotlin.String)/tgType">tgType</span><span class="symbol">:</span>&nbsp;<span class="identifier">String</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Unit</span></code>
+<p>Download the file to display and add it together with its properties to the configuration files.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="create-question.html">createQuestion</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">createQuestion</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.database.DatabaseManager$createQuestion(kotlin.String, kotlin.Long)/question">question</span><span class="symbol">:</span>&nbsp;<span class="identifier">String</span><span class="symbol">, </span><span class="identifier" id="org.telegram.bot.database.DatabaseManager$createQuestion(kotlin.String, kotlin.Long)/chatID">chatID</span><span class="symbol">:</span>&nbsp;<span class="identifier">Long</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Unit</span></code>
+<p>Creates a new question. The question's ID is one bigger than the number of existing files.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="delete-display-file.html">deleteDisplayFile</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">deleteDisplayFile</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.database.DatabaseManager$deleteDisplayFile(kotlin.String)/name">name</span><span class="symbol">:</span>&nbsp;<span class="identifier">String</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Unit</span></code>
+<p>Wrapper for deleting display files that have not been uploaded by the admin so the userId is unknown for the command.</p>
+<code><span class="keyword">fun </span><span class="identifier">deleteDisplayFile</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.database.DatabaseManager$deleteDisplayFile(kotlin.Int, kotlin.String)/userId">userId</span><span class="symbol">:</span>&nbsp;<span class="identifier">Int</span><span class="symbol">, </span><span class="identifier" id="org.telegram.bot.database.DatabaseManager$deleteDisplayFile(kotlin.Int, kotlin.String)/name">name</span><span class="symbol">:</span>&nbsp;<span class="identifier">String</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Unit</span></code>
+<p>Delete a display file by removing it from the databases for display files and deleting the files.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="delete-question.html">deleteQuestion</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">deleteQuestion</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.database.DatabaseManager$deleteQuestion(kotlin.Int)/questionID">questionID</span><span class="symbol">:</span>&nbsp;<span class="identifier">Int</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Unit</span></code>
+<p>Delete a question and adjust the IDs of the other questions.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="delete-questions.html">deleteQuestions</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">deleteQuestions</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Unit</span></code>
+<p>Deletes all existing questions in questions subdirectory.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="get-admin-chat-id.html">getAdminChatId</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">getAdminChatId</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Int</span></code>
+<p>Reads the admin's chat id from the configuration file</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="get-admin-user-id.html">getAdminUserId</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">getAdminUserId</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Int</span></code>
+<p>Reads the admin's user id from the configuration file</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="get-bot-token.html">getBotToken</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">getBotToken</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">String</span></code>
+<p>Reads the token of the bot from the configuration file</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="get-bot-username.html">getBotUsername</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">getBotUsername</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">String</span></code>
+<p>Reads the name for the bot from the configuration file</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="get-current-picture-description.html">getCurrentPictureDescription</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">getCurrentPictureDescription</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.database.DatabaseManager$getCurrentPictureDescription(kotlin.Int)/userId">userId</span><span class="symbol">:</span>&nbsp;<span class="identifier">Int</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">String</span></code>
+<p>Reads currentPictureDescription from the configuration file of a user.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="get-current-picture-duration.html">getCurrentPictureDuration</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">getCurrentPictureDuration</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.database.DatabaseManager$getCurrentPictureDuration(kotlin.Int)/userId">userId</span><span class="symbol">:</span>&nbsp;<span class="identifier">Int</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Int</span></code>
+<p>Reads currentPictureDuration from the configuration file of a user.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="get-current-picture-title.html">getCurrentPictureTitle</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">getCurrentPictureTitle</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.database.DatabaseManager$getCurrentPictureTitle(kotlin.Int)/userID">userID</span><span class="symbol">:</span>&nbsp;<span class="identifier">Int</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">String</span></code>
+<p>Reads currentPictureTile from the configuration file of a user.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="get-current-video-description.html">getCurrentVideoDescription</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">getCurrentVideoDescription</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.database.DatabaseManager$getCurrentVideoDescription(kotlin.Int)/userId">userId</span><span class="symbol">:</span>&nbsp;<span class="identifier">Int</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">String</span></code>
+<p>Reads currentVideoDescription from the configuration file of a user.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="get-current-video-title.html">getCurrentVideoTitle</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">getCurrentVideoTitle</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.database.DatabaseManager$getCurrentVideoTitle(kotlin.Int)/userId">userId</span><span class="symbol">:</span>&nbsp;<span class="identifier">Int</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">String</span></code>
+<p>Reads currentVideoTitle from the configuration file of a user.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="get-database-display-file-path.html">getDatabaseDisplayFilePath</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">getDatabaseDisplayFilePath</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.database.DatabaseManager$getDatabaseDisplayFilePath(kotlin.String)/name">name</span><span class="symbol">:</span>&nbsp;<span class="identifier">String</span><span class="symbol">)</span><span class="symbol">: </span><a href="http://docs.oracle.com/javase/6/docs/api/java/nio/file/Path.html"><span class="identifier">Path</span></a></code>
+<p>Adds the default prefix for displayFile configuration files and name together.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="get-database-question-path.html">getDatabaseQuestionPath</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">getDatabaseQuestionPath</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.database.DatabaseManager$getDatabaseQuestionPath(kotlin.Int)/questionID">questionID</span><span class="symbol">:</span>&nbsp;<span class="identifier">Int</span><span class="symbol">)</span><span class="symbol">: </span><a href="http://docs.oracle.com/javase/6/docs/api/java/nio/file/Path.html"><span class="identifier">Path</span></a></code>
+<p>Adds the default prefix for question configuration files and questionID together.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="get-database-user-path.html">getDatabaseUserPath</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">getDatabaseUserPath</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.database.DatabaseManager$getDatabaseUserPath(kotlin.Int)/userID">userID</span><span class="symbol">:</span>&nbsp;<span class="identifier">Int</span><span class="symbol">)</span><span class="symbol">: </span><a href="http://docs.oracle.com/javase/6/docs/api/java/nio/file/Path.html"><span class="identifier">Path</span></a></code>
+<p>Adds the default prefix for user configuration files and the userID together.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="get-display-file-description.html">getDisplayFileDescription</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">getDisplayFileDescription</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.database.DatabaseManager$getDisplayFileDescription(kotlin.String)/displayFileName">displayFileName</span><span class="symbol">:</span>&nbsp;<span class="identifier">String</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">String</span></code></td>
+</tr>
+<tr>
+<td>
+<a href="get-display-file-duration.html">getDisplayFileDuration</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">getDisplayFileDuration</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.database.DatabaseManager$getDisplayFileDuration(kotlin.String)/name">name</span><span class="symbol">:</span>&nbsp;<span class="identifier">String</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Int</span></code></td>
+</tr>
+<tr>
+<td>
+<a href="get-display-file-id.html">getDisplayFileId</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">getDisplayFileId</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.database.DatabaseManager$getDisplayFileId(kotlin.String)/title">title</span><span class="symbol">:</span>&nbsp;<span class="identifier">String</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">String</span></code>
+<p>Get the Telegram fileId of the media that was saved as a display file.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="get-display-file-tg-type.html">getDisplayFileTgType</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">getDisplayFileTgType</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.database.DatabaseManager$getDisplayFileTgType(kotlin.String)/displayFileName">displayFileName</span><span class="symbol">:</span>&nbsp;<span class="identifier">String</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">String</span></code>
+<p>Get the type of message the media was sent over Telegram.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="get-display-file-upload-info-id.html">getDisplayFileUploadInfoId</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">getDisplayFileUploadInfoId</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.database.DatabaseManager$getDisplayFileUploadInfoId(kotlin.String)/title">title</span><span class="symbol">:</span>&nbsp;<span class="identifier">String</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Int</span></code>
+<p>Get the id of the user who uploaded the specified display file.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="get-display-file-upload-info-name.html">getDisplayFileUploadInfoName</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">getDisplayFileUploadInfoName</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.database.DatabaseManager$getDisplayFileUploadInfoName(kotlin.String)/title">title</span><span class="symbol">:</span>&nbsp;<span class="identifier">String</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">String</span></code>
+<p>Get the name of the user who uploaded the specified display file.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="get-display-files.html">getDisplayFiles</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">getDisplayFiles</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">MutableList</span><span class="symbol">&lt;</span><span class="identifier">String</span><span class="symbol">&gt;</span></code>
+<p>Get all display files that are registered in the main database.</p>
+<code><span class="keyword">fun </span><span class="identifier">getDisplayFiles</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.database.DatabaseManager$getDisplayFiles(kotlin.Int)/userId">userId</span><span class="symbol">:</span>&nbsp;<span class="identifier">Int</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">MutableList</span><span class="symbol">&lt;</span><span class="identifier">String</span><span class="symbol">&gt;</span></code>
+<p>Get all display files that are registered for a user.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="get-instance.html">getInstance</a></td>
+<td>
+<code><span class="keyword">static</span> <span class="keyword">fun </span><span class="identifier">getInstance</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">DatabaseManager</span></code>
+<p>Returns an instance of DatabaseManager. If there is no instance created yet, it <code><a href="#">initialises</a></code> one.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="get-number-of-questions.html">getNumberOfQuestions</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">getNumberOfQuestions</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Int</span></code>
+<p>Count the number of all questions in the questions subdirectory.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="get-question.html">getQuestion</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">getQuestion</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.database.DatabaseManager$getQuestion(kotlin.Int)/questionID">questionID</span><span class="symbol">:</span>&nbsp;<span class="identifier">Int</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">String</span></code>
+<p>Reads a question from the questions subdirectory.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="get-question-chat-i-d.html">getQuestionChatID</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">getQuestionChatID</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.database.DatabaseManager$getQuestionChatID(kotlin.Int)/questionID">questionID</span><span class="symbol">:</span>&nbsp;<span class="identifier">Int</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Long</span></code>
+<p>Reads the chatID of the chat where the question was asked.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="get-question-chat-i-ds.html">getQuestionChatIDs</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">getQuestionChatIDs</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Array</span><span class="symbol">&lt;</span><span class="identifier">Long</span><span class="symbol">&gt;</span></code>
+<p>Get all chatID's from questions in the questions subdirectory.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="get-questions.html">getQuestions</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">getQuestions</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Array</span><span class="symbol">&lt;</span><span class="identifier">String</span><span class="symbol">&gt;</span></code>
+<p>Reads all questions in the questions subdirectory.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="get-selected-question.html">getSelectedQuestion</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">getSelectedQuestion</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.database.DatabaseManager$getSelectedQuestion(kotlin.Int)/userID">userID</span><span class="symbol">:</span>&nbsp;<span class="identifier">Int</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Int</span></code>
+<p>Reads selectedQuestion value from the configuration file of a user.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="get-user-command-state.html">getUserCommandState</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">getUserCommandState</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.database.DatabaseManager$getUserCommandState(kotlin.Int)/userID">userID</span><span class="symbol">:</span>&nbsp;<span class="identifier">Int</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">String</span></code>
+<p>Look up the step of a command loop a user is.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="get-user-language.html">getUserLanguage</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">getUserLanguage</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.database.DatabaseManager$getUserLanguage(kotlin.Int)/userId">userId</span><span class="symbol">:</span>&nbsp;<span class="identifier">Int</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">String</span></code>
+<p>Looks up in which language a user wants to receive his messages.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="get-user-registration-state.html">getUserRegistrationState</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">getUserRegistrationState</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.database.DatabaseManager$getUserRegistrationState(kotlin.Int)/userID">userID</span><span class="symbol">:</span>&nbsp;<span class="identifier">Int</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Boolean</span></code>
+<p>Looks up if the user is marked as registered in its configuration file.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="get-user-state.html">getUserState</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">getUserState</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.database.DatabaseManager$getUserState(kotlin.Int)/userId">userId</span><span class="symbol">:</span>&nbsp;<span class="identifier">Int</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Boolean</span></code>
+<p>Looks up if user is active or not. Reads user state from its configuration file.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="get-user-wants-registration-state.html">getUserWantsRegistrationState</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">getUserWantsRegistrationState</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.database.DatabaseManager$getUserWantsRegistrationState(kotlin.Int)/userID">userID</span><span class="symbol">:</span>&nbsp;<span class="identifier">Int</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Boolean</span></code>
+<p>Looks up if the user is marked as registered in its configuration file.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="remove-display-file.html">removeDisplayFile</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">removeDisplayFile</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.database.DatabaseManager$removeDisplayFile(kotlin.String, kotlin.Int)/displayFileName">displayFileName</span><span class="symbol">:</span>&nbsp;<span class="identifier">String</span><span class="symbol">, </span><span class="identifier" id="org.telegram.bot.database.DatabaseManager$removeDisplayFile(kotlin.String, kotlin.Int)/userId">userId</span><span class="symbol">:</span>&nbsp;<span class="identifier">Int</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Unit</span></code>
+<p>Unregisters a display file by deleting it from the main database and the user's database it came from.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="save-builders.html">saveBuilders</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">saveBuilders</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Unit</span></code>
+<p>Takes all builders from <code><a href="#">#builders</a></code> and calls their save method.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="set-current-picture-description.html">setCurrentPictureDescription</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">setCurrentPictureDescription</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.database.DatabaseManager$setCurrentPictureDescription(kotlin.Int, kotlin.String)/userId">userId</span><span class="symbol">:</span>&nbsp;<span class="identifier">Int</span><span class="symbol">, </span><span class="identifier" id="org.telegram.bot.database.DatabaseManager$setCurrentPictureDescription(kotlin.Int, kotlin.String)/description">description</span><span class="symbol">:</span>&nbsp;<span class="identifier">String</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Unit</span></code>
+<p>Saves currentPictureDescription in the configuration file of a user.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="set-current-picture-duration.html">setCurrentPictureDuration</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">setCurrentPictureDuration</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.database.DatabaseManager$setCurrentPictureDuration(kotlin.Int, kotlin.Int)/userId">userId</span><span class="symbol">:</span>&nbsp;<span class="identifier">Int</span><span class="symbol">, </span><span class="identifier" id="org.telegram.bot.database.DatabaseManager$setCurrentPictureDuration(kotlin.Int, kotlin.Int)/duration">duration</span><span class="symbol">:</span>&nbsp;<span class="identifier">Int</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Unit</span></code>
+<p>Saves currentPictureDuration in the configuration file of a user.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="set-current-picture-title.html">setCurrentPictureTitle</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">setCurrentPictureTitle</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.database.DatabaseManager$setCurrentPictureTitle(kotlin.Int, kotlin.String)/userID">userID</span><span class="symbol">:</span>&nbsp;<span class="identifier">Int</span><span class="symbol">, </span><span class="identifier" id="org.telegram.bot.database.DatabaseManager$setCurrentPictureTitle(kotlin.Int, kotlin.String)/title">title</span><span class="symbol">:</span>&nbsp;<span class="identifier">String</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Unit</span></code>
+<p>Saves currentPictureTitle in the configuration file of a user.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="set-current-video-description.html">setCurrentVideoDescription</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">setCurrentVideoDescription</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.database.DatabaseManager$setCurrentVideoDescription(kotlin.Int, kotlin.String)/userId">userId</span><span class="symbol">:</span>&nbsp;<span class="identifier">Int</span><span class="symbol">, </span><span class="identifier" id="org.telegram.bot.database.DatabaseManager$setCurrentVideoDescription(kotlin.Int, kotlin.String)/description">description</span><span class="symbol">:</span>&nbsp;<span class="identifier">String</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Unit</span></code>
+<p>Saves currentVideoDescription in the configuration file of a user.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="set-current-video-title.html">setCurrentVideoTitle</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">setCurrentVideoTitle</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.database.DatabaseManager$setCurrentVideoTitle(kotlin.Int, kotlin.String)/userId">userId</span><span class="symbol">:</span>&nbsp;<span class="identifier">Int</span><span class="symbol">, </span><span class="identifier" id="org.telegram.bot.database.DatabaseManager$setCurrentVideoTitle(kotlin.Int, kotlin.String)/title">title</span><span class="symbol">:</span>&nbsp;<span class="identifier">String</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Unit</span></code>
+<p>Saves currentVideoTitle in the configuration file of a user.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="set-display-file-description.html">setDisplayFileDescription</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">setDisplayFileDescription</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.database.DatabaseManager$setDisplayFileDescription(kotlin.String, kotlin.String)/displayFileName">displayFileName</span><span class="symbol">:</span>&nbsp;<span class="identifier">String</span><span class="symbol">, </span><span class="identifier" id="org.telegram.bot.database.DatabaseManager$setDisplayFileDescription(kotlin.String, kotlin.String)/description">description</span><span class="symbol">:</span>&nbsp;<span class="identifier">String</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Unit</span></code>
+<p>Set's the description of a DisplayFile.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="set-display-file-duration.html">setDisplayFileDuration</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">setDisplayFileDuration</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.database.DatabaseManager$setDisplayFileDuration(kotlin.String, kotlin.Int)/displayFileName">displayFileName</span><span class="symbol">:</span>&nbsp;<span class="identifier">String</span><span class="symbol">, </span><span class="identifier" id="org.telegram.bot.database.DatabaseManager$setDisplayFileDuration(kotlin.String, kotlin.Int)/duration">duration</span><span class="symbol">:</span>&nbsp;<span class="identifier">Int</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Unit</span></code>
+<p>Set's the display duration of a DisplayFile.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="set-display-file-id.html">setDisplayFileId</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">setDisplayFileId</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.database.DatabaseManager$setDisplayFileId(kotlin.String, kotlin.String)/title">title</span><span class="symbol">:</span>&nbsp;<span class="identifier">String</span><span class="symbol">, </span><span class="identifier" id="org.telegram.bot.database.DatabaseManager$setDisplayFileId(kotlin.String, kotlin.String)/fileId">fileId</span><span class="symbol">:</span>&nbsp;<span class="identifier">String</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Unit</span></code>
+<p>Set the Telegram fileID of the media that was saved as a display file.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="set-display-file-tg-type.html">setDisplayFileTgType</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">setDisplayFileTgType</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.database.DatabaseManager$setDisplayFileTgType(kotlin.String, kotlin.String)/displayFileName">displayFileName</span><span class="symbol">:</span>&nbsp;<span class="identifier">String</span><span class="symbol">, </span><span class="identifier" id="org.telegram.bot.database.DatabaseManager$setDisplayFileTgType(kotlin.String, kotlin.String)/tgType">tgType</span><span class="symbol">:</span>&nbsp;<span class="identifier">String</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Unit</span></code>
+<p>Set the type of message the media was sent over Telegram. Possible types are <code><a href="#">Config.Bot#DISPLAY_FILE_TG_TYPE_AS_DOCUMENT</a></code> if it was sent as a document, <code><a href="#">Config.Bot#DISPLAY_FILE_TG_TYPE_IMAGE</a></code> if it was sent as an image or <code><a href="#">Config.Bot#DISPLAY_FILE_TG_TYPE_VIDEO</a></code> if it was sent as a video.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="set-display-file-type.html">setDisplayFileType</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">setDisplayFileType</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.database.DatabaseManager$setDisplayFileType(kotlin.String, kotlin.String)/displayFileName">displayFileName</span><span class="symbol">:</span>&nbsp;<span class="identifier">String</span><span class="symbol">, </span><span class="identifier" id="org.telegram.bot.database.DatabaseManager$setDisplayFileType(kotlin.String, kotlin.String)/type">type</span><span class="symbol">:</span>&nbsp;<span class="identifier">String</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Unit</span></code>
+<p>Set's the type of a DisplayFile.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="set-display-file-upload-info.html">setDisplayFileUploadInfo</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">setDisplayFileUploadInfo</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.database.DatabaseManager$setDisplayFileUploadInfo(kotlin.String, org.telegram.telegrambots.api.objects.User)/title">title</span><span class="symbol">:</span>&nbsp;<span class="identifier">String</span><span class="symbol">, </span><span class="identifier" id="org.telegram.bot.database.DatabaseManager$setDisplayFileUploadInfo(kotlin.String, org.telegram.telegrambots.api.objects.User)/user">user</span><span class="symbol">:</span>&nbsp;<span class="identifier">User</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Unit</span></code>
+<p>Set the upload information of a user, e. g. its id and username. The username is retrieved from User by <code><a href="../../org.telegram.bot/-main/get-special-filtered-username.html">Main#getSpecialFilteredUsername(User)</a></code></p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="set-display-files.html">setDisplayFiles</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">setDisplayFiles</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.database.DatabaseManager$setDisplayFiles(kotlin.collections.MutableList((kotlin.String)))/displayFiles">displayFiles</span><span class="symbol">:</span>&nbsp;<span class="identifier">MutableList</span><span class="symbol">&lt;</span><span class="identifier">String</span><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Unit</span></code><br/>
+<code><span class="keyword">fun </span><span class="identifier">setDisplayFiles</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.database.DatabaseManager$setDisplayFiles(kotlin.collections.MutableList((kotlin.String)), kotlin.Int)/displayFiles">displayFiles</span><span class="symbol">:</span>&nbsp;<span class="identifier">MutableList</span><span class="symbol">&lt;</span><span class="identifier">String</span><span class="symbol">&gt;</span><span class="symbol">, </span><span class="identifier" id="org.telegram.bot.database.DatabaseManager$setDisplayFiles(kotlin.collections.MutableList((kotlin.String)), kotlin.Int)/userId">userId</span><span class="symbol">:</span>&nbsp;<span class="identifier">Int</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Unit</span></code>
+<p>Set the display files in the main database.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="set-selected-question.html">setSelectedQuestion</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">setSelectedQuestion</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.database.DatabaseManager$setSelectedQuestion(kotlin.Int, kotlin.Int)/userID">userID</span><span class="symbol">:</span>&nbsp;<span class="identifier">Int</span><span class="symbol">, </span><span class="identifier" id="org.telegram.bot.database.DatabaseManager$setSelectedQuestion(kotlin.Int, kotlin.Int)/selectedQuestion">selectedQuestion</span><span class="symbol">:</span>&nbsp;<span class="identifier">Int</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Unit</span></code>
+<p>Saves selectedQuestion value in the configuration file of a user.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="set-user-command-state.html">setUserCommandState</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">setUserCommandState</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.database.DatabaseManager$setUserCommandState(kotlin.Int, kotlin.String)/userID">userID</span><span class="symbol">:</span>&nbsp;<span class="identifier">Int</span><span class="symbol">, </span><span class="identifier" id="org.telegram.bot.database.DatabaseManager$setUserCommandState(kotlin.Int, kotlin.String)/state">state</span><span class="symbol">:</span>&nbsp;<span class="identifier">String</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Unit</span></code>
+<p>Saves at which step of a command loop a user is.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="set-user-language.html">setUserLanguage</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">setUserLanguage</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.database.DatabaseManager$setUserLanguage(kotlin.Int, kotlin.String)/userId">userId</span><span class="symbol">:</span>&nbsp;<span class="identifier">Int</span><span class="symbol">, </span><span class="identifier" id="org.telegram.bot.database.DatabaseManager$setUserLanguage(kotlin.Int, kotlin.String)/language">language</span><span class="symbol">:</span>&nbsp;<span class="identifier">String</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Unit</span></code>
+<p>User changed his language preference. Save the language preference for a user in his configuration file.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="set-user-registration-state.html">setUserRegistrationState</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">setUserRegistrationState</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.database.DatabaseManager$setUserRegistrationState(kotlin.Int, kotlin.Boolean)/userID">userID</span><span class="symbol">:</span>&nbsp;<span class="identifier">Int</span><span class="symbol">, </span><span class="identifier" id="org.telegram.bot.database.DatabaseManager$setUserRegistrationState(kotlin.Int, kotlin.Boolean)/registered">registered</span><span class="symbol">:</span>&nbsp;<span class="identifier">Boolean</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Unit</span></code>
+<p>Saves the registration state of a user in its configuration file.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="set-user-state.html">setUserState</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">setUserState</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.database.DatabaseManager$setUserState(kotlin.Int, kotlin.Boolean)/userId">userId</span><span class="symbol">:</span>&nbsp;<span class="identifier">Int</span><span class="symbol">, </span><span class="identifier" id="org.telegram.bot.database.DatabaseManager$setUserState(kotlin.Int, kotlin.Boolean)/userActive">userActive</span><span class="symbol">:</span>&nbsp;<span class="identifier">Boolean</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Unit</span></code>
+<p>User got active or inactive. Saves user state to its configuration file.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="set-user-wants-registration-state.html">setUserWantsRegistrationState</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">setUserWantsRegistrationState</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.database.DatabaseManager$setUserWantsRegistrationState(kotlin.Int, kotlin.Boolean)/userID">userID</span><span class="symbol">:</span>&nbsp;<span class="identifier">Int</span><span class="symbol">, </span><span class="identifier" id="org.telegram.bot.database.DatabaseManager$setUserWantsRegistrationState(kotlin.Int, kotlin.Boolean)/wantsRegistration">wantsRegistration</span><span class="symbol">:</span>&nbsp;<span class="identifier">Boolean</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Unit</span></code>
+<p>Saves the registration state of a user in its configuration file.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

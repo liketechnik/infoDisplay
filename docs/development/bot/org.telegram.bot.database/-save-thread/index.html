@@ -1,0 +1,54 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>SaveThread - </title>
+<link rel="stylesheet" href="../../style.css">
+</HEAD>
+<BODY>
+<a href="../index.html">org.telegram.bot.database</a>&nbsp;/&nbsp;<a href=".">SaveThread</a><br/>
+<br/>
+<h1>SaveThread</h1>
+<code><span class="keyword">open</span> <span class="keyword">class </span><span class="identifier">SaveThread</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="http://docs.oracle.com/javase/6/docs/api/java/lang/Thread.html"><span class="identifier">Thread</span></a></code> <a href="https://github.com/liketechnik/infoDisplay/blob/development/bot/src/main/java/org/telegram/bot/database/SaveThread.java#L48">(source)</a>
+<p>A <code>Thread</code> that runs every five minutes the save method of the database manager until the bot starts closing. This is done to prevent data loss in case of interruption of the bot.</p>
+<p><strong>Author</strong><br/>
+Florian Warzecha</p>
+<p><strong>Version</strong><br/>
+1.0</p>
+<p><strong>Date</strong><br/>
+17 of May 2017</p>
+<p><strong>See Also</strong><br/>
+<a href="../-database-manager/save-builders.html">DatabaseManager#saveBuilders()</a></p>
+<h3>Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<a href="-l-o-g-t-a-g.html">LOGTAG</a></td>
+<td>
+<code><span class="keyword">static</span> <span class="keyword">val </span><span class="identifier">LOGTAG</span><span class="symbol">: </span><span class="identifier">String</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<a href="get-instance.html">getInstance</a></td>
+<td>
+<code><span class="keyword">open</span> <span class="keyword">static</span> <span class="keyword">fun </span><span class="identifier">getInstance</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.database.SaveThread$getInstance(org.telegram.bot.api.TelegramLongPollingThreadBot)/bot">bot</span><span class="symbol">:</span>&nbsp;<a href="../../org.telegram.bot.api/-telegram-long-polling-thread-bot/index.html"><span class="identifier">TelegramLongPollingThreadBot</span></a><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">SaveThread</span></code>
+<p>Make sure there is only one instance of this saving thread in one program.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="run.html">run</a></td>
+<td>
+<code><span class="keyword">open</span> <span class="keyword">fun </span><span class="identifier">run</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Unit</span></code>
+<p>Wait five minutes, call save method, wait again, and so on, and so on....</p>
+</td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

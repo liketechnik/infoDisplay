@@ -1,0 +1,94 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>SituationalInlineKeyboard - </title>
+<link rel="stylesheet" href="../../style.css">
+</HEAD>
+<BODY>
+<a href="../index.html">org.telegram.bot.messages</a>&nbsp;/&nbsp;<a href=".">SituationalInlineKeyboard</a><br/>
+<br/>
+<h1>SituationalInlineKeyboard</h1>
+<code><span class="keyword">open</span> <span class="keyword">class </span><span class="identifier">SituationalInlineKeyboard</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../-inline-keyboard/index.html"><span class="identifier">InlineKeyboard</span></a></code> <a href="https://github.com/liketechnik/infoDisplay/blob/development/bot/src/main/java/org/telegram/bot/messages/SituationalInlineKeyboard.java#L42">(source)</a>
+<p>A combination of InlineKeyboard and SituationalMessage that combines their features.</p>
+<p><strong>Author</strong><br/>
+Florian Warzecha</p>
+<p><strong>Version</strong><br/>
+1.0</p>
+<p><strong>Date</strong><br/>
+18 of May 2017</p>
+<p><strong>See Also</strong><br/>
+InlineKeyboardSituationalMessage</p>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<a href="-init-.html">&lt;init&gt;</a></td>
+<td>
+<code><span class="identifier">SituationalInlineKeyboard</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.messages.SituationalInlineKeyboard$<init>(kotlin.String, kotlin.String)/command">command</span><span class="symbol">:</span>&nbsp;<span class="identifier">String</span><span class="symbol">, </span><span class="identifier" id="org.telegram.bot.messages.SituationalInlineKeyboard$<init>(kotlin.String, kotlin.String)/situation">situation</span><span class="symbol">:</span>&nbsp;<span class="identifier">String</span><span class="symbol">)</span></code>
+<p>Initialize a new <code>SituationalInlineKeyboard</code>.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<a href="get-situation.html">getSituation</a></td>
+<td>
+<code><span class="keyword">open</span> <span class="keyword">fun </span><span class="identifier">getSituation</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">String</span></code>
+<p>Get the situation the command is in.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="set-message-name.html">setMessageName</a></td>
+<td>
+<code><span class="keyword">open</span> <span class="keyword">fun </span><span class="identifier">setMessageName</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.messages.SituationalInlineKeyboard$setMessageName(kotlin.String, kotlin.String)/command">command</span><span class="symbol">:</span>&nbsp;<span class="identifier">String</span><span class="symbol">, </span><span class="identifier" id="org.telegram.bot.messages.SituationalInlineKeyboard$setMessageName(kotlin.String, kotlin.String)/situation">situation</span><span class="symbol">:</span>&nbsp;<span class="identifier">String</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Unit</span></code><br/>
+<code><span class="keyword">open</span> <span class="keyword">fun </span><span class="identifier">setMessageName</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.messages.SituationalInlineKeyboard$setMessageName(kotlin.String, kotlin.String, kotlin.String)/commandPackage">commandPackage</span><span class="symbol">:</span>&nbsp;<span class="identifier">String</span><span class="symbol">, </span><span class="identifier" id="org.telegram.bot.messages.SituationalInlineKeyboard$setMessageName(kotlin.String, kotlin.String, kotlin.String)/command">command</span><span class="symbol">:</span>&nbsp;<span class="identifier">String</span><span class="symbol">, </span><span class="identifier" id="org.telegram.bot.messages.SituationalInlineKeyboard$setMessageName(kotlin.String, kotlin.String, kotlin.String)/situation">situation</span><span class="symbol">:</span>&nbsp;<span class="identifier">String</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Unit</span></code>
+<p>Handle the xmlQuarry and set the name of the message.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3>Inherited Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<a href="../-inline-keyboard/calculate-hash.html">calculateHash</a></td>
+<td>
+<code><span class="keyword">open</span> <span class="keyword">fun </span><s><span class="identifier">calculateHash</span></s><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Int</span></code>
+<p>Inherited from Message but senseless in this class because a keyboard is always send together with a message, so the hash comes from the message. Also it would be very unclear how to calculate the hash of a keyboard.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="../-inline-keyboard/get-content.html">getContent</a></td>
+<td>
+<code><span class="keyword">open</span> <span class="keyword">fun </span><s><span class="identifier">getContent</span></s><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.messages.InlineKeyboard$getContent(kotlin.Int, kotlin.Boolean)/userId">userId</span><span class="symbol">:</span>&nbsp;<span class="identifier">Int</span><span class="symbol">, </span><span class="identifier" id="org.telegram.bot.messages.InlineKeyboard$getContent(kotlin.Int, kotlin.Boolean)/addHelp">addHelp</span><span class="symbol">:</span>&nbsp;<span class="identifier">Boolean</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">String</span></code>
+<p>Inherited fro Message but senseless in this class as it represents a keyboard and not simple text.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="../-inline-keyboard/get-keyboard.html">getKeyboard</a></td>
+<td>
+<code><span class="keyword">open</span> <span class="keyword">fun </span><span class="identifier">getKeyboard</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.messages.InlineKeyboard$getKeyboard(kotlin.Int)/userId">userId</span><span class="symbol">:</span>&nbsp;<span class="identifier">Int</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">MutableList</span><span class="symbol">&lt;</span><span class="identifier">MutableList</span><span class="symbol">&lt;</span><span class="identifier">InlineKeyboardButton</span><span class="symbol">&gt;</span><span class="symbol">&gt;</span></code>
+<p>Create the keyboard from the buttons and their text specified at the <code><a href="#">#xmlQuarry</a></code>. The text of the buttons is in a users foreign language.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="../-inline-keyboard/set-message-name.html">setMessageName</a></td>
+<td>
+<code><span class="keyword">open</span> <span class="keyword">fun </span><span class="identifier">setMessageName</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.messages.InlineKeyboard$setMessageName(kotlin.String)/command">command</span><span class="symbol">:</span>&nbsp;<span class="identifier">String</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Unit</span></code>
+<p>Handle the xmlQuarry and set the name of the message.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

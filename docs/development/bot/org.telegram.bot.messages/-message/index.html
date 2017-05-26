@@ -1,0 +1,136 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>Message - </title>
+<link rel="stylesheet" href="../../style.css">
+</HEAD>
+<BODY>
+<a href="../index.html">org.telegram.bot.messages</a>&nbsp;/&nbsp;<a href=".">Message</a><br/>
+<br/>
+<h1>Message</h1>
+<code><span class="keyword">open</span> <span class="keyword">class </span><span class="identifier">Message</span></code> <a href="https://github.com/liketechnik/infoDisplay/blob/development/bot/src/main/java/org/telegram/bot/messages/Message.java#L55">(source)</a>
+<p>Get messages in a users foreign language.</p>
+<p><strong>Author</strong><br/>
+Florian Warzecha</p>
+<p><strong>Version</strong><br/>
+1.0</p>
+<p><strong>Date</strong><br/>
+09 of November of 2016</p>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<a href="-init-.html">&lt;init&gt;</a></td>
+<td>
+<code><span class="identifier">Message</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.messages.Message$<init>(kotlin.String)/command">command</span><span class="symbol">:</span>&nbsp;<span class="identifier">String</span><span class="symbol">)</span></code>
+<p>Initialize new Message object.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3>Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<a href="-l-o-g-t-a-g.html">LOGTAG</a></td>
+<td>
+<code><span class="keyword">static</span> <span class="keyword">val </span><span class="identifier">LOGTAG</span><span class="symbol">: </span><span class="identifier">String</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<a href="calculate-hash.html">calculateHash</a></td>
+<td>
+<code><span class="keyword">open</span> <span class="keyword">fun </span><span class="identifier">calculateHash</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Int</span></code>
+<p>Calculate a unique hash from the text of the message. Uniqueness is guaranteed by synchronizing this method to <code>Message.class</code>, adding the <code><a href="#">System#currentTimeMillis()</a></code> to the message text before calculating the hash and waiting one millisecond before the hash is returned.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="get-content.html">getContent</a></td>
+<td>
+<code><span class="keyword">open</span> <span class="keyword">fun </span><span class="identifier">getContent</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.messages.Message$getContent(kotlin.Int, kotlin.Boolean)/userId">userId</span><span class="symbol">:</span>&nbsp;<span class="identifier">Int</span><span class="symbol">, </span><span class="identifier" id="org.telegram.bot.messages.Message$getContent(kotlin.Int, kotlin.Boolean)/addHelp">addHelp</span><span class="symbol">:</span>&nbsp;<span class="identifier">Boolean</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">String</span></code>
+<p>Get the message for the specified command.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="get-message-name.html">getMessageName</a></td>
+<td>
+<code><span class="keyword">open</span> <span class="keyword">fun </span><span class="identifier">getMessageName</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">String</span></code>
+<p>Get the command name the message belongs to.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="get-xml-configuration.html">getXmlConfiguration</a></td>
+<td>
+<code><span class="keyword">open</span> <span class="keyword">static</span> <span class="keyword">fun </span><span class="identifier">getXmlConfiguration</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.messages.Message$getXmlConfiguration(kotlin.Int)/userID">userID</span><span class="symbol">:</span>&nbsp;<span class="identifier">Int</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">XMLConfiguration</span></code>
+<p>Load a message file in a user specific language.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="get-xml-quarry.html">getXmlQuarry</a></td>
+<td>
+<code><span class="keyword">open</span> <span class="keyword">fun </span><span class="identifier">getXmlQuarry</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">String</span></code>
+<p>Get the xmlQuarry for the current command.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="set-message-name.html">setMessageName</a></td>
+<td>
+<code><span class="keyword">open</span> <span class="keyword">fun </span><span class="identifier">setMessageName</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.messages.Message$setMessageName(kotlin.String)/command">command</span><span class="symbol">:</span>&nbsp;<span class="identifier">String</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Unit</span></code>
+<p>Handles the xmlQuarry and sets the name of the message.</p>
+<code><span class="keyword">open</span> <span class="keyword">fun </span><span class="identifier">setMessageName</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.messages.Message$setMessageName(kotlin.String, kotlin.String)/commandPackage">commandPackage</span><span class="symbol">:</span>&nbsp;<span class="identifier">String</span><span class="symbol">, </span><span class="identifier" id="org.telegram.bot.messages.Message$setMessageName(kotlin.String, kotlin.String)/command">command</span><span class="symbol">:</span>&nbsp;<span class="identifier">String</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Unit</span></code>
+<p>Handle the xmlQuarry and sets the name of the message.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3>Inheritors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<a href="../-command-description/index.html">CommandDescription</a></td>
+<td>
+<code><span class="keyword">open</span> <span class="keyword">class </span><span class="identifier">CommandDescription</span>&nbsp;<span class="symbol">:</span>&nbsp;<span class="identifier">Message</span></code>
+<p>Wrapper around Message to get the command description in a users foreign language. It works by changing the xmlQuarries from the standard content path to the description path in the xml files.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="../-content-message/index.html">ContentMessage</a></td>
+<td>
+<code><span class="keyword">open</span> <span class="keyword">class </span><span class="identifier">ContentMessage</span>&nbsp;<span class="symbol">:</span>&nbsp;<span class="identifier">Message</span></code>
+<p>An extended Message that allows replacing of predefined Strings in the language files with modular content via <code>HashMap</code>s.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="../-inline-keyboard/index.html">InlineKeyboard</a></td>
+<td>
+<code><span class="keyword">open</span> <span class="keyword">class </span><span class="identifier">InlineKeyboard</span>&nbsp;<span class="symbol">:</span>&nbsp;<span class="identifier">Message</span></code>
+<p>Wrapper around Message to get the keyboard text from the language files in a users foreign language. It works by changing the xmlQuarries from the usual content path to keyboard path.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="../-situational-message/index.html">SituationalMessage</a></td>
+<td>
+<code><span class="keyword">open</span> <span class="keyword">class </span><span class="identifier">SituationalMessage</span>&nbsp;<span class="symbol">:</span>&nbsp;<span class="identifier">Message</span></code>
+<p>An extended Message that allows changing of the text depending on the state of the command</p>
+</td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

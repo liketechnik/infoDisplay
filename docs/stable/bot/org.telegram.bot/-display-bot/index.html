@@ -1,0 +1,150 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>DisplayBot - </title>
+<link rel="stylesheet" href="../../style.css">
+</HEAD>
+<BODY>
+<a href="../index.html">org.telegram.bot</a>&nbsp;/&nbsp;<a href=".">DisplayBot</a><br/>
+<br/>
+<h1>DisplayBot</h1>
+<code><span class="keyword">open</span> <span class="keyword">class </span><span class="identifier">DisplayBot</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../../org.telegram.bot.api/-telegram-long-polling-thread-bot/index.html"><span class="identifier">TelegramLongPollingThreadBot</span></a></code> <a href="https://github.com/liketechnik/infoDisplay/blob/stable/bot/src/main/java/org/telegram/bot/DisplayBot.java#L56">(source)</a>
+<p>The bot class that registers commands, and defines the username, token and parsers of the bot.</p>
+<p><strong>Author</strong><br/>
+Florian Warzecha</p>
+<p><strong>Version</strong><br/>
+1.0.1</p>
+<p><strong>Date</strong><br/>
+22 of October of 2016</p>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<a href="-init-.html">&lt;init&gt;</a></td>
+<td>
+<code><span class="identifier">DisplayBot</span><span class="symbol">(</span><span class="symbol">)</span></code>
+<p>Register my commands and set an default action for unknown commands send to the bot. Default action executes the HelpCommand.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3>Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<a href="-l-o-g-t-a-g.html">LOGTAG</a></td>
+<td>
+<code><span class="keyword">static</span> <span class="keyword">val </span><span class="identifier">LOGTAG</span><span class="symbol">: </span><span class="identifier">String</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<a href="get-bot-token.html">getBotToken</a></td>
+<td>
+<code><span class="keyword">open</span> <span class="keyword">fun </span><span class="identifier">getBotToken</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">String</span></code>
+<p>Gets called if the token of the bot is needed. The returned value is defined in the config file.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="get-bot-username.html">getBotUsername</a></td>
+<td>
+<code><span class="keyword">open</span> <span class="keyword">fun </span><span class="identifier">getBotUsername</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">String</span></code>
+<p>Gets called if the username of the bot is needed. The returned value is defined in the config file.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="get-callback-parser.html">getCallbackParser</a></td>
+<td>
+<code><span class="keyword">open</span> <span class="keyword">fun </span><span class="identifier">getCallbackParser</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="http://docs.oracle.com/javase/6/docs/api/java/lang/reflect/Constructor.html"><span class="identifier">Constructor</span></a><span class="symbol">&lt;</span><span class="identifier">Any</span><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<a href="get-document-parser.html">getDocumentParser</a></td>
+<td>
+<code><span class="keyword">open</span> <span class="keyword">fun </span><span class="identifier">getDocumentParser</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="http://docs.oracle.com/javase/6/docs/api/java/lang/reflect/Constructor.html"><span class="identifier">Constructor</span></a><span class="symbol">&lt;</span><span class="identifier">Any</span><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<a href="get-message-parser.html">getMessageParser</a></td>
+<td>
+<code><span class="keyword">open</span> <span class="keyword">fun </span><span class="identifier">getMessageParser</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="http://docs.oracle.com/javase/6/docs/api/java/lang/reflect/Constructor.html"><span class="identifier">Constructor</span></a><span class="symbol">&lt;</span><span class="identifier">Any</span><span class="symbol">&gt;</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Inherited Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<a href="../../org.telegram.bot.api/-telegram-long-polling-thread-bot/deregister-command.html">deregisterCommand</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">deregisterCommand</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.api.TelegramLongPollingThreadBot$deregisterCommand(java.lang.Class((org.telegram.telegrambots.bots.commands.BotCommand)))/botCommandClass">botCommandClass</span><span class="symbol">:</span>&nbsp;<a href="http://docs.oracle.com/javase/6/docs/api/java/lang/Class.html"><span class="identifier">Class</span></a><span class="symbol">&lt;</span><span class="identifier">BotCommand</span><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Boolean</span></code>
+<p>Deregister a command so it cannot be executed by users anymore.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="../../org.telegram.bot.api/-telegram-long-polling-thread-bot/get-commands-map.html">getCommandsMap</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">getCommandsMap</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="http://docs.oracle.com/javase/6/docs/api/java/util/HashMap.html"><span class="identifier">HashMap</span></a><span class="symbol">&lt;</span><span class="identifier">String</span><span class="symbol">,</span>&nbsp;<a href="http://docs.oracle.com/javase/6/docs/api/java/lang/reflect/Constructor.html"><span class="identifier">Constructor</span></a><span class="symbol">&lt;</span><span class="identifier">BotCommand</span><span class="symbol">&gt;</span><span class="symbol">&gt;</span></code>
+<p>Get the commands HashMap containing the identifiers of the commands linked to their classes Constructors.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="../../org.telegram.bot.api/-telegram-long-polling-thread-bot/get-registered-command.html">getRegisteredCommand</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">getRegisteredCommand</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.api.TelegramLongPollingThreadBot$getRegisteredCommand(kotlin.String)/commandIdentifier">commandIdentifier</span><span class="symbol">:</span>&nbsp;<span class="identifier">String</span><span class="symbol">)</span><span class="symbol">: </span><a href="http://docs.oracle.com/javase/6/docs/api/java/lang/reflect/Constructor.html"><span class="identifier">Constructor</span></a><span class="symbol">&lt;</span><span class="identifier">BotCommand</span><span class="symbol">&gt;</span></code>
+<p>Get a command via its command identifier.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="../../org.telegram.bot.api/-telegram-long-polling-thread-bot/get-registered-commands.html">getRegisteredCommands</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">getRegisteredCommands</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">MutableCollection</span><span class="symbol">&lt;</span><a href="http://docs.oracle.com/javase/6/docs/api/java/lang/reflect/Constructor.html"><span class="identifier">Constructor</span></a><span class="symbol">&lt;</span><span class="identifier">BotCommand</span><span class="symbol">&gt;</span><span class="symbol">&gt;</span></code>
+<p>Get all registered commands.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="../../org.telegram.bot.api/-telegram-long-polling-thread-bot/is-closing.html">isClosing</a></td>
+<td>
+<code><span class="keyword">open</span> <span class="keyword">fun </span><span class="identifier">isClosing</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Boolean</span></code>
+<p>Returns the status of the bot.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="../../org.telegram.bot.api/-telegram-long-polling-thread-bot/on-closing.html">onClosing</a></td>
+<td>
+<code><span class="keyword">open</span> <span class="keyword">fun </span><span class="identifier">onClosing</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Unit</span></code>
+<p>Called when the bot session is closed. Logs that the shutdown process is initiated, waits some time to let the commands shut down. Then lets the SendMessages thread do its work. During the whole process it logs the current status, so the user knows how long it will take till the bot shuts down completely.</p>
+</td>
+</tr>
+<tr>
+<td>
+<a href="../../org.telegram.bot.api/-telegram-long-polling-thread-bot/on-update-received.html">onUpdateReceived</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">onUpdateReceived</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.api.TelegramLongPollingThreadBot$onUpdateReceived(org.telegram.telegrambots.api.objects.Update)/update">update</span><span class="symbol">:</span>&nbsp;<span class="identifier">Update</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Unit</span></code></td>
+</tr>
+<tr>
+<td>
+<a href="../../org.telegram.bot.api/-telegram-long-polling-thread-bot/register-command.html">registerCommand</a></td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">registerCommand</span><span class="symbol">(</span><span class="identifier" id="org.telegram.bot.api.TelegramLongPollingThreadBot$registerCommand(java.lang.Class((kotlin.Any)))/commandClass">commandClass</span><span class="symbol">:</span>&nbsp;<a href="http://docs.oracle.com/javase/6/docs/api/java/lang/Class.html"><span class="identifier">Class</span></a><span class="symbol">&lt;</span><span class="identifier">*</span><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Boolean</span></code>
+<p>Registers a new command that can be executed by users.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>
