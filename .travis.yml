@@ -1,13 +1,24 @@
 language: java
-script: ./gradlew :bot:distZip :bot:distTar :display:distTar :display:distZip
+script: "./gradlew :bot:distZip :bot:distTar :display:distTar :display:distZip"
 jdk:
-  - oraclejdk8
+- oraclejdk8
 before_cache:
-  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
-  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+- rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+- rm -fr $HOME/.gradle/caches/*/plugin-resolution/
 cache:
   directories:
-    - $HOME/.gradle/caches/
-    - $HOME/.gradle/wrapper/
+  - "$HOME/.gradle/caches/"
+  - "$HOME/.gradle/wrapper/"
 addons:
   srcclr: true
+deploy:
+  provider: releases
+  api_key:
+    secure: RvMDt/fNNhrmGNgXWu61X1x4CtBamCLXFUb7P5nsFsbqCijFR0Kj8Llv4SAvMkxDBzNEgVP0M+xYALy5+MgwcJAyz6KsL73hPtTFTzNls46E5QdrXE1/lLDTOf7Wpk1x/LHD7l8a2ATWK48duirGOvPMLSMeNhWNWtpS7JSyeB1nE/9xc5r4YYGb9LToOg3g4Ld9PXNQARiX81TmWOBMJGBQNWQFv/q+dKSwXli8gMZw73AnIKXx/jRpircHc6zqc8cS37BNnFQgUf7dhE6GKOfP4wdQv5pd3b/blPng8H+0PWMZo22f9Z75R827xf/l6b2oBAAZEUgMlu6AFBG96NTaotpAQBOZx0vN3cZG+lyZUJMe/njDuGGjhSw7IVvNyjAYgOq2IXVkho3LbYnglS1Gekt/lryL89vTrubw0OeCSSEex40geJeALzgloPpVDjCJmDRt7204zOAUs9GTGm/3Fw3hM80mUy8sBBJIsfrH079dYdUu0JSpbmCbrp2lY+aHmYvVzkAi7k845krRCWfvstPhaREBcSKtR/u95qoTOXG8yqZFNb34kLt7/r+NaUv7O/dayuwuXkn2gPveiWV8SGEhIAtMpmF0rkob+3qwLzqTQyyLVikO0r6vP978OXOKEu3Z1tsDQ1oCf68rq5S2Srl8Giftib59JOUZOKc=
+  file_glob: true
+  file:
+    - bot/build/distributions/*
+    - display/build/distributions/*
+  skip_cleanup: true
+  on:
+    tags: true
