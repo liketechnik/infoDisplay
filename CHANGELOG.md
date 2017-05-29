@@ -1,12 +1,12 @@
 # Change Log
 
-## [**Development**](https://github.com/liketechnik/infoDisplay/tree/HEAD)
-
-[Full Changelog](https://github.com/liketechnik/infoDisplay/compare/2.0.0...HEAD)
+## [2.0.0-1](https://github.com/liketechnik/infoDisplay/tree/2.0.0-1) (2017-05-29)
+[Full Changelog](https://github.com/liketechnik/infoDisplay/compare/2.0.0...2.0.0-1)
 
 **Merged pull requests (development branch):**
 
-
+- Get changes from release of version 2.0.0 [\#39](https://github.com/liketechnik/infoDisplay/pull/39) ([liketechnik](https://github.com/liketechnik))
+- release verision 2.0.0 [\#38](https://github.com/liketechnik/infoDisplay/pull/38) ([liketechnik](https://github.com/liketechnik))
 
 ## [2.0.0](https://github.com/liketechnik/infoDisplay/tree/2.0.0) (2017-05-26)
 [Full Changelog](https://github.com/liketechnik/infoDisplay/compare/1.2.3...2.0.0)
