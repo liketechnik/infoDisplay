@@ -5,6 +5,7 @@
 
 **Merged pull requests (development branch):**
 
+- travis\_auto\_deploy [\#42](https://github.com/liketechnik/infoDisplay/pull/42) ([liketechnik](https://github.com/liketechnik))
 - Get changes from release of version 2.0.0 [\#39](https://github.com/liketechnik/infoDisplay/pull/39) ([liketechnik](https://github.com/liketechnik))
 - release verision 2.0.0 [\#38](https://github.com/liketechnik/infoDisplay/pull/38) ([liketechnik](https://github.com/liketechnik))
 
